@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:petsguides/navigation_bar.dart';
+import 'package:petsguides/views/google_map.dart';
 
 void main() {
   runApp(MaterialApp(
-    title: 'Flutter Demo',
-    theme: ThemeData(primarySwatch: Colors.blue),
-    home: const HomePage(),
-  ));
+      title: 'Flutter Demo',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      // home: const HomePage(),
+      home: const GoogleMapView()));
 }
 
 class HomePage extends StatelessWidget {
