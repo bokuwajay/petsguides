@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petsguides/navigation_bar.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -14,8 +15,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-      title: const Text('Home Page'),
-    ));
+      appBar: AppBar(
+        title: const Text('Home Page'),
+      ),
+      bottomNavigationBar: const BottomNavBar(),
+    );
   }
 }
