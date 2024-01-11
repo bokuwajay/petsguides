@@ -6,8 +6,9 @@ void main() {
   runApp(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      // home: const HomePage(),
-      home: const GoogleMapView()));
+      home: const HomePage()
+      // home: const GoogleMapView()
+      ));
 }
 
 class HomePage extends StatelessWidget {
