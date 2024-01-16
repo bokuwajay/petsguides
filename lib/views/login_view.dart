@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'dart:io' show Platform;
+import 'package:petsguides/service/dio/dio_interceptor.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -10,6 +10,8 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  final HttpUtil _httpUtil = HttpUtil();
+
   late final TextEditingController _email;
   late final TextEditingController _password;
 
@@ -53,8 +55,8 @@ class _LoginViewState extends State<LoginView> {
 
               try {
                 // Replace with your backend server URL
-                final response = await dio.post(
-                  'http://10.8.9.152:4000/api/v1/auth/authentication',
+                final response = await _httpUtil.post(
+                  '/auth/authentication',
                   data: {
                     'email': email,
                     'password': password,

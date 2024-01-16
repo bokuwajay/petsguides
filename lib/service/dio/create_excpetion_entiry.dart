@@ -48,7 +48,7 @@ ExceptionEntity createExceptionEntity(DioException exception) {
         case 401:
           return ExceptionEntity(
               statusCode: 401,
-              exceptionMessage: "Permission denied catch in Dio Interceptor");
+              exceptionMessage: exception.response!.data['detail']);
         case 500:
           return ExceptionEntity(
               statusCode: 500,

@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -23,7 +22,7 @@ class HttpUtil {
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 5),
       headers: {},
-      contentType: "application/json: charset=utf-8",
+      contentType: Headers.jsonContentType,
       responseType: ResponseType.json,
     );
 
@@ -101,11 +100,14 @@ class HttpUtil {
     Options? options,
   }) async {
     Options requestOptions = options ?? Options();
-    requestOptions.headers = requestOptions.headers ?? {};
-    Map<String, dynamic>? authorization = getAuthorizationHeader();
 
-    if (authorization != null) {
-      requestOptions.headers!.addAll(authorization);
+    if (!path.startsWith('/auth/')) {
+      requestOptions.headers = requestOptions.headers ?? {};
+      Map<String, dynamic>? authorization = getAuthorizationHeader();
+
+      if (authorization != null) {
+        requestOptions.headers!.addAll(authorization);
+      }
     }
     var response = await dio.post(
       path,
