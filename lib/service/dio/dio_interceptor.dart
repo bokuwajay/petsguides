@@ -18,7 +18,7 @@ class HttpUtil {
 
   HttpUtil._internal() {
     BaseOptions options = BaseOptions(
-      baseUrl: "http://10.8.9.152:4000/api/v1",
+      baseUrl: "http://10.8.9.77:4000/api/v1",
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 5),
       headers: {},
@@ -63,6 +63,7 @@ class HttpUtil {
         print("app error data $exception");
       }
       // this is for customized the error message, but on further action
+
       ExceptionEntity eInfo = createExceptionEntity(exception);
 
       // therefore we need this one, not just return the error message, this one based on the status code from ExceptionEntity
@@ -120,7 +121,7 @@ class HttpUtil {
 
   void onError(ExceptionEntity eInfo) {
     print(
-        'error.code -> ${eInfo..statusCode}, error.message -> ${eInfo.exceptionMessage}');
+        'error.code -> ${eInfo.statusCode}, error.message -> ${eInfo.exceptionMessage}');
     switch (eInfo.statusCode) {
       case 400:
         print("Server syntax error");

@@ -1,5 +1,5 @@
 class ExceptionEntity implements Exception {
-  int statusCode = -1;
+  int statusCode;
   String exceptionMessage = "";
 
   ExceptionEntity({
