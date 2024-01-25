@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:petsguides/helpers/loading/loading_screen.dart';
 import 'package:petsguides/service/dio/dio_interceptor.dart';
 
 class LoginView extends StatefulWidget {
@@ -73,6 +74,15 @@ class _LoginViewState extends State<LoginView> {
                 print('Error: $error');
               }
             },
+
+            // onPressed: () {
+            //   LoadingScreen().show(context: context); // Show loading screen
+            //   Future.delayed(Duration(seconds: 3), () {
+            //     LoadingScreen()
+            //         .hide(); // Hide loading screen after 3 seconds (simulating an async operation)
+            //   });
+            // },
+
             child: const Text("Login"))
       ]),
     );
