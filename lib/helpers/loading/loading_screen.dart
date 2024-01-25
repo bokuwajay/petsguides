@@ -42,7 +42,7 @@ class LoadingScreen {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 10),
-                    Lottie.asset('assets/Loading.json'),
+                    Lottie.asset('assets/Loading2.json'),
                     const SizedBox(height: 10),
                   ],
                 ),

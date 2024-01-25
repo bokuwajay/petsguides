@@ -77,12 +77,11 @@ class _LoginViewState extends State<LoginView> {
 
             // onPressed: () {
             //   LoadingScreen().show(context: context); // Show loading screen
-            //   Future.delayed(Duration(seconds: 3), () {
+            //   Future.delayed(const Duration(seconds: 3), () {
             //     LoadingScreen()
             //         .hide(); // Hide loading screen after 3 seconds (simulating an async operation)
             //   });
             // },
-
             child: const Text("Login"))
       ]),
     );
