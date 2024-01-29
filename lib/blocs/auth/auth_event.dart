@@ -5,12 +5,16 @@ abstract class AuthEvent {
   const AuthEvent();
 }
 
+class AuthEventInitialize extends AuthEvent {
+  const AuthEventInitialize();
+}
+
 class AuthEventRegister extends AuthEvent {
   final String firstName;
   final String lastName;
   final String email;
   final String password;
-  final int phone;
+  final String phone;
 
   const AuthEventRegister({
     required this.firstName,

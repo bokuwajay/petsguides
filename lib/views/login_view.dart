@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:petsguides/helpers/loading/loading_screen.dart';
-import 'package:petsguides/service/dio/dio_interceptor.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petsguides/blocs/auth/auth_bloc.dart';
+import 'package:petsguides/blocs/auth/auth_event.dart';
+import 'package:petsguides/blocs/auth/auth_state.dart';
+import 'package:petsguides/services/auth/auth_exceptions.dart';
+import 'package:petsguides/views/dialogs/error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -11,8 +14,6 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final HttpUtil _httpUtil = HttpUtil();
-
   late final TextEditingController _email;
   late final TextEditingController _password;
 
@@ -32,58 +33,45 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Login Page")),
-      body: Column(children: [
-        TextField(
-            controller: _email,
-            enableSuggestions: false,
-            autocorrect: false,
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(hintText: "Email")),
-        TextField(
-            controller: _password,
-            enableSuggestions: false,
-            autocorrect: false,
-            obscureText: true,
-            decoration: const InputDecoration(hintText: "Password")),
-        TextButton(
-            onPressed: () async {
-              final email = _email.text;
-              final password = _password.text;
-              // Initialize Dio
-              final dio = Dio();
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) async {
+        if (state is AuthStateLoggedOut) {
+          if (state.exception is UserNotFoundAuthException) {
+            await showErrorDialog(context, "user not found");
+          } else if (state.exception is WrongPasswordAuthException) {
+            await showErrorDialog(context, "Wrong credentials");
+          } else if (state.exception is GenericAuthException) {
+            await showErrorDialog(context, "Authentication error");
+          }
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: Text("Login Page")),
+        body: Column(children: [
+          TextField(
+              controller: _email,
+              enableSuggestions: false,
+              autocorrect: false,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(hintText: "Email")),
+          TextField(
+              controller: _password,
+              enableSuggestions: false,
+              autocorrect: false,
+              obscureText: true,
+              decoration: const InputDecoration(hintText: "Password")),
+          TextButton(
+              onPressed: () async {
+                final email = _email.text;
+                final password = _password.text;
 
-              try {
-                // Replace with your backend server URL
-                final response = await _httpUtil.post(
-                  '/auth/authentication',
-                  data: {
-                    'email': email,
-                    'password': password,
-                  },
-                );
-
-                // Handle the response accordingly (e.g., check for success or display error)
-                print('Response Status: ${response.statusCode}');
-                print('Response Data: ${response.data}');
-
-                // TODO: Handle success or error states based on the response
-              } catch (error) {
-                // Handle DioError (network error, timeout, etc.) or other exceptions
-                print('Error: $error');
-              }
-            },
-
-            // onPressed: () {
-            //   LoadingScreen().show(context: context); // Show loading screen
-            //   Future.delayed(const Duration(seconds: 3), () {
-            //     LoadingScreen()
-            //         .hide(); // Hide loading screen after 3 seconds (simulating an async operation)
-            //   });
-            // },
-            child: const Text("Login"))
-      ]),
+                context
+                    .read<AuthBloc>()
+                    .add(AuthEventLogIn(email: email, password: password));
+              },
+              child: const Text("Login"))
+        ]),
+      ),
     );
   }
 }
