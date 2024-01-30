@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/views/google_map.dart';
 import 'package:petsguides/views/home_view.dart';
 import 'package:petsguides/views/login_view.dart';

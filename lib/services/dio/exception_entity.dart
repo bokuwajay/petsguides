@@ -11,6 +11,6 @@ class ExceptionEntity implements Exception {
   String toString() {
     if (exceptionMessage == "") return "Exception";
 
-    return "Exception Status Code: $statusCode; Exception Message: $exceptionMessage";
+    return "statusCode: $statusCode; exceptionMessage: $exceptionMessage";
   }
 }

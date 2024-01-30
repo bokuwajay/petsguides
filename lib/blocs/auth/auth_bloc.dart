@@ -1,12 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/blocs/auth/auth_event.dart';
 import 'package:petsguides/blocs/auth/auth_state.dart';
 import 'package:petsguides/helpers/secure_storage.dart';
-import 'package:petsguides/models/api_response.dart';
 import 'package:petsguides/services/auth/auth_service.dart';
-import 'dart:developer' as devtools show log;
+// import 'dart:developer' as devtools show log;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {

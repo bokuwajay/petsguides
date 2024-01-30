@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:petsguides/services/auth/auth_exceptions.dart';
 import 'create_excpetion_entiry.dart';
 import 'exception_entity.dart';
 
@@ -128,8 +128,10 @@ class HttpUtil {
         break;
       case 401:
         print("You are denied to continue");
-        // we can navigate to login screen  /  get the re flash token to send the request again
-        break;
+        throw eInfo;
+
+      // we can navigate to login screen  /  get the re flash token to send the request again
+
       case 500:
         print("Server internal error");
         break;

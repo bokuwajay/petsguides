@@ -1,5 +1,16 @@
 // login exceptions
-class UserNotFoundAuthException implements Exception {}
+class UserNotFoundAuthException implements Exception {
+  String exceptionMessage = "";
+
+  UserNotFoundAuthException({required this.exceptionMessage});
+
+  @override
+  String toString() {
+    if (exceptionMessage == "") return "User Not Found!";
+
+    return exceptionMessage;
+  }
+}
 
 class WrongPasswordAuthException implements Exception {}
 
