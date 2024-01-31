@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
-import 'package:petsguides/services/auth/auth_exceptions.dart';
 import 'create_excpetion_entiry.dart';
 import 'exception_entity.dart';
 
@@ -64,11 +63,11 @@ class HttpUtil {
       }
       // this is for customized the error message, but on further action
 
-      ExceptionEntity eInfo = createExceptionEntity(exception);
+      ExceptionEntity customException = createExceptionEntity(exception);
 
       // therefore we need this one, not just return the error message, this one based on the status code from ExceptionEntity
       // to customized further action inside this method
-      onError(eInfo);
+      onError(customException);
     }));
   }
 
@@ -119,16 +118,35 @@ class HttpUtil {
     return response.data;
   }
 
-  void onError(ExceptionEntity eInfo) {
-    print(
-        'error.code -> ${eInfo.statusCode}, error.message -> ${eInfo.exceptionMessage}');
-    switch (eInfo.statusCode) {
+  void onError(ExceptionEntity customException) {
+    switch (customException.statusCode) {
+      case -1:
+        // DioExceptionType.connectionTimeout
+        throw customException;
+      case -2:
+        // DioExceptionType.sendTimeout
+        throw customException;
+      case -3:
+        // DioExceptionType.receiveTimeout
+        throw customException;
+      case -4:
+        // DioExceptionType.badCertificate
+        throw customException;
+      case -5:
+        // DioExceptionType.cancel
+        throw customException;
+      case -6:
+        // DioExceptionType.connectionError (backend server shut down)
+        throw customException;
+      case -7:
+        // DioExceptionType.unknown
+        throw customException;
       case 400:
         print("Server syntax error");
         break;
       case 401:
         print("You are denied to continue");
-        throw eInfo;
+        throw customException;
 
       // we can navigate to login screen  /  get the re flash token to send the request again
 
@@ -136,8 +154,8 @@ class HttpUtil {
         print("Server internal error");
         break;
       default:
-        print("Unknown error");
-        break;
+        throw ExceptionEntity(
+            statusCode: -8, exceptionMessage: "Really Unknown [Dio]");
     }
   }
 }

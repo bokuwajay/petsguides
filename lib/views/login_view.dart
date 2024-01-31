@@ -3,8 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/blocs/auth/auth_bloc.dart';
 import 'package:petsguides/blocs/auth/auth_event.dart';
 import 'package:petsguides/blocs/auth/auth_state.dart';
-import 'package:petsguides/services/auth/auth_exceptions.dart';
+import 'package:petsguides/exceptions/auth_exceptions.dart';
+import 'package:petsguides/exceptions/connection_exception.dart';
+import 'package:petsguides/helpers/validator.dart';
 import 'package:petsguides/views/dialogs/error_dialog.dart';
+
+final _formKey = GlobalKey<FormState>();
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -13,7 +17,7 @@ class LoginView extends StatefulWidget {
   State<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends State<LoginView> with Validator {
   late final TextEditingController _email;
   late final TextEditingController _password;
 
@@ -36,42 +40,51 @@ class _LoginViewState extends State<LoginView> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateLoggedOut) {
-          if (state.exception is UserNotFoundAuthException) {
+          if (state.exception is AuthException) {
             await showErrorDialog(context, state.exception.toString());
-          } else if (state.exception is WrongPasswordAuthException) {
-            await showErrorDialog(context, "Wrong credentials");
-          } else if (state.exception is GenericAuthException) {
-            await showErrorDialog(context, "Authentication error");
+          } else if (state.exception is ConnectionException) {
+            await showErrorDialog(context, state.exception.toString());
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(title: Text("Login Page")),
-        body: Column(children: [
-          TextField(
+        body: Form(
+          key: _formKey,
+          child: Column(children: [
+            TextFormField(
               controller: _email,
               enableSuggestions: false,
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(hintText: "Email")),
-          TextField(
+              decoration: const InputDecoration(hintText: "Email"),
+              validator: (value) => validateEmail(value),
+            ),
+            TextFormField(
               controller: _password,
               enableSuggestions: false,
               autocorrect: false,
               obscureText: true,
-              decoration: const InputDecoration(hintText: "Password")),
-          TextButton(
-              onPressed: () async {
-                final email = _email.text;
-                final password = _password.text;
+              decoration: const InputDecoration(hintText: "Password"),
+              validator: (value) => validateRequiredField(value, "Password"),
+            ),
+            TextButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    final email = _email.text;
+                    final password = _password.text;
 
-                context.read<AuthBloc>().add(AuthEventLogIn(
-                      email: email,
-                      password: password,
-                    ));
-              },
-              child: const Text("Login"))
-        ]),
+                    context.read<AuthBloc>().add(AuthEventLogIn(
+                          email: email,
+                          password: password,
+                        ));
+
+                    _formKey.currentState!.reset();
+                  }
+                },
+                child: const Text("Login"))
+          ]),
+        ),
       ),
     );
   }

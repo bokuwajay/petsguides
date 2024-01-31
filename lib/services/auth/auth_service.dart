@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:petsguides/services/auth/auth_exceptions.dart';
+import 'package:petsguides/exceptions/auth_exceptions.dart';
+import 'package:petsguides/exceptions/connection_exception.dart';
 import 'package:petsguides/services/dio/dio_interceptor.dart';
 import 'package:petsguides/services/dio/exception_entity.dart';
 // import 'dart:developer' as devtools show log;
@@ -40,8 +41,14 @@ class AuthService {
     } on DioException catch (exception) {
       if (exception.error is ExceptionEntity) {
         final exceptionEntity = exception.error as ExceptionEntity;
-        throw UserNotFoundAuthException(
-            exceptionMessage: exceptionEntity.exceptionMessage);
+        if (exceptionEntity.statusCode >= -8 &&
+            exceptionEntity.statusCode <= -1) {
+          throw ConnectionException(
+              exceptionMessage: exceptionEntity.exceptionMessage);
+        } else if (exceptionEntity.statusCode == 401) {
+          throw AuthException(
+              exceptionMessage: exceptionEntity.exceptionMessage);
+        }
       }
     }
     return null;

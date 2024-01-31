@@ -6,37 +6,27 @@ ExceptionEntity createExceptionEntity(DioException exception) {
   switch (exception.type) {
     case DioExceptionType.connectionTimeout:
       return ExceptionEntity(
-          statusCode: -1,
-          exceptionMessage:
-              "Connection timed out exception catch in Dio Interceptor");
+          statusCode: -1, exceptionMessage: "Connection timed out [Dio]");
 
     case DioExceptionType.sendTimeout:
       return ExceptionEntity(
-          statusCode: -1,
-          exceptionMessage:
-              "Send timed out exception catch in Dio Interceptor");
+          statusCode: -2, exceptionMessage: "Send timed out [Dio]");
 
     case DioExceptionType.receiveTimeout:
       return ExceptionEntity(
-          statusCode: -1,
-          exceptionMessage:
-              "Receive timed out exception catch in Dio Interceptor");
+          statusCode: -3, exceptionMessage: "Receive timed out [Dio]");
 
     case DioExceptionType.badCertificate:
       return ExceptionEntity(
-          statusCode: -1,
-          exceptionMessage:
-              "Bad SSL certificates exception catch in Dio Interceptor");
+          statusCode: -4, exceptionMessage: "Bad SSL certificates [Dio]");
 
     case DioExceptionType.cancel:
       return ExceptionEntity(
-          statusCode: -1,
-          exceptionMessage: "Server canceled it catch in Dio Interceptor");
+          statusCode: -5, exceptionMessage: "Server canceled [Dio]");
 
     case DioExceptionType.connectionError:
       return ExceptionEntity(
-          statusCode: -1,
-          exceptionMessage: "Connection error catch in Dio Interceptor");
+          statusCode: -6, exceptionMessage: "Connection error [Dio]");
 
     case DioExceptionType.badResponse:
       switch (exception.response!.statusCode) {
@@ -61,7 +51,6 @@ ExceptionEntity createExceptionEntity(DioException exception) {
 
     case DioExceptionType.unknown:
       return ExceptionEntity(
-          statusCode: -1,
-          exceptionMessage: "Unknown exception catch in Dio Interceptor");
+          statusCode: -7, exceptionMessage: "Unknown exception [Dio]");
   }
 }
