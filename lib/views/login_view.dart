@@ -48,7 +48,9 @@ class _LoginViewState extends State<LoginView> with Validator {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text("Login Page")),
+        appBar: AppBar(
+          title: const Text("Login Page"),
+        ),
         body: Form(
           key: _formKey,
           child: Column(children: [

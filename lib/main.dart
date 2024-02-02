@@ -5,6 +5,7 @@ import 'package:petsguides/blocs/auth/auth_event.dart';
 import 'package:petsguides/blocs/auth/auth_state.dart';
 import 'package:petsguides/services/auth/auth_service.dart';
 import 'package:petsguides/services/dio/dio_interceptor.dart';
+import 'package:petsguides/themes/themes.dart';
 import 'package:petsguides/views/google_map.dart';
 import 'package:petsguides/views/loading/loading_screen.dart';
 import 'package:petsguides/views/login_view.dart';
@@ -19,7 +20,9 @@ import 'package:petsguides/views/login_view.dart';
 void main() {
   runApp(MaterialApp(
     title: 'Flutter Home page',
-    theme: ThemeData(primarySwatch: Colors.blue),
+    theme: ThemeClass.lightTheme,
+    darkTheme: ThemeClass.darkTheme,
+    themeMode: ThemeMode.system,
     home: BlocProvider<AuthBloc>(
       create: (context) => AuthBloc(AuthService(HttpUtil())),
       child: const HomePage(),
