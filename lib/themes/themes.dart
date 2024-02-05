@@ -5,7 +5,9 @@ import 'package:petsguides/themes/custom_themes/checkbox_theme.dart';
 import 'package:petsguides/themes/custom_themes/chip_theme.dart';
 import 'package:petsguides/themes/custom_themes/elevated_button_theme.dart';
 import 'package:petsguides/themes/custom_themes/outlined_button_theme.dart';
+import 'package:petsguides/themes/custom_themes/text_button_theme.dart';
 import 'package:petsguides/themes/custom_themes/text_form_field_theme.dart';
+import 'package:petsguides/themes/custom_themes/text_selection_theme.dart';
 import 'package:petsguides/themes/custom_themes/text_theme.dart';
 
 class ThemeClass {
@@ -27,6 +29,8 @@ class ThemeClass {
     chipTheme: ChipThemeClass.lightChipTheme,
     outlinedButtonTheme: OutlinedButtonThemeClass.lightOutlinedButtonTheme,
     inputDecorationTheme: TextFormFieldThemeClass.lightInputDecorationTheme,
+    textButtonTheme: TextButtonThemeClass.lightTextButtonTheme,
+    textSelectionTheme: TextSelectionThemeClass.lightTextSelectionTheme,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -43,5 +47,7 @@ class ThemeClass {
     chipTheme: ChipThemeClass.darkChipTheme,
     outlinedButtonTheme: OutlinedButtonThemeClass.darkOutlinedButtonTheme,
     inputDecorationTheme: TextFormFieldThemeClass.darkInputDecorationTheme,
+    textButtonTheme: TextButtonThemeClass.darkTextButtonTheme,
+    textSelectionTheme: TextSelectionThemeClass.darkTextSelectionTheme,
   );
 }

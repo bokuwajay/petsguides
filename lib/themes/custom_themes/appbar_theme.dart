@@ -6,7 +6,7 @@ class AppBarThemeClass {
 
   static AppBarTheme lightAppBarTheme = AppBarTheme(
       elevation: 0,
-      centerTitle: false,
+      centerTitle: true,
       scrolledUnderElevation: 0,
       backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
@@ -19,7 +19,7 @@ class AppBarThemeClass {
 
   static AppBarTheme darkAppBarTheme = AppBarTheme(
       elevation: 0,
-      centerTitle: false,
+      centerTitle: true,
       scrolledUnderElevation: 0,
       backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
