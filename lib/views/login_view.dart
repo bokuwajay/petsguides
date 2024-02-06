@@ -155,11 +155,9 @@ class _LoginViewState extends State<LoginView> with Validator {
                                                 hidePassword = !hidePassword;
                                               },
                                             ),
-                                            icon: Icon(
-                                              hidePassword
-                                                  ? Icons.visibility
-                                                  : Icons.visibility_off,
-                                            ),
+                                            icon: Icon(hidePassword
+                                                ? Icons.visibility
+                                                : Icons.visibility_off),
                                           )
                                         : null,
                                   ),
@@ -171,9 +169,7 @@ class _LoginViewState extends State<LoginView> with Validator {
                           ),
                         ),
                       )),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   FadeInUp(
                     duration: const Duration(milliseconds: 1800),
                     child: const Center(
@@ -221,7 +217,8 @@ class _LoginViewState extends State<LoginView> with Validator {
                         'Create Account',
                       ),
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
