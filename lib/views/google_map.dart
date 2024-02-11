@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:petsguides/helpers/secure_storage.dart';
+import 'package:petsguides/core/util/secure_storage.dart';
 
 class GoogleMapView extends StatefulWidget {
   const GoogleMapView({super.key});

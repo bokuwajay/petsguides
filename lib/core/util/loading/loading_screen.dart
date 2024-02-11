@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petsguides/views/loading/loading_screen_controller.dart';
+import 'package:petsguides/core/util/loading/loading_screen_controller.dart';
 import 'package:lottie/lottie.dart';
 
 class LoadingScreen {

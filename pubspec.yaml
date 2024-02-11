@@ -41,6 +41,28 @@ dependencies:
   lottie: ^3.0.0
   bloc: ^8.1.2
   flutter_bloc: ^8.1.3
+
+  # comparing dart objects
+  equatable: ^2.0.5
+
+  # service locator
+  get_it: ^7.6.7
+
+  # dateFormat
+  intl: ^0.19.0
+
+  # database use sqlite to store data locally
+  floor: ^1.4.2
+
+  # source code generator package which uses Dio as Http Client to generate proper methods that we need to deal with restful API based on abstraction
+  retrofit: ^4.1.0
+
+  # manage the life cycle of the widget (main purpose: increase the code sharing between widgets by removing duplicates)
+  flutter_hooks: ^0.20.5
+
+  # show image from the internet and keep them in the cached directory
+  cached_network_image: ^3.3.1
+
   flutter_secure_storage: ^9.0.0
   jwt_decoder: ^2.0.1
   hexcolor: ^3.0.1
@@ -50,13 +72,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^3.0.1
+
+  # these also needed at dev_dependencies
+  retrofit_generator: ^8.1.0
+  floor_generator: ^1.4.2
+  build_runner: ^2.4.8
+  analyzer: ^5.13.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petsguides/views/dialogs/generic_dialog.dart';
+import 'package:petsguides/core/util/dialogs/generic_dialog.dart';
 
 Future<void> showErrorDialog(
   BuildContext context,

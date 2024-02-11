@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:petsguides/blocs/auth/auth_bloc.dart';
-import 'package:petsguides/blocs/auth/auth_event.dart';
-import 'package:petsguides/blocs/auth/auth_state.dart';
-import 'package:petsguides/services/auth/auth_service.dart';
-import 'package:petsguides/services/dio/dio_interceptor.dart';
-import 'package:petsguides/themes/themes.dart';
+import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
+import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
+import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
+import 'package:petsguides/injection_container.dart';
+import 'package:petsguides/config/themes/themes.dart';
 import 'package:petsguides/views/google_map.dart';
-import 'package:petsguides/views/loading/loading_screen.dart';
-import 'package:petsguides/views/login_view.dart';
-// import 'dart:developer' as devtools show log;
+import 'package:petsguides/core/util/loading/loading_screen.dart';
 
-// void main() {
-//   runApp(MaterialApp.router(
-//     routerConfig: router,
-//   ));
-// }
-
-void main() {
+void main() async {
+  await initializeDependencies();
   runApp(MaterialApp(
     title: 'Flutter Home page',
     theme: ThemeClass.lightTheme,
     darkTheme: ThemeClass.darkTheme,
     themeMode: ThemeMode.system,
     home: BlocProvider<AuthBloc>(
-      create: (context) => AuthBloc(AuthService(HttpUtil())),
+      create: (context) => sl(),
       child: const HomePage(),
     ),
   ));
@@ -51,12 +44,8 @@ class HomePage extends StatelessWidget {
         } else if (state is AuthStateLoggedOut) {
           return const LoginView();
         } else {
-          // return const Scaffold(
-          //   body: Center(
-          //     child: CircularProgressIndicator(),
-          //   ),
-          // );
-          return const LoginView();
+          return const CircularProgressIndicator();
+          // return const LoginView();
         }
       },
     );

@@ -1,16 +1,16 @@
 // login exceptions
-class AuthException implements Exception {
-  String exceptionMessage = "";
+// class AuthException implements Exception {
+//   String exceptionMessage = "";
 
-  AuthException({required this.exceptionMessage});
+//   AuthException({required this.exceptionMessage});
 
-  @override
-  String toString() {
-    if (exceptionMessage == "") return "Authentication Error!";
+//   @override
+//   String toString() {
+//     if (exceptionMessage == "") return "Authentication Error!";
 
-    return exceptionMessage;
-  }
-}
+//     return exceptionMessage;
+//   }
+// }
 
 // class WrongPasswordAuthException implements Exception {}
 
