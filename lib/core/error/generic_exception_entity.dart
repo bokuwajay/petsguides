@@ -1,14 +1,14 @@
-class GenericExceptionEntity implements Exception {
-  String genericExceptionMessage = "";
+// class GenericExceptionEntity implements Exception {
+//   String genericExceptionMessage = "";
 
-  GenericExceptionEntity({
-    required this.genericExceptionMessage,
-  });
+//   GenericExceptionEntity({
+//     required this.genericExceptionMessage,
+//   });
 
-  @override
-  String toString() {
-    if (genericExceptionMessage == "") return "Generic Exception";
+//   @override
+//   String toString() {
+//     if (genericExceptionMessage == "") return "Generic Exception";
 
-    return genericExceptionMessage;
-  }
-}
+//     return genericExceptionMessage;
+//   }
+// }
