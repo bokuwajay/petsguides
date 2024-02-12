@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:petsguides/core/error/dio_exception_handler.dart';
 import 'package:petsguides/core/resources/data_state.dart';
 import 'package:petsguides/features/auth/data/data_sources/auth_service.dart';
 import 'package:petsguides/features/auth/data/models/auth_model.dart';
@@ -24,17 +25,20 @@ class AuthRepositoryImpl implements AuthRepository {
       if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(httpResponse.data);
       } else {
-        return DataFailed(
+        return DioDataFailed(
           DioException(
-            error: httpResponse.response.statusMessage,
-            response: httpResponse.response,
-            type: DioExceptionType.badResponse,
             requestOptions: httpResponse.response.requestOptions,
+            message: httpResponse.response.data['detail'],
           ),
         );
       }
-    } on DioException catch (exception) {
-      return DataFailed(exception);
+    } on DioException catch (dioException) {
+      return DioDataFailed(dioExceptionHandler(dioException));
+    } on Exception catch (genericException) {
+      return GenericDataFailed(genericException);
     }
   }
 }
+
+
+//  return DataFailed(GenericExceptionEntity(genericExceptionMessage: exception.toString()))

@@ -7,7 +7,6 @@ import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
 import 'package:petsguides/injection_container.dart';
 import 'package:petsguides/config/themes/themes.dart';
 import 'package:petsguides/views/google_map.dart';
-import 'package:petsguides/core/util/loading/loading_screen.dart';
 
 void main() async {
   await initializeDependencies();
@@ -30,14 +29,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<AuthBloc>().add(const AuthEventInitialize());
 
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state.isLoading) {
-          LoadingScreen().show(context: context);
-        } else {
-          LoadingScreen().hide();
-        }
-      },
+    return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthStateLoggedIn) {
           return const GoogleMapView();

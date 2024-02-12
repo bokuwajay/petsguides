@@ -1,7 +1,10 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petsguides/core/util/dialogs/error_dialog.dart';
+import 'package:petsguides/core/util/loading/loading_screen.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
@@ -47,12 +50,19 @@ class _LoginViewState extends State<LoginView> with Validator {
     final width = MediaQuery.of(context).size.width;
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
-        if (state is AuthStateLoggedOut) {
-          // if (state.exception is AuthException) {
-          //   await showErrorDialog(context, state.exception.toString());
-          // } else if (state.exception is ConnectionException) {
-          //   await showErrorDialog(context, state.exception.toString());
-          // }
+        if (state.isLoading) {
+          LoadingScreen().show(context: context);
+        } else {
+          LoadingScreen().hide();
+          if (state is AuthStateLoggedOut) {
+            if (state.dioException is DioException) {
+              await showErrorDialog(
+                  context, state.dioException!.message.toString());
+            } else if (state.genericException is Exception) {
+              await showErrorDialog(
+                  context, state.genericException!.toString());
+            }
+          }
         }
       },
       child: Scaffold(

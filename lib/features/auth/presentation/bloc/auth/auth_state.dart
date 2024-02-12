@@ -4,12 +4,18 @@ import 'package:petsguides/features/auth/domain/entities/auth_entity.dart';
 
 abstract class AuthState extends Equatable {
   final AuthEntity? auth;
-  final DioException? exception;
+  final DioException? dioException;
+  final Exception? genericException;
   final bool isLoading;
-  const AuthState({this.auth, this.exception, required this.isLoading});
+  const AuthState({
+    this.auth,
+    this.dioException,
+    this.genericException,
+    required this.isLoading,
+  });
 
   @override
-  List<Object?> get props => [auth, exception, isLoading];
+  List<Object?> get props => [auth, dioException, genericException, isLoading];
 }
 
 class AuthStateUninitialized extends AuthState {
@@ -26,9 +32,15 @@ class AuthStateLoggedIn extends AuthState {
 }
 
 class AuthStateLoggedOut extends AuthState {
-  final DioException? exception;
+  final DioException? dioException;
+  final Exception? genericException;
   const AuthStateLoggedOut({
-    this.exception,
+    this.dioException,
+    this.genericException,
     required bool isLoading,
-  }) : super(exception: exception, isLoading: isLoading);
+  }) : super(
+          dioException: dioException,
+          genericException: genericException,
+          isLoading: isLoading,
+        );
 }

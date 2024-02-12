@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:petsguides/core/resources/data_state.dart';
@@ -25,38 +24,54 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                     .isAfter(DateTime.now())) {
               emit(const AuthStateLoggedIn(isLoading: false));
             } else {
-              emit(const AuthStateLoggedOut(exception: null, isLoading: false));
+              emit(const AuthStateLoggedOut(
+                dioException: null,
+                genericException: null,
+                isLoading: false,
+              ));
             }
           } else {
-            emit(const AuthStateLoggedOut(exception: null, isLoading: false));
+            emit(const AuthStateLoggedOut(
+              dioException: null,
+              genericException: null,
+              isLoading: false,
+            ));
           }
-        } on DioException catch (exception) {
-          emit(AuthStateLoggedOut(exception: exception, isLoading: false));
+        } on Exception catch (genericException) {
+          emit(AuthStateLoggedOut(
+              dioException: null,
+              genericException: genericException,
+              isLoading: false));
         }
       },
     );
 
     on<AuthEventLogIn>((event, emit) async {
-      emit(const AuthStateLoggedOut(exception: null, isLoading: true));
-
+      emit(const AuthStateLoggedOut(
+          dioException: null, genericException: null, isLoading: true));
       final email = event.email;
       final password = event.password;
-      try {
-        final dataState =
-            await _authUseCase(params: {'email': email, 'password': password});
-        if (dataState is DataSuccess && dataState.data!.statusCode == 200) {
-          final token = dataState.data!.token!;
-          await SecureStorage.writeSecureData('pgToken', token);
-          emit(AuthStateLoggedIn(auth: dataState.data, isLoading: false));
-        }
-        if (dataState is DataFailed) {
-          emit(AuthStateLoggedOut(
-              exception: dataState.exception, isLoading: false));
-        }
-      } on DioException catch (exception) {
-        emit(
-          AuthStateLoggedOut(exception: exception, isLoading: false),
-        );
+
+      final dataState = await _authUseCase(
+        params: {
+          'email': email,
+          'password': password,
+        },
+      );
+      if (dataState is DataSuccess && dataState.data!.statusCode == 200) {
+        final token = dataState.data!.token!;
+        await SecureStorage.writeSecureData('pgToken', token);
+        emit(AuthStateLoggedIn(auth: dataState.data, isLoading: false));
+      } else if (dataState is DioDataFailed) {
+        emit(AuthStateLoggedOut(
+          dioException: dataState.dioException,
+          isLoading: false,
+        ));
+      } else if (dataState is GenericDataFailed) {
+        emit(AuthStateLoggedOut(
+          genericException: dataState.genericException,
+          isLoading: false,
+        ));
       }
     });
   }
