@@ -58,6 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           'password': password,
         },
       );
+
       if (dataState is DataSuccess && dataState.data!.statusCode == 200) {
         final token = dataState.data!.token!;
         await SecureStorage.writeSecureData('pgToken', token);

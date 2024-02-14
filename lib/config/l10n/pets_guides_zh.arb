@@ -1,0 +1,17 @@
+{
+  "@@locale": "zh",
+  "@_LOGIN_SCREEN": {},
+  "login": "登入",
+  "email": "電郵",
+  "password": "密碼",
+  "forgetPassword": "忘記密碼?",
+  "createAccount": "注冊帳號",
+  "@_ERROR_Dialog": {},
+  "errorDialogTitle": "有無搞錯!",
+  "okBtn": "有",
+  "@_LOGOUT_Dialog": {},
+  "logoutDialogTitle": "登出",
+  "logoutText": "確定登出?",
+  "yesBtn": "確定",
+  "noBtn": "取消"
+}

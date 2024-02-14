@@ -3,12 +3,16 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petsguides/core/constants/languages.dart';
 import 'package:petsguides/core/util/dialogs/error_dialog.dart';
 import 'package:petsguides/core/util/loading/loading_screen.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:petsguides/core/util/validator.dart';
+import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
+import 'package:petsguides/main.dart';
+// import 'package:petsguides/main.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -57,10 +61,18 @@ class _LoginViewState extends State<LoginView> with Validator {
           if (state is AuthStateLoggedOut) {
             if (state.dioException is DioException) {
               await showErrorDialog(
-                  context, state.dioException!.message.toString());
+                context,
+                AppLocalizations.of(context)!.errorDialogTitle,
+                state.dioException!.message.toString(),
+                AppLocalizations.of(context)!.okBtn,
+              );
             } else if (state.genericException is Exception) {
               await showErrorDialog(
-                  context, state.genericException!.toString());
+                context,
+                AppLocalizations.of(context)!.errorDialogTitle,
+                state.genericException!.toString(),
+                AppLocalizations.of(context)!.okBtn,
+              );
             }
           }
         }
@@ -107,12 +119,38 @@ class _LoginViewState extends State<LoginView> with Validator {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: DropdownButton<Language>(
+                underline: const SizedBox(),
+                icon: const Icon(
+                  Icons.language,
+                  color: Colors.white,
+                ),
+                items: Language.languageList()
+                    .map(
+                      (e) => DropdownMenuItem<Language>(
+                        value: e,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[Text(e.label)],
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (Language? lang) {
+                  if (lang != null) {
+                    MyApp.setLocale(context, Locale(lang.languageCode, ''));
+                  }
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
                 children: <Widget>[
                   FadeIn(
                     duration: const Duration(milliseconds: 1500),
-                    child: const Text(
-                      "Login",
+                    child: Text(
+                      AppLocalizations.of(context)!.login,
                       style: TextStyle(fontSize: 30),
                     ),
                   ),
@@ -129,19 +167,20 @@ class _LoginViewState extends State<LoginView> with Validator {
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 child: TextFormField(
-                                  controller: _email,
-                                  enableSuggestions: false,
-                                  autocorrect: false,
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: const InputDecoration(
-                                    hintText: "Email",
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.all(0),
-                                      child: Icon(Icons.email),
+                                    controller: _email,
+                                    enableSuggestions: false,
+                                    autocorrect: false,
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: InputDecoration(
+                                      hintText:
+                                          AppLocalizations.of(context)!.email,
+                                      prefixIcon: const Padding(
+                                        padding: EdgeInsets.all(0),
+                                        child: Icon(Icons.email),
+                                      ),
                                     ),
-                                  ),
-                                  validator: (value) => validateEmail(value),
-                                ),
+                                    validator: (value) => validateEmail(value,
+                                        AppLocalizations.of(context)!.email)),
                               ),
                               Container(
                                 padding: const EdgeInsets.all(10),
@@ -151,7 +190,8 @@ class _LoginViewState extends State<LoginView> with Validator {
                                   autocorrect: false,
                                   obscureText: hidePassword,
                                   decoration: InputDecoration(
-                                    hintText: "Password",
+                                    hintText:
+                                        AppLocalizations.of(context)!.password,
                                     prefixIcon: const Padding(
                                       padding: EdgeInsets.all(0),
                                       child: Icon(Icons.lock),
@@ -169,8 +209,9 @@ class _LoginViewState extends State<LoginView> with Validator {
                                           )
                                         : null,
                                   ),
-                                  validator: (value) =>
-                                      validateRequiredField(value, "Password"),
+                                  validator: (value) => validateRequiredField(
+                                      value,
+                                      AppLocalizations.of(context)!.password),
                                 ),
                               ),
                             ],
@@ -180,9 +221,9 @@ class _LoginViewState extends State<LoginView> with Validator {
                   const SizedBox(height: 20),
                   FadeInUp(
                     duration: const Duration(milliseconds: 1800),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        'Forget Password?',
+                        AppLocalizations.of(context)!.forgetPassword,
                       ),
                     ),
                   ),
@@ -208,8 +249,8 @@ class _LoginViewState extends State<LoginView> with Validator {
                             _formKey.currentState!.reset();
                           }
                         },
-                        child: const Text(
-                          "Login",
+                        child: Text(
+                          AppLocalizations.of(context)!.login,
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
@@ -220,9 +261,9 @@ class _LoginViewState extends State<LoginView> with Validator {
                   ),
                   FadeInUp(
                     duration: const Duration(milliseconds: 2000),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        'Create Account',
+                        AppLocalizations.of(context)!.createAccount,
                       ),
                     ),
                   ),

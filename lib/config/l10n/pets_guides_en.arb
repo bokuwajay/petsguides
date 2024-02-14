@@ -1,0 +1,17 @@
+{
+  "@@locale": "en",
+  "@_LOGIN_SCREEN": {},
+  "login": "Login",
+  "email": "Email",
+  "password": "Password",
+  "forgetPassword": "Forget Password?",
+  "createAccount": "Create Account",
+  "@_ERROR_Dialog": {},
+  "errorDialogTitle": "Opsss something wrong",
+  "okBtn": "OK",
+  "@_LOGOUT_Dialog": {},
+  "logoutDialogTitle": "Log Out",
+  "logoutText": "Are you sure?",
+  "yesBtn": "Yes",
+  "noBtn": "No"
+}
