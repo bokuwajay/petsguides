@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:petsguides/core/util/secure_storage.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
@@ -51,7 +50,7 @@ import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 //       },
 //     );
 //   }
-// }
+// },
 
 void main() async {
   if (kDebugMode) {
@@ -80,14 +79,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    _locale = sl<Locale>();
     super.initState();
-    _locale = Locale(Platform.localeName.substring(0, 2), '');
   }
 
-  setLocale(Locale lang) {
+  setLocale(Locale lang) async {
     setState(() {
       _locale = lang;
     });
+    await SecureStorage.writeSecureData('language', lang.languageCode);
   }
 
   @override

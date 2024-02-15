@@ -1,6 +1,10 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:petsguides/core/util/secure_storage.dart';
 import 'package:petsguides/features/auth/data/data_sources/auth_service.dart';
 import 'package:petsguides/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:petsguides/features/auth/domain/repository/auth_repository.dart';
@@ -11,6 +15,10 @@ final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
   Dio dio = Dio(BaseOptions(baseUrl: dotenv.env['baseURL']!));
+  final String? languageCode = await SecureStorage.readSecureData('language');
+  final locale =
+      Locale(languageCode ?? Platform.localeName.substring(0, 2), '');
+  sl.registerSingleton<Locale>(locale);
   sl.registerSingleton<Dio>(dio);
 
   // register dependencies
