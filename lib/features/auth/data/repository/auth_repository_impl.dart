@@ -39,6 +39,3 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 }
-
-
-//  return DataFailed(GenericExceptionEntity(genericExceptionMessage: exception.toString()))

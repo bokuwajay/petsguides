@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
@@ -52,6 +54,11 @@ import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 // }
 
 void main() async {
+  if (kDebugMode) {
+    await dotenv.load(fileName: 'assets/env/.env.development');
+  } else {
+    await dotenv.load(fileName: 'assets/env/.env.production');
+  }
   await initializeDependencies();
   runApp(const MyApp());
 }
