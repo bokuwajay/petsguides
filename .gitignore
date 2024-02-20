@@ -46,4 +46,4 @@ app.*.map.json
 /assets/env/.env.development
 /assets/env/.env.production
 
-/ios/Podfile.lock
+Podfile.lock
