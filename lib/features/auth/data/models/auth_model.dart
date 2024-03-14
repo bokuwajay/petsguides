@@ -19,7 +19,7 @@ class AuthModel extends AuthEntity {
     return AuthModel(
       status: json['status'] ?? "",
       statusCode: json['statusCode'] ?? 0,
-      token: json['data']?['token'] ?? "",
+      token: json['data'] ?? "",
       detail: json['detail'] ?? "",
       timestamp: json['timestamp'] ?? "",
     );

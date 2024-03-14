@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
 import 'package:petsguides/views/google_map.dart';
-import 'package:petsguides/views/home_view.dart';
+import 'package:petsguides/views/main_view.dart';
 // import 'package:petsguides/views/login_view.dart';
 
 // Function to initialize and configure the GoRouter
@@ -15,7 +15,7 @@ GoRouter initRouter() {
       ),
       GoRoute(
         path: '/',
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => const MainView(),
       ),
       GoRoute(
         path: '/goMap',

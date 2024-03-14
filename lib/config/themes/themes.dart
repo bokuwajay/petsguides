@@ -4,11 +4,13 @@ import 'package:petsguides/config/themes/custom_themes/bottom_sheet_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/checkbox_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/chip_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/elevated_button_theme.dart';
+import 'package:petsguides/config/themes/custom_themes/icon_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/outlined_button_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/text_button_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/text_form_field_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/text_selection_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/text_theme.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class ThemeClass {
   // ThemeClass has a private constructor with the name _ ,
@@ -20,7 +22,7 @@ class ThemeClass {
     fontFamily: 'Poppins',
     brightness: Brightness.light,
     primaryColor: Colors.blue,
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: HexColor('#F2F2F2'),
     textTheme: TextThemeClass.lightTextTheme,
     elevatedButtonTheme: ElevatedButtonThemeClass.lightElevatedButtonTheme,
     appBarTheme: AppBarThemeClass.lightAppBarTheme,
@@ -31,6 +33,7 @@ class ThemeClass {
     inputDecorationTheme: TextFormFieldThemeClass.lightInputDecorationTheme,
     textButtonTheme: TextButtonThemeClass.lightTextButtonTheme,
     textSelectionTheme: TextSelectionThemeClass.lightTextSelectionTheme,
+    iconTheme: IconThemeClass.lightIconTheme,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -38,7 +41,7 @@ class ThemeClass {
     fontFamily: 'Poppins',
     brightness: Brightness.dark,
     primaryColor: Colors.blue,
-    scaffoldBackgroundColor: Colors.black,
+    scaffoldBackgroundColor: HexColor('#333333'),
     textTheme: TextThemeClass.darkTextTheme,
     elevatedButtonTheme: ElevatedButtonThemeClass.darkElevatedButtonTheme,
     appBarTheme: AppBarThemeClass.darkAppBarTheme,
@@ -49,5 +52,6 @@ class ThemeClass {
     inputDecorationTheme: TextFormFieldThemeClass.darkInputDecorationTheme,
     textButtonTheme: TextButtonThemeClass.darkTextButtonTheme,
     textSelectionTheme: TextSelectionThemeClass.darkTextSelectionTheme,
+    iconTheme: IconThemeClass.darkIconTheme,
   );
 }

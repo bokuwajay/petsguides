@@ -9,8 +9,9 @@ import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart'
 import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
 import 'package:petsguides/injection_container.dart';
 import 'package:petsguides/config/themes/themes.dart';
-import 'package:petsguides/views/google_map.dart';
+// import 'package:petsguides/views/google_map.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
+import 'package:petsguides/views/main_view.dart';
 
 // void main() async {
 //   await initializeDependencies();
@@ -118,7 +119,7 @@ class HomePage extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthStateLoggedIn) {
-          return const GoogleMapView();
+          return const MainView();
         } else if (state is AuthStateLoggedOut) {
           return const LoginView();
         } else {
