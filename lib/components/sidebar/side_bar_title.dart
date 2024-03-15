@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 class SideBarTitle extends StatelessWidget {
   const SideBarTitle({
     super.key,
+    required this.isActive,
+    required this.press,
   });
+
+  final VoidCallback press;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +27,7 @@ class SideBarTitle extends StatelessWidget {
               duration: const Duration(milliseconds: 300),
               curve: Curves.fastOutSlowIn,
               height: 56,
-              width: 288,
+              width: isActive ? 288 : 0,
               left: 0,
               child: Container(
                 decoration: const BoxDecoration(
@@ -31,7 +36,7 @@ class SideBarTitle extends StatelessWidget {
               ),
             ),
             ListTile(
-              onTap: () {},
+              onTap: press,
               leading: const SizedBox(
                 height: 34,
                 width: 34,

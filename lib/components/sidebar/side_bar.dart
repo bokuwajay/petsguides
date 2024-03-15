@@ -35,10 +35,22 @@ class _SideBarState extends State<SideBar> {
                     .copyWith(color: Colors.white70),
               ),
             ),
-            SideBarTitle(),
-            SideBarTitle(),
-            SideBarTitle(),
-            SideBarTitle(),
+            SideBarTitle(
+              press: () {},
+              isActive: false,
+            ),
+            SideBarTitle(
+              press: () {},
+              isActive: false,
+            ),
+            SideBarTitle(
+              press: () {},
+              isActive: false,
+            ),
+            SideBarTitle(
+              press: () {},
+              isActive: false,
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 24, top: 32, bottom: 16),
               child: Text(

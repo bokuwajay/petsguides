@@ -11,7 +11,7 @@ import 'package:petsguides/injection_container.dart';
 import 'package:petsguides/config/themes/themes.dart';
 // import 'package:petsguides/views/google_map.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
-import 'package:petsguides/components/sidebar/side_bar.dart';
+// import 'package:petsguides/components/sidebar/side_bar.dart';
 import 'package:petsguides/views/main_view.dart';
 
 // void main() async {
