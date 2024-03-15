@@ -186,6 +186,8 @@ class _LoginViewState extends State<LoginView> with Validator {
                                     Container(
                                       padding: const EdgeInsets.all(10),
                                       child: TextFormField(
+                                          onTapOutside: (event) =>
+                                              FocusScope.of(context).unfocus(),
                                           controller: _email,
                                           enableSuggestions: false,
                                           autocorrect: false,
@@ -208,6 +210,8 @@ class _LoginViewState extends State<LoginView> with Validator {
                                     Container(
                                       padding: const EdgeInsets.all(10),
                                       child: TextFormField(
+                                        onTapOutside: (event) =>
+                                            FocusScope.of(context).unfocus(),
                                         controller: _password,
                                         enableSuggestions: false,
                                         autocorrect: false,

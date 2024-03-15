@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petsguides/components/sidebar/info_card.dart';
-import 'package:petsguides/components/sidebar/side_bar_title.dart';
+import 'package:petsguides/features/market/presentation/widgets/sidebar/info_card.dart';
+import 'package:petsguides/features/market/presentation/widgets/sidebar/side_bar_title.dart';
 
 class SideBar extends StatefulWidget {
   const SideBar({super.key});
@@ -17,7 +17,7 @@ class _SideBarState extends State<SideBar> {
       body: Container(
         width: 288,
         height: double.infinity,
-        color: Color(0xFF17203A),
+        color: const Color(0xFF17203A),
         child: SafeArea(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

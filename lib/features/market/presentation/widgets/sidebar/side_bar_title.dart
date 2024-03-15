@@ -14,8 +14,8 @@ class SideBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 24),
+        const Padding(
+          padding: EdgeInsets.only(left: 24),
           child: Divider(
             color: Colors.white24,
             height: 1,

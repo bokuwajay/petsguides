@@ -12,47 +12,7 @@ import 'package:petsguides/config/themes/themes.dart';
 // import 'package:petsguides/views/google_map.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 // import 'package:petsguides/components/sidebar/side_bar.dart';
-import 'package:petsguides/views/main_view.dart';
-
-// void main() async {
-//   await initializeDependencies();
-//   String deviceLanguage = Platform.localeName.substring(0, 2);
-//   runApp(MaterialApp(
-//     title: 'Flutter Home page',
-//     theme: ThemeClass.lightTheme,
-//     darkTheme: ThemeClass.darkTheme,
-//     themeMode: ThemeMode.system,
-//     localizationsDelegates: AppLocalizations.localizationsDelegates,
-//     supportedLocales: AppLocalizations.supportedLocales,
-//     locale: Locale(deviceLanguage),
-//     home: BlocProvider<AuthBloc>(
-//       create: (context) => sl(),
-//       child: const HomePage(),
-//     ),
-//   ));
-// }
-
-// class HomePage extends StatelessWidget {
-//   const HomePage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     context.read<AuthBloc>().add(const AuthEventInitialize());
-
-//     return BlocBuilder<AuthBloc, AuthState>(
-//       builder: (context, state) {
-//         if (state is AuthStateLoggedIn) {
-//           return const GoogleMapView();
-//         } else if (state is AuthStateLoggedOut) {
-//           return const LoginView();
-//         } else {
-//           return const CircularProgressIndicator();
-//           // return const LoginView();
-//         }
-//       },
-//     );
-//   }
-// },
+import 'package:petsguides/features/market/presentation/pages/market_view.dart';
 
 void main() async {
   if (kDebugMode) {
@@ -104,14 +64,14 @@ class _MyAppState extends State<MyApp> {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         locale: _locale,
-        home: const HomePage(),
+        home: const InitPage(),
       ),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class InitPage extends StatelessWidget {
+  const InitPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +81,7 @@ class HomePage extends StatelessWidget {
       builder: (context, state) {
         if (state is AuthStateLoggedIn) {
           // return const SideBar();
-          return const MainView();
+          return const MarketView();
         } else if (state is AuthStateLoggedOut) {
           return const LoginView();
         } else {

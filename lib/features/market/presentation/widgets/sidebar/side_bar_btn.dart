@@ -14,7 +14,7 @@ class SideBarBtn extends StatelessWidget {
       child: GestureDetector(
         onTap: press,
         child: Container(
-          margin: EdgeInsets.only(left: 16),
+          margin: const EdgeInsets.only(left: 16),
           height: 40,
           width: 40,
           decoration: const BoxDecoration(
