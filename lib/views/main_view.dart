@@ -56,54 +56,58 @@ class _MainViewState extends State<MainView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: HexColor('#192038'),
-        resizeToAvoidBottomInset: false,
-        extendBody: true,
-        body: Stack(
-          children: [
-            AnimatedPositioned(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.fastOutSlowIn,
-                width: 288,
-                left: isSideBarClosed ? -288 : 0,
-                height: MediaQuery.of(context).size.height,
-                child: const SideBar()),
-            Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..rotateY(animation.value - 30 * animation.value * pi / 180),
-              child: Transform.translate(
-                  offset: Offset(animation.value * 265, 0),
-                  child: Transform.scale(
-                    scale: scalAnimation.value,
-                    child: const ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(24)),
-                        child: GoogleMapView()),
-                  )),
-            ),
-            AnimatedPositioned(
+      backgroundColor: HexColor('#192038'),
+      resizeToAvoidBottomInset: false,
+      extendBody: true,
+      body: Stack(
+        children: [
+          AnimatedPositioned(
               duration: const Duration(milliseconds: 200),
               curve: Curves.fastOutSlowIn,
-              left: isSideBarClosed ? 0 : 220,
-              top: 16,
-              child: SideBarBtn(
-                press: () {
-                  if (isSideBarClosed) {
-                    _animationController.forward();
-                  } else {
-                    _animationController.reverse();
-                  }
-                  setState(() {
-                    isSideBarClosed = !isSideBarClosed;
-                  });
-                },
+              width: 288,
+              left: isSideBarClosed ? -288 : 0,
+              height: MediaQuery.of(context).size.height,
+              child: const SideBar()),
+          Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateY(animation.value - 30 * animation.value * pi / 180),
+            child: Transform.translate(
+              offset: Offset(animation.value * 265, 0),
+              child: Transform.scale(
+                scale: scalAnimation.value,
+                child: const ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(24)),
+                  child: GoogleMapView(),
+                ),
               ),
             ),
-          ],
-        ),
-        bottomNavigationBar: Transform.translate(
-            offset: Offset(0, 100 * animation.value),
-            child: const BottomNavBar()));
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.fastOutSlowIn,
+            left: isSideBarClosed ? 0 : 220,
+            top: 16,
+            child: SideBarBtn(
+              press: () {
+                if (isSideBarClosed) {
+                  _animationController.forward();
+                } else {
+                  _animationController.reverse();
+                }
+                setState(() {
+                  isSideBarClosed = !isSideBarClosed;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Transform.translate(
+        offset: Offset(0, 100 * animation.value),
+        child: const BottomNavBar(),
+      ),
+    );
   }
 }
