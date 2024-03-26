@@ -7,6 +7,7 @@ import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:petsguides/features/auth/presentation/pages/login_sign_up_view.dart';
+import 'package:petsguides/features/market/presentation/pages/market_view.dart';
 import 'package:petsguides/injection_container.dart';
 import 'package:petsguides/config/themes/themes.dart';
 // import 'package:petsguides/views/google_map.dart';
@@ -84,7 +85,8 @@ class InitPage extends StatelessWidget {
           return const LoginSignUpView();
         } else if (state is AuthStateLoggedOut) {
           // return const LoginView();
-          return const LoginSignUpView();
+          // return const LoginSignUpView();
+          return const MarketView();
         } else {
           return const CircularProgressIndicator();
           // return const LoginView();

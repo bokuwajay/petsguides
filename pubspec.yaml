@@ -71,6 +71,8 @@ dependencies:
   snappable_thanos: ^0.0.4
   animate_do: ^3.3.3
 
+  flutter_svg: ^2.0.10+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -98,6 +100,8 @@ flutter:
     - assets/
     - assets/login/
     - assets/env/
+    - assets/icons/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
