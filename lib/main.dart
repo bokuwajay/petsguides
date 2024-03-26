@@ -6,13 +6,12 @@ import 'package:petsguides/core/util/secure_storage.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
-import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
+import 'package:petsguides/features/auth/presentation/pages/login_sign_up_view.dart';
 import 'package:petsguides/injection_container.dart';
 import 'package:petsguides/config/themes/themes.dart';
 // import 'package:petsguides/views/google_map.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 // import 'package:petsguides/components/sidebar/side_bar.dart';
-import 'package:petsguides/features/market/presentation/pages/market_view.dart';
 
 void main() async {
   if (kDebugMode) {
@@ -81,9 +80,11 @@ class InitPage extends StatelessWidget {
       builder: (context, state) {
         if (state is AuthStateLoggedIn) {
           // return const SideBar();
-          return const MarketView();
+          // return const MarketView();
+          return const LoginSignUpView();
         } else if (state is AuthStateLoggedOut) {
-          return const LoginView();
+          // return const LoginView();
+          return const LoginSignUpView();
         } else {
           return const CircularProgressIndicator();
           // return const LoginView();
