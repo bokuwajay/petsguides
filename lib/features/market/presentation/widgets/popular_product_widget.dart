@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:petsguides/features/market/presentation/widgets/product_model.dart';
 
 class PopularProductWidget extends StatelessWidget {
@@ -63,42 +64,50 @@ class PopularProductWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            RichText(
-                              text: TextSpan(children: [
-                                TextSpan(
-                                    text: products[index].brand,
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall),
-                                TextSpan(
-                                    text: " ${products[index].name}",
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall)
-                              ]),
+                            Expanded(
+                              child: RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                      text: products[index].brand,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium),
+                                  TextSpan(
+                                      text: " ${products[index].name}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall)
+                                ]),
+                              ),
                             ),
-                            Row(
-                              children: [
-                                const Icon(Icons.star_rounded),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  products[index].rating,
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                )
-                              ],
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.star_rounded),
+                                      Text(
+                                        products[index].rating,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall,
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.wallet),
+                                      Text(
+                                        products[index].price,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                            Row(
-                              children: [
-                                const Icon(Icons.wallet),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  products[index].price,
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                )
-                              ],
-                            )
                           ],
                         ),
                       ),
