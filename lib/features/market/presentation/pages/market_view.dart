@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:petsguides/components/bottomNavigationBar/navigation_bar.dart';
-import 'package:petsguides/features/market/presentation/pages/home_screen.dart';
+// import 'package:petsguides/features/get_started/presentation/pages/get_started_view.dart';
+import 'package:petsguides/features/market/presentation/widgets/home/home_view.dart';
 import 'package:petsguides/features/market/presentation/widgets/sidebar/side_bar.dart';
 // import 'package:petsguides/features/market/presentation/widgets/sidebar/side_bar_btn.dart';
 // import 'package:petsguides/google_map.dart';
@@ -80,29 +81,11 @@ class _MarketViewState extends State<MarketView>
                 scale: scalAnimation.value,
                 child: const ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(24)),
-                  child: HomeScreen(),
+                  child: HomeView(),
                 ),
               ),
             ),
           ),
-          // AnimatedPositioned(
-          //   duration: const Duration(milliseconds: 200),
-          //   curve: Curves.fastOutSlowIn,
-          //   left: isSideBarClosed ? 0 : 220,
-          //   top: 16,
-          //   child: SideBarBtn(
-          //     press: () {
-          //       if (isSideBarClosed) {
-          //         _animationController.forward();
-          //       } else {
-          //         _animationController.reverse();
-          //       }
-          //       setState(() {
-          //         isSideBarClosed = !isSideBarClosed;
-          //       });
-          //     },
-          //   ),
-          // ),
         ],
       ),
       bottomNavigationBar: Transform.translate(

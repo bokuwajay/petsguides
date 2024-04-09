@@ -43,6 +43,7 @@ dependencies:
   bloc: ^8.1.2
   flutter_bloc: ^8.1.3
   flutter_dotenv: ^5.1.0
+  carousel_slider: ^4.2.1
 
   # comparing dart objects
   equatable: ^2.0.5
@@ -102,6 +103,7 @@ flutter:
     - assets/env/
     - assets/icons/
     - assets/images/
+    - assets/pets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
