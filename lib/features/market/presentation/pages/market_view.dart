@@ -3,12 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:petsguides/components/bottomNavigationBar/navigation_bar.dart';
-// import 'package:petsguides/features/get_started/presentation/pages/get_started_view.dart';
 import 'package:petsguides/features/market/presentation/widgets/home/home_view.dart';
 import 'package:petsguides/features/market/presentation/widgets/sidebar/side_bar.dart';
-import 'package:petsguides/features/market/presentation/widgets/sidebar/side_bar_btn.dart';
-// import 'package:petsguides/features/market/presentation/widgets/sidebar/side_bar_btn.dart';
-// import 'package:petsguides/google_map.dart';
 
 class MarketView extends StatefulWidget {
   const MarketView({super.key});
@@ -24,6 +20,17 @@ class _MarketViewState extends State<MarketView>
   late AnimationController _animationController;
   late Animation<double> animation;
   late Animation<double> scalAnimation;
+
+  void toggle() {
+    if (isSideBarClosed) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+    setState(() {
+      isSideBarClosed = !isSideBarClosed;
+    });
+  }
 
   @override
   void initState() {
@@ -80,29 +87,21 @@ class _MarketViewState extends State<MarketView>
               offset: Offset(animation.value * 265, 0),
               child: Transform.scale(
                 scale: scalAnimation.value,
-                child: const ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(24)),
-                  child: HomeView(),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(24)),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (!isSideBarClosed) {
+                        toggle();
+                      }
+                    },
+                    child: HomeView(
+                      isSideBarClosed: isSideBarClosed,
+                      toggle: toggle,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.fastOutSlowIn,
-            left: isSideBarClosed ? 0 : 220,
-            top: 16,
-            child: SideBarBtn(
-              press: () {
-                if (isSideBarClosed) {
-                  _animationController.forward();
-                } else {
-                  _animationController.reverse();
-                }
-                setState(() {
-                  isSideBarClosed = !isSideBarClosed;
-                });
-              },
             ),
           ),
         ],

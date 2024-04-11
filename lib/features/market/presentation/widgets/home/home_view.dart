@@ -7,7 +7,11 @@ import 'package:petsguides/features/market/presentation/widgets/promotion_widget
 import 'package:petsguides/features/market/presentation/widgets/shop_widget.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  final bool isSideBarClosed;
+  final Function() toggle;
+
+  const HomeView(
+      {super.key, required this.isSideBarClosed, required this.toggle});
 
   @override
   Widget build(BuildContext context) {
@@ -15,23 +19,40 @@ class HomeView extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.white,
             floating: true,
-            title: const Text("Pets Guides"),
             centerTitle: true,
             bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(56),
-              child: Container(
-                margin: const EdgeInsets.all(16),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Row(
+              preferredSize: const Size.fromHeight(12),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Icon(Icons.search),
-                    Expanded(child: Text("Search...."))
+                    IconButton(
+                        onPressed: () {
+                          toggle();
+                        },
+                        icon: const Icon(Icons.menu, size: 36)),
+                    const Expanded(
+                      child: SizedBox(
+                        height: 36,
+                        width: 80,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Search...',
+                            border: InputBorder.none,
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 16.0),
+                            prefixIcon: Icon(Icons.search, size: 30),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Icon(Icons.bookmark_add_outlined, size: 36),
+                    const Icon(Icons.chat_bubble_outline, size: 36),
                   ],
                 ),
               ),

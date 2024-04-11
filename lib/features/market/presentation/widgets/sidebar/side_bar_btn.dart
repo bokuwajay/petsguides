@@ -25,7 +25,7 @@ class SideBarBtn extends StatelessWidget {
                   color: Colors.black12, offset: Offset(0, 3), blurRadius: 8)
             ],
           ),
-          child: const Icon(Icons.article_outlined),
+          child: const Icon(Icons.menu),
         ),
       ),
     );
