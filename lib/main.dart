@@ -2,10 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:petsguides/config/routes/routes.dart';
 import 'package:petsguides/core/util/secure_storage.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
+import 'package:petsguides/features/auth/presentation/pages/get_started_view.dart';
 // import 'package:petsguides/features/auth/presentation/pages/login_sign_up_view.dart';
 import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
 import 'package:petsguides/features/market/presentation/pages/market_view.dart';
@@ -58,7 +60,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return BlocProvider<AuthBloc>(
       create: (context) => sl(),
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Flutter Home page',
         theme: ThemeClass.lightTheme,
         darkTheme: ThemeClass.darkTheme,
@@ -66,7 +68,7 @@ class _MyAppState extends State<MyApp> {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         locale: _locale,
-        home: const InitPage(),
+        routerConfig: router,
       ),
     );
   }
@@ -87,6 +89,10 @@ class InitPage extends StatelessWidget {
           // return const LoginSignUpView();
         } else if (state is AuthStateLoggedOut) {
           return const LoginView();
+          // return const LoginSignUpView();
+          // return const MarketView();
+        } else if (state is AuthStateFirstLaunch) {
+          return const GetStartedView();
           // return const LoginSignUpView();
           // return const MarketView();
         } else {

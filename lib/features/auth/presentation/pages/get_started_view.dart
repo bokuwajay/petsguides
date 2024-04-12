@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
+import 'package:petsguides/core/util/secure_storage.dart';
 
 class GetStartedView extends StatelessWidget {
   const GetStartedView({super.key});
@@ -39,7 +41,13 @@ class GetStartedView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           GestureDetector(
-            onTap: () {},
+            onTap: () async {
+              await SecureStorage.writeSecureData(
+                'FIRST_LAUNCH',
+                'pets_guides',
+              );
+              GoRouter.of(context).go('/login');
+            },
             child: Container(
               height: 66,
               decoration: BoxDecoration(

@@ -15,6 +15,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (event, emit) async {
         try {
           final token = await SecureStorage.readSecureData('pgToken');
+          final String? firstLaunch =
+              await SecureStorage.readSecureData('FIRST_LAUNCH');
+
+          if (firstLaunch != 'pets_guides') {
+            emit(const AuthStateFirstLaunch(isLoading: false));
+            return;
+          }
 
           if (token != null) {
             final Map<String, dynamic> decodedToken = JwtDecoder.decode(token);

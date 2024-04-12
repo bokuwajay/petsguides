@@ -23,6 +23,11 @@ class AuthStateUninitialized extends AuthState {
       : super(isLoading: isLoading);
 }
 
+class AuthStateFirstLaunch extends AuthState {
+  const AuthStateFirstLaunch({required bool isLoading})
+      : super(isLoading: isLoading);
+}
+
 class AuthStateLoggedIn extends AuthState {
   final AuthEntity? auth;
   const AuthStateLoggedIn({
