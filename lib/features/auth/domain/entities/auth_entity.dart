@@ -3,14 +3,14 @@ import 'package:equatable/equatable.dart';
 class AuthEntity extends Equatable {
   final String? status;
   final int? statusCode;
-  final String? token;
+  final String? data;
   final String? detail;
   final String? timestamp;
 
   const AuthEntity({
     this.status,
     this.statusCode,
-    this.token,
+    this.data,
     this.detail,
     this.timestamp,
   });
@@ -22,7 +22,7 @@ class AuthEntity extends Equatable {
     return [
       status,
       statusCode,
-      token,
+      data,
       detail,
       timestamp,
     ];

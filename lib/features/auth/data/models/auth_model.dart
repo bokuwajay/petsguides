@@ -4,13 +4,13 @@ class AuthModel extends AuthEntity {
   const AuthModel({
     status,
     statusCode,
-    token,
+    data,
     detail,
     timestamp,
   }) : super(
           status: status,
           statusCode: statusCode,
-          token: token,
+          data: data,
           detail: detail,
           timestamp: timestamp,
         );
@@ -19,7 +19,7 @@ class AuthModel extends AuthEntity {
     return AuthModel(
       status: json['status'] ?? "",
       statusCode: json['statusCode'] ?? 0,
-      token: json['data'] ?? "",
+      data: json['data'] ?? "",
       detail: json['detail'] ?? "",
       timestamp: json['timestamp'] ?? "",
     );

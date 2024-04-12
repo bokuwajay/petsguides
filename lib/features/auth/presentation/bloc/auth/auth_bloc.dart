@@ -60,7 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       if (dataState is DataSuccess && dataState.data!.statusCode == 200) {
-        final token = dataState.data!.token!;
+        final token = dataState.data!.data!;
         await SecureStorage.writeSecureData('pgToken', token);
         emit(AuthStateLoggedIn(auth: dataState.data, isLoading: false));
       } else if (dataState is DioDataFailed) {
