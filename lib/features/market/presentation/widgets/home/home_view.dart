@@ -56,6 +56,7 @@ class HomeView extends StatelessWidget {
                     IconButton(
                         onPressed: () async {
                           await SecureStorage.deleteSecureData('pgToken');
+                          // await SecureStorage.deleteSecureData('FIRST_LAUNCH');
                         },
                         icon: const Icon(Icons.chat_bubble_outline, size: 36)),
                   ],

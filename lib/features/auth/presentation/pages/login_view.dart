@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:petsguides/core/constants/languages.dart';
 import 'package:petsguides/core/util/dialogs/error_dialog.dart';
 import 'package:petsguides/core/util/loading/loading_screen.dart';
@@ -33,7 +34,7 @@ class _LoginViewState extends State<LoginView> with Validator {
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
-    _password.addListener(_updateSuffixIconVisibility);
+    // _password.addListener(_updateSuffixIconVisibility);
     super.initState();
   }
 
@@ -44,11 +45,11 @@ class _LoginViewState extends State<LoginView> with Validator {
     super.dispose();
   }
 
-  void _updateSuffixIconVisibility() {
-    setState(() {
-      hidePassword = _password.text.isNotEmpty;
-    });
-  }
+  // void _updateSuffixIconVisibility() {
+  //   setState(() {
+  //     hidePassword = _password.text.isNotEmpty;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,9 @@ class _LoginViewState extends State<LoginView> with Validator {
           LoadingScreen().show(context: context);
         } else {
           LoadingScreen().hide();
-          if (state is AuthStateLoggedOut) {
+          if (state is AuthStateLoggedIn) {
+            context.go('/home');
+          } else if (state is AuthStateLoggedOut) {
             if (state.dioException is DioException) {
               await showErrorDialog(
                 context,
@@ -224,19 +227,19 @@ class _LoginViewState extends State<LoginView> with Validator {
                                             padding: EdgeInsets.all(0),
                                             child: Icon(Icons.lock),
                                           ),
-                                          suffixIcon: _password.text.isNotEmpty
-                                              ? IconButton(
-                                                  onPressed: () => setState(
-                                                    () {
-                                                      hidePassword =
-                                                          !hidePassword;
-                                                    },
-                                                  ),
-                                                  icon: Icon(hidePassword
-                                                      ? Icons.visibility
-                                                      : Icons.visibility_off),
-                                                )
-                                              : null,
+                                          // suffixIcon: _password.text.isNotEmpty
+                                          //     ? IconButton(
+                                          //         onPressed: () => setState(
+                                          //           () {
+                                          //             hidePassword =
+                                          //                 !hidePassword;
+                                          //           },
+                                          //         ),
+                                          //         icon: Icon(hidePassword
+                                          //             ? Icons.visibility
+                                          //             : Icons.visibility_off),
+                                          //       )
+                                          //     : null,
                                         ),
                                         validator: (value) =>
                                             validateRequiredField(
