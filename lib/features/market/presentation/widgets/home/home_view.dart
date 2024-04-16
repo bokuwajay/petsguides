@@ -35,23 +35,23 @@ class HomeView extends StatelessWidget {
                           toggle();
                         },
                         icon: const Icon(Icons.menu, size: 36)),
-                    const Expanded(
-                      child: SizedBox(
-                        height: 36,
-                        width: 80,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Search...',
-                            border: InputBorder.none,
-                            filled: true,
-                            fillColor: Colors.white,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 16.0),
-                            prefixIcon: Icon(Icons.search, size: 30),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // const Expanded(
+                    //   child: SizedBox(
+                    //     height: 36,
+                    //     width: 80,
+                    //     child: TextField(
+                    //       decoration: InputDecoration(
+                    //         hintText: 'Search...',
+                    //         border: InputBorder.none,
+                    //         filled: true,
+                    //         fillColor: Colors.white,
+                    //         contentPadding: EdgeInsets.symmetric(
+                    //             vertical: 8.0, horizontal: 16.0),
+                    //         prefixIcon: Icon(Icons.search, size: 30),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     const Icon(Icons.bookmark_add_outlined, size: 36),
                     IconButton(
                         onPressed: () async {
