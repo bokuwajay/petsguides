@@ -22,32 +22,27 @@ GoRouter initRouter() {
         path: '/',
         builder: (context, state) {
           authBloc.add(const AuthEventInitialize());
-          return Scaffold(
-            body: BlocBuilder<AuthBloc, AuthState>(
-              bloc: authBloc,
-              builder: (context, state) {
-                if (state is AuthStateLoggedIn) {
-                  // return const SideBar();
-                  return const MarketView();
-                  // return const LoginSignUpView();
-                } else if (state is AuthStateLoggedOut) {
-                  return const LoginView();
-                  // return const LoginSignUpView();
-                  // return const MarketView();
-                } else if (state is AuthStateFirstLaunch) {
-                  return const GetStartedView();
-                  // return const LoginSignUpView();
-                  // return const MarketView();
-                } else {
-                  return Center(
-                    child: LottieBuilder.asset('assets/splashShiba.json'),
-                  );
-                  // return const LoginView();
-                }
-              },
-            ),
+          return BlocBuilder<AuthBloc, AuthState>(
+            bloc: authBloc,
+            builder: (context, state) {
+              if (state is AuthStateFirstLaunch) {
+                return const GetStartedView();
+              } else if (state is AuthStateLoggedOut) {
+                return const GetStartedView();
+              } else if (state is AuthStateLoggedIn) {
+                return const MarketView();
+              } else {
+                return Center(
+                  child: LottieBuilder.asset('assets/splashShiba.json'),
+                );
+              }
+            },
           );
         },
+      ),
+      GoRoute(
+        path: '/get_started',
+        builder: (context, state) => const GetStartedView(),
       ),
       GoRoute(
         path: '/login',
