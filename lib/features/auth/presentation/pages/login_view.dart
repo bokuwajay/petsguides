@@ -14,7 +14,6 @@ import 'package:petsguides/core/util/validator.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 import 'package:petsguides/main.dart';
 import 'package:snappable_thanos/snappable_thanos.dart';
-// import 'package:petsguides/main.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -34,7 +33,7 @@ class _LoginViewState extends State<LoginView> with Validator {
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
-    // _password.addListener(_updateSuffixIconVisibility);
+    _password.addListener(_updateSuffixIconVisibility);
     super.initState();
   }
 
@@ -45,11 +44,11 @@ class _LoginViewState extends State<LoginView> with Validator {
     super.dispose();
   }
 
-  // void _updateSuffixIconVisibility() {
-  //   setState(() {
-  //     hidePassword = _password.text.isNotEmpty;
-  //   });
-  // }
+  void _updateSuffixIconVisibility() {
+    setState(() {
+      hidePassword = _password.text.isNotEmpty;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,19 +226,19 @@ class _LoginViewState extends State<LoginView> with Validator {
                                             padding: EdgeInsets.all(0),
                                             child: Icon(Icons.lock),
                                           ),
-                                          // suffixIcon: _password.text.isNotEmpty
-                                          //     ? IconButton(
-                                          //         onPressed: () => setState(
-                                          //           () {
-                                          //             hidePassword =
-                                          //                 !hidePassword;
-                                          //           },
-                                          //         ),
-                                          //         icon: Icon(hidePassword
-                                          //             ? Icons.visibility
-                                          //             : Icons.visibility_off),
-                                          //       )
-                                          //     : null,
+                                          suffixIcon: _password.text.isNotEmpty
+                                              ? IconButton(
+                                                  onPressed: () => setState(
+                                                    () {
+                                                      hidePassword =
+                                                          !hidePassword;
+                                                    },
+                                                  ),
+                                                  icon: Icon(hidePassword
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off),
+                                                )
+                                              : null,
                                         ),
                                         validator: (value) =>
                                             validateRequiredField(

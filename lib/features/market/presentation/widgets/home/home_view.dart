@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petsguides/core/util/secure_storage.dart';
+import 'package:petsguides/features/auth/presentation/widgets/dialog/sign_in_dialog.dart';
 import 'package:petsguides/features/market/presentation/widgets/carousel_widget.dart';
 import 'package:petsguides/features/market/presentation/widgets/category_widget.dart';
 import 'package:petsguides/features/market/presentation/widgets/pets_widget.dart';
@@ -52,13 +53,20 @@ class HomeView extends StatelessWidget {
                     //     ),
                     //   ),
                     // ),
-                    const Icon(Icons.bookmark_add_outlined, size: 36),
                     IconButton(
-                        onPressed: () async {
-                          await SecureStorage.deleteSecureData('pgToken');
-                          // await SecureStorage.deleteSecureData('FIRST_LAUNCH');
-                        },
-                        icon: const Icon(Icons.chat_bubble_outline, size: 36)),
+                      onPressed: () {
+                        SignInDialog().show(context: context);
+                      },
+                      icon: const Icon(Icons.bookmark_add_outlined, size: 36),
+                    ),
+
+                    IconButton(
+                      onPressed: () async {
+                        await SecureStorage.deleteSecureData('pgToken');
+                        // await SecureStorage.deleteSecureData('FIRST_LAUNCH');
+                      },
+                      icon: const Icon(Icons.chat_bubble_outline, size: 36),
+                    ),
                   ],
                 ),
               ),

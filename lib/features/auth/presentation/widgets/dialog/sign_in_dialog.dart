@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petsguides/features/auth/presentation/pages/login_sign_up_view.dart';
-import 'package:petsguides/features/auth/presentation/widgets/sign_in_dialog_controller.dart';
+import 'package:petsguides/features/auth/presentation/widgets/dialog/sign_in_dialog_controller.dart';
 
 class SignInDialog {
   factory SignInDialog() => _shared;
