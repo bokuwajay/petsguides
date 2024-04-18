@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petsguides/features/market/presentation/widgets/pet_model.dart';
+import 'package:petsguides/features/shop/presentation/widgets/pet_model.dart';
 
 class PetsWidget extends StatefulWidget {
   const PetsWidget({super.key});

@@ -3,17 +3,17 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:petsguides/components/bottomNavigationBar/navigation_bar.dart';
-import 'package:petsguides/features/market/presentation/widgets/home/home_view.dart';
-import 'package:petsguides/features/market/presentation/widgets/sidebar/side_bar.dart';
+import 'package:petsguides/features/shop/presentation/widgets/shop_item_list_view.dart';
+import 'package:petsguides/features/shop/presentation/widgets/sidebar/side_bar.dart';
 
-class MarketView extends StatefulWidget {
-  const MarketView({super.key});
+class ShopView extends StatefulWidget {
+  const ShopView({super.key});
 
   @override
-  State<MarketView> createState() => _MarketViewState();
+  State<ShopView> createState() => _ShopViewState();
 }
 
-class _MarketViewState extends State<MarketView>
+class _ShopViewState extends State<ShopView>
     with SingleTickerProviderStateMixin {
   bool isSideBarClosed = true;
 
@@ -95,7 +95,7 @@ class _MarketViewState extends State<MarketView>
                         toggle();
                       }
                     },
-                    child: HomeView(
+                    child: ShopItemListView(
                       isSideBarClosed: isSideBarClosed,
                       toggle: toggle,
                     ),

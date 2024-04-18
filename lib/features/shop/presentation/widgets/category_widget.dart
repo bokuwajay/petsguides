@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petsguides/features/market/presentation/widgets/category_model.dart';
+import 'package:petsguides/features/shop/presentation/widgets/category_model.dart';
 
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget({super.key});

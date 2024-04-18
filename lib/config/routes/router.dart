@@ -8,7 +8,7 @@ import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart'
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:petsguides/features/auth/presentation/pages/get_started_view.dart';
 import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
-import 'package:petsguides/features/market/presentation/pages/market_view.dart';
+import 'package:petsguides/features/shop/presentation/pages/shop_view.dart';
 import 'package:petsguides/google_map.dart';
 
 // Function to initialize and configure the GoRouter
@@ -30,7 +30,7 @@ GoRouter initRouter() {
               } else if (state is AuthStateLoggedOut) {
                 return const GetStartedView();
               } else if (state is AuthStateLoggedIn) {
-                return const MarketView();
+                return const ShopView();
               } else {
                 return Center(
                   child: LottieBuilder.asset('assets/splashShiba.json'),
@@ -50,7 +50,7 @@ GoRouter initRouter() {
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) => const MarketView(),
+        builder: (context, state) => const ShopView(),
       ),
       GoRoute(
         path: '/goMap',

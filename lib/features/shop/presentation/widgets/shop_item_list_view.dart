@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:petsguides/core/util/secure_storage.dart';
 import 'package:petsguides/features/auth/presentation/widgets/dialog/sign_in_dialog.dart';
-import 'package:petsguides/features/market/presentation/widgets/carousel_widget.dart';
-import 'package:petsguides/features/market/presentation/widgets/category_widget.dart';
-import 'package:petsguides/features/market/presentation/widgets/pets_widget.dart';
-import 'package:petsguides/features/market/presentation/widgets/popular_product_widget.dart';
-import 'package:petsguides/features/market/presentation/widgets/promotion_widget.dart';
-import 'package:petsguides/features/market/presentation/widgets/shop_widget.dart';
+import 'package:petsguides/features/shop/presentation/widgets/carousel_widget.dart';
+import 'package:petsguides/features/shop/presentation/widgets/category_widget.dart';
+import 'package:petsguides/features/shop/presentation/widgets/pets_widget.dart';
+import 'package:petsguides/features/shop/presentation/widgets/popular_product_widget.dart';
+import 'package:petsguides/features/shop/presentation/widgets/promotion_widget.dart';
+import 'package:petsguides/features/shop/presentation/widgets/shop_widget.dart';
 
-class HomeView extends StatelessWidget {
+class ShopItemListView extends StatelessWidget {
   final bool isSideBarClosed;
   final Function() toggle;
 
-  const HomeView(
+  const ShopItemListView(
       {super.key, required this.isSideBarClosed, required this.toggle});
 
   @override

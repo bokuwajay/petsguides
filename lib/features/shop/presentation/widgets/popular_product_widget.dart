@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:petsguides/features/market/presentation/widgets/product_model.dart';
+import 'package:petsguides/features/shop/presentation/widgets/product_model.dart';
 
 class PopularProductWidget extends StatelessWidget {
   const PopularProductWidget({super.key});

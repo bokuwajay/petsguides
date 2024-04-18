@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petsguides/features/market/presentation/widgets/sidebar/info_card.dart';
-import 'package:petsguides/features/market/presentation/widgets/sidebar/side_bar_title.dart';
+import 'package:petsguides/features/shop/presentation/widgets/sidebar/info_card.dart';
+import 'package:petsguides/features/shop/presentation/widgets/sidebar/side_bar_title.dart';
 
 class SideBar extends StatefulWidget {
   const SideBar({super.key});
