@@ -7,7 +7,7 @@ import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:petsguides/features/auth/presentation/pages/get_started_view.dart';
-import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
+// import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
 import 'package:petsguides/features/shop/presentation/pages/shop_view.dart';
 import 'package:petsguides/google_map.dart';
 
@@ -44,10 +44,10 @@ GoRouter initRouter() {
         path: '/get_started',
         builder: (context, state) => const GetStartedView(),
       ),
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginView(),
-      ),
+      // GoRoute(
+      //   path: '/login',
+      //   builder: (context, state) => const LoginView(),
+      // ),
       GoRoute(
         path: '/home',
         builder: (context, state) => const ShopView(),

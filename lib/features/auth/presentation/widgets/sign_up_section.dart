@@ -148,14 +148,15 @@ class _SignUpSectionState extends State<SignUpSection> with Validator {
             children: [
               buildTextFormField(
                 controller: _firstName,
-                hintText: "First Name",
-                validator: (value) =>
-                    validateRequiredField(value, "First Name"),
+                hintText: AppLocalizations.of(context)!.firstName,
+                validator: (value) => validateRequiredField(
+                    value, AppLocalizations.of(context)!.firstName),
               ),
               buildTextFormField(
                 controller: _lastName,
-                hintText: "Last Name",
-                validator: (value) => validateRequiredField(value, "Last Name"),
+                hintText: AppLocalizations.of(context)!.lastName,
+                validator: (value) => validateRequiredField(
+                    value, AppLocalizations.of(context)!.lastName),
               ),
               buildTextFormField(
                 controller: _email,
@@ -173,17 +174,44 @@ class _SignUpSectionState extends State<SignUpSection> with Validator {
               ),
               buildTextFormField(
                 controller: _confirmPassword,
-                hintText: "Repeat password",
+                hintText: AppLocalizations.of(context)!.repeatPassword,
                 prefixIcon: const Icon(Icons.lock),
                 obscureText: true,
                 validator: (value) => validateConfirmPassword(
-                    value, _password as String, "Repeat password"),
+                    value,
+                    _password.text,
+                    AppLocalizations.of(context)!.repeatPassword),
               ),
               buildTextFormField(
                 controller: _phone,
-                hintText: "Phone",
-                validator: (value) => validatePhone(value, "Phone"),
-              )
+                hintText: AppLocalizations.of(context)!.phone,
+                validator: (value) =>
+                    validatePhone(value, AppLocalizations.of(context)!.phone),
+              ),
+              SizedBox(
+                width: 160,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      final firstName = _firstName.text;
+                      final lastName = _lastName.text;
+                      final email = _email.text;
+                      final password = _password.text;
+                      final confirmedPassword = _confirmPassword.text;
+                      final phone = _phone.text;
+                    }
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.signUp,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
             ],
           )),
     );

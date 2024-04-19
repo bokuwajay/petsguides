@@ -4,7 +4,7 @@ mixin Validator {
       if (RegExp(r'^[a-zA-Z]+$').hasMatch(fieldName)) {
         return 'Email is required';
       } else {
-        return '請填寫有效的電郵地址';
+        return '要填真電郵地址';
       }
     } else if (!RegExp(
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
@@ -12,7 +12,7 @@ mixin Validator {
       if (RegExp(r'^[a-zA-Z]+$').hasMatch(fieldName)) {
         return 'Please enter a valid email';
       } else {
-        return '請填寫有效的電郵地址';
+        return '要填真電郵地址';
       }
     }
     return null;
@@ -23,7 +23,7 @@ mixin Validator {
       if (RegExp(r'^[a-zA-Z]+$').hasMatch(fieldName)) {
         return 'Phone numbers are required';
       } else {
-        return "請填寫有效的香港電話號碼";
+        return "要填真香港電話號碼";
       }
     } else if (!RegExp(r"^(?:\+852-?)?[456789]\d{3}-?\d{4}$").hasMatch(phone)) {
       return 'Please enter valid HK phone numbers';
@@ -36,20 +36,20 @@ mixin Validator {
       if (RegExp(r'^[a-zA-Z]+$').hasMatch(fieldName)) {
         return 'Password is required';
       } else {
-        return "請填寫密碼";
+        return "要打密碼";
       }
     } else if (password.length < 12) {
       if (RegExp(r'^[a-zA-Z]+$').hasMatch(fieldName)) {
         return 'Password must be at least 12 characters';
       } else {
-        return '密碼最少為12個英文字母(最少1個大楷及1個細楷)及數字';
+        return '密碼最少要12個英文字母(最少1個大楷+1個細楷)同埋數字';
       }
     } else if (!RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+")
         .hasMatch(password)) {
       if (RegExp(r'^[a-zA-Z]+$').hasMatch(fieldName)) {
         return "Please include at least 1 uppercase, 1 lowercase and 1 digit.";
       } else {
-        return '密碼最少1個大楷及1個細楷字母及數字';
+        return '密碼最少1個大楷+1個細楷字母+數字';
       }
     }
     return null;
@@ -61,13 +61,13 @@ mixin Validator {
       if (RegExp(r'^[a-zA-Z]+$').hasMatch(fieldName)) {
         return 'Confirm password is required';
       } else {
-        return '請重覆上述所設定的密碼';
+        return '打多次個密碼';
       }
     } else if (value != password) {
       if (RegExp(r'^[a-zA-Z]+$').hasMatch(fieldName)) {
         return 'Confirm password does not match';
       } else {
-        return '與上述所設定的密碼不符，請重新輸入';
+        return '2個密碼唔對!請再打過';
       }
     }
     return null;
@@ -78,7 +78,7 @@ mixin Validator {
       if (RegExp(r'^[a-zA-Z]+$').hasMatch(fieldName)) {
         return '$fieldName is required';
       } else {
-        return '$fieldName不可留空';
+        return '要填$fieldName';
       }
     }
     return null;

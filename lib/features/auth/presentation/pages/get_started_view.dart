@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsguides/core/util/secure_storage.dart';
+import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 
 class GetStartedView extends StatelessWidget {
   const GetStartedView({super.key});
@@ -46,7 +47,7 @@ class GetStartedView extends StatelessWidget {
                 'FIRST_LAUNCH',
                 'pets_guides',
               );
-              GoRouter.of(context).go('/login');
+              GoRouter.of(context).go('/home');
             },
             child: Container(
               height: 66,
@@ -54,7 +55,7 @@ class GetStartedView extends StatelessWidget {
                   color: Colors.blue, borderRadius: BorderRadius.circular(32)),
               alignment: Alignment.center,
               child: Text(
-                "Get Started",
+                AppLocalizations.of(context)!.getStarted,
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
@@ -63,16 +64,6 @@ class GetStartedView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Already have an Account",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const Text("Log in"),
-            ],
-          )
         ]),
       ),
     );

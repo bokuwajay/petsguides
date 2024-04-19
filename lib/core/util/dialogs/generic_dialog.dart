@@ -31,9 +31,10 @@ Future<T?> showGenericDialog<T>({
         return AlertDialog(
           title: Text(title),
           content: Text(content),
-          actions: options.keys.map((optionTitle) {
-            final T value = options[optionTitle];
-            return TextButton(
+          actions: options.keys.map(
+            (optionTitle) {
+              final T value = options[optionTitle];
+              return TextButton(
                 onPressed: () {
                   if (value != null) {
                     Navigator.of(context).pop(value);
@@ -41,8 +42,10 @@ Future<T?> showGenericDialog<T>({
                     Navigator.of(context).pop();
                   }
                 },
-                child: Text(optionTitle));
-          }).toList(), // without .toList() , when hover on options , we will see it return Iterable
+                child: Text(optionTitle),
+              );
+            },
+          ).toList(), // without .toList() , when hover on options , we will see it return Iterable
         );
       });
 }

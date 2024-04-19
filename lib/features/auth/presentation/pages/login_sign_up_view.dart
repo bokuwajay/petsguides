@@ -56,7 +56,7 @@ class _LoginSignUpViewState extends State<LoginSignUpView> {
         Positioned(
           top: isSignUpView ? 140 : 220,
           child: Container(
-            height: isSignUpView ? 520 : 320,
+            height: isSignUpView ? 580 : 320,
             padding: const EdgeInsets.all(20),
             width: MediaQuery.of(context).size.width - 40,
             margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -85,7 +85,7 @@ class _LoginSignUpViewState extends State<LoginSignUpView> {
                         child: Column(
                           children: [
                             Text(
-                              "Login",
+                              AppLocalizations.of(context)!.login,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -112,7 +112,7 @@ class _LoginSignUpViewState extends State<LoginSignUpView> {
                         child: Column(
                           children: [
                             Text(
-                              "Sign Up",
+                              AppLocalizations.of(context)!.signUp,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
