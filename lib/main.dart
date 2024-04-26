@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthBloc>(
-      create: (context) => sl(),
+      create: (context) => sl.get<AuthBloc>(),
       child: MaterialApp.router(
         title: 'Flutter Home page',
         theme: ThemeClass.lightTheme,
@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         locale: _locale,
-        routerConfig: router,
+        routerConfig: initRouter(context),
       ),
     );
   }

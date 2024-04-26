@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/core/util/secure_storage.dart';
-import 'package:petsguides/features/auth/presentation/widgets/dialog/sign_in_dialog.dart';
+import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/shop/presentation/widgets/carousel_widget.dart';
 import 'package:petsguides/features/shop/presentation/widgets/category_widget.dart';
 import 'package:petsguides/features/shop/presentation/widgets/pets_widget.dart';
@@ -9,11 +11,9 @@ import 'package:petsguides/features/shop/presentation/widgets/promotion_widget.d
 import 'package:petsguides/features/shop/presentation/widgets/shop_widget.dart';
 
 class ShopItemListView extends StatelessWidget {
-  final bool isSideBarClosed;
   final Function() toggle;
 
-  const ShopItemListView(
-      {super.key, required this.isSideBarClosed, required this.toggle});
+  const ShopItemListView({super.key, required this.toggle});
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +54,10 @@ class ShopItemListView extends StatelessWidget {
                     //   ),
                     // ),
                     IconButton(
-                      onPressed: () {
-                        SignInDialog().show(context: context);
+                      onPressed: () async {
+                        context
+                            .read<AuthBloc>()
+                            .add(const AuthEventCheckToken());
                       },
                       icon: const Icon(Icons.bookmark_add_outlined, size: 36),
                     ),

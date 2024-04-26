@@ -14,3 +14,7 @@ class AuthEventLogIn extends AuthEvent {
     required this.password,
   });
 }
+
+class AuthEventCheckToken extends AuthEvent {
+  const AuthEventCheckToken();
+}

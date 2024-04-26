@@ -82,5 +82,29 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ));
       }
     });
+
+    on<AuthEventCheckToken>((event, emit) async {
+      final token = await SecureStorage.readSecureData('pgToken');
+      if (token == null) {
+        emit(const AuthStateLoggedOut(
+          dioException: null,
+          genericException: null,
+          isLoading: false,
+        ));
+        return;
+      } else {
+        final Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+        if (decodedToken['exp'] == null ||
+            DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000)
+                .isBefore(DateTime.now())) {
+          emit(const AuthStateLoggedOut(
+            dioException: null,
+            genericException: null,
+            isLoading: false,
+          ));
+          return;
+        }
+      }
+    });
   }
 }

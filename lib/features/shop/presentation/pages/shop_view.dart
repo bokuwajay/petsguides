@@ -96,7 +96,6 @@ class _ShopViewState extends State<ShopView>
                       }
                     },
                     child: ShopItemListView(
-                      isSideBarClosed: isSideBarClosed,
                       toggle: toggle,
                     ),
                   ),
