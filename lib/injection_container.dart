@@ -10,6 +10,11 @@ import 'package:petsguides/features/auth/data/repository/auth_repository_impl.da
 import 'package:petsguides/features/auth/domain/repository/auth_repository.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_usecase.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:petsguides/features/map/data/data_sources/map_service.dart';
+import 'package:petsguides/features/map/data/repository/map_repository_impl.dart';
+import 'package:petsguides/features/map/domain/repository/map_repository.dart';
+import 'package:petsguides/features/map/domain/usecases/map_usecase.dart';
+import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -31,4 +36,9 @@ Future<void> initializeDependencies() async {
 
   // register Blocs
   sl.registerFactory<AuthBloc>(() => AuthBloc(sl()));
+
+  sl.registerSingleton<MapService>(MapService());
+  sl.registerSingleton<MapRepository>(MapRepositoryImpl(sl()));
+  sl.registerSingleton<MapUseCase>(MapUseCase(sl()));
+  sl.registerFactory<MapBloc>(() => MapBloc(sl()));
 }

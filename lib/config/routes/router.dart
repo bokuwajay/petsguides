@@ -10,9 +10,11 @@ import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart'
 import 'package:petsguides/features/auth/presentation/pages/get_started_view.dart';
 import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
 import 'package:petsguides/features/auth/presentation/widgets/sign_in_sign_up_overlay.dart';
+import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 // import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
 import 'package:petsguides/features/shop/presentation/pages/shop_view.dart';
-import 'package:petsguides/google_map.dart';
+import 'package:petsguides/features/map/presentation/pages/google_map.dart';
+import 'package:petsguides/injection_container.dart';
 
 // Function to initialize and configure the GoRouter
 GoRouter initRouter(context) {
@@ -28,9 +30,9 @@ GoRouter initRouter(context) {
               if (state is AuthStateFirstLaunch) {
                 context.go('/get_started');
               } else if (state is AuthStateLoggedOut) {
-                context.go('/home');
+                context.go('/goMap');
               } else if (state is AuthStateLoggedIn) {
-                context.go('/home');
+                context.go('/goMap');
               }
             },
             child: Center(
@@ -72,7 +74,12 @@ GoRouter initRouter(context) {
       ),
       GoRoute(
         path: '/goMap',
-        builder: (context, state) => const GoogleMapView(),
+        builder: (context, state) {
+          return BlocProvider<MapBloc>(
+            create: (context) => sl.get<MapBloc>(),
+            child: const GoogleMapView(),
+          );
+        },
       ),
     ],
   );
