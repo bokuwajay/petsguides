@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
+import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 
 class GoogleMapView extends StatefulWidget {
   const GoogleMapView({super.key});
@@ -55,74 +57,82 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(children: [
-              Container(
-                height: screenHeight,
-                width: screenWidth,
-                child: GoogleMap(
-                  mapType: MapType.normal,
-                  markers: _markers,
-                  initialCameraPosition: _kGooglePlex,
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
-                ),
-              ),
-              searchToggle
-                  ? Padding(
-                      padding: EdgeInsets.fromLTRB(15.0, 40.0, 15.0, 5.0),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 50.0,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: Colors.white),
-                            child: TextFormField(
-                              controller: searchController,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 20.0, vertical: 15.0),
-                                  border: InputBorder.none,
-                                  hintText: "Search",
-                                  suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          searchToggle = false;
-                                          searchController.text = '';
+    return BlocConsumer<MapBloc, MapState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Stack(children: [
+                  Container(
+                    height: screenHeight,
+                    width: screenWidth,
+                    child: GoogleMap(
+                      mapType: MapType.normal,
+                      markers: _markers,
+                      initialCameraPosition: _kGooglePlex,
+                      onMapCreated: (GoogleMapController controller) {
+                        _controller.complete(controller);
+                      },
+                    ),
+                  ),
+                  searchToggle
+                      ? Padding(
+                          padding: EdgeInsets.fromLTRB(15.0, 40.0, 15.0, 5.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: Colors.white),
+                                child: TextFormField(
+                                  controller: searchController,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 15.0),
+                                      border: InputBorder.none,
+                                      hintText: "Search",
+                                      suffixIcon: IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              searchToggle = false;
+                                              searchController.text = '';
+                                              _markers = {};
+                                              // searchFlag.toggleSearch();
+                                            });
+                                          },
+                                          icon: Icon(Icons.close))),
+                                  onChanged: (value) {
+                                    if (_debounce?.isActive ?? false) {
+                                      _debounce?.cancel();
+                                    }
+                                    _debounce = Timer(
+                                        Duration(milliseconds: 700), () async {
+                                      if (value.length > 2) {
+                                        // here to call google API get the search of List<Place>
+                                        if (searchToggle) {
                                           _markers = {};
-                                          // searchFlag.toggleSearch();
-                                        });
-                                      },
-                                      icon: Icon(Icons.close))),
-                              onChanged: (value) {
-                                if (_debounce?.isActive ?? false) {
-                                  _debounce?.cancel();
-                                }
-                                _debounce = Timer(Duration(milliseconds: 700),
-                                    () async {
-                                  if (value.length > 2) {
-                                    // here to call google API get the search of List<Place>
-                                    context.read<MapBloc>().add(
-                                        MapEventSearchPlaces(
-                                            searchInput: value));
-                                  }
-                                });
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  : Container(),
+                                        }
 
-              // if the search of List<Place> > 0, then show the below
-              searchToggle
-                  ? searchResult.length > 0
+                                        context.read<MapBloc>().add(
+                                              MapEventSearchPlaces(
+                                                searchInput: value,
+                                              ),
+                                            );
+                                      }
+                                    });
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      : Container(),
+
+                  // if the search of List<Place> > 0, then show the below
+                  (state is MapStateSearchPlacesSuccess)
                       ? Positioned(
                           top: 100.0,
                           left: 15.0,
@@ -133,85 +143,82 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                               borderRadius: BorderRadius.circular(10.0),
                               color: Colors.white.withOpacity(0.7),
                             ),
-                            child: ListView(
-                              children: [],
-                            ),
-                          ))
-                      : Positioned(
-                          top: 100.0,
-                          left: 15.0,
-                          child: Container(
-                            height: 200.0,
-                            width: screenWidth - 30.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: Colors.white.withOpacity(0.7),
-                            ),
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "No results to show",
-                                    style: TextStyle(
-                                        fontFamily: 'WorkSans',
-                                        fontWeight: FontWeight.w200),
-                                  ),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Container(
-                                    width: 125.0,
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          // searchFlag.toggleSearch();
-                                        },
-                                        child: Center(
-                                          child: Text(
-                                            'Close this',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: 'WorkSans',
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        )),
+                            child: state.autoComplete!.isNotEmpty
+                                ? ListView(
+                                    children: [
+                                      ...state.autoComplete!
+                                          .map((e) => buildListItem(e))
+                                    ],
                                   )
-                                ],
-                              ),
-                            ),
+                                : Center(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "No results to show",
+                                          style: TextStyle(
+                                              fontFamily: 'WorkSans',
+                                              fontWeight: FontWeight.w200),
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Container(
+                                          width: 125.0,
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                // searchFlag.toggleSearch();
+                                              },
+                                              child: Center(
+                                                child: Text(
+                                                  'Close this',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'WorkSans',
+                                                      fontWeight:
+                                                          FontWeight.w300),
+                                                ),
+                                              )),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                           ))
-                  : Container()
-            ])
-          ],
-        ),
-      ),
-      floatingActionButton: FabCircularMenuPlus(
-          alignment: Alignment.bottomLeft,
-          fabColor: Colors.blue.shade50,
-          fabOpenColor: Colors.red.shade100,
-          ringDiameter: 250.0,
-          ringWidth: 60.0,
-          ringColor: Colors.blue.shade50,
-          fabSize: 60.0,
-          children: <Widget>[
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  searchToggle = true;
-                  radiusSlider = false;
-                  pressedNear = false;
-                  cardTapped = false;
-                  getDirections = false;
-                });
-              },
-              icon: Icon(Icons.search),
+                      : Container()
+                ])
+              ],
             ),
-            IconButton(
-              onPressed: () {
-                setState(() {});
-              },
-              icon: Icon(Icons.navigation),
-            ),
-          ]),
+          ),
+          floatingActionButton: FabCircularMenuPlus(
+            alignment: Alignment.bottomLeft,
+            fabColor: Colors.blue.shade50,
+            fabOpenColor: Colors.red.shade100,
+            ringDiameter: 250.0,
+            ringWidth: 60.0,
+            ringColor: Colors.blue.shade50,
+            fabSize: 60.0,
+            children: <Widget>[
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    searchToggle = true;
+                    radiusSlider = false;
+                    pressedNear = false;
+                    cardTapped = false;
+                    getDirections = false;
+                  });
+                },
+                icon: Icon(Icons.search),
+              ),
+              IconButton(
+                onPressed: () {
+                  setState(() {});
+                },
+                icon: Icon(Icons.navigation),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -221,7 +228,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         CameraPosition(target: LatLng(lat, lng), zoom: 12)));
   }
 
-  Widget buildListItem(placeItem, searchFlag) {
+  Widget buildListItem(
+    AutoCompleteEntity placeItem,
+  ) {
     return Padding(
       padding: EdgeInsets.all(5.0),
       child: GestureDetector(

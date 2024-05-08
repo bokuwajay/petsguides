@@ -14,7 +14,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       final searchInput = event.searchInput;
 
       final dataState = await _mapUseCase(params: {'search': searchInput});
-      print(dataState);
+
       if (dataState is DataSuccess) {
         emit(MapStateSearchPlacesSuccess(
             autoComplete: dataState.data, isLoading: false));
@@ -23,5 +23,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
             genericException: dataState.genericException, isLoading: false));
       }
     });
+
+    on<MapEventSearchToggle>(
+      (event, emit) async {
+        final bool searchToggle = !event.searchToggle;
+        emit(MapStateSearchToggle(
+            isLoading: false, isSearchToggle: searchToggle));
+      },
+    );
   }
 }

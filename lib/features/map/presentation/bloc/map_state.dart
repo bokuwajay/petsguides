@@ -49,3 +49,9 @@ class MapStateSearchPlacesFail extends MapState {
           isLoading: isLoading,
         );
 }
+
+class MapStateSearchToggle extends MapState {
+  final bool isSearchToggle;
+  MapStateSearchToggle({required bool isLoading, this.isSearchToggle = false})
+      : super(isLoading: isLoading);
+}
