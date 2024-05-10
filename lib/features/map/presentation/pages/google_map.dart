@@ -21,7 +21,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   Timer? _debounce;
 
-  bool searchToggle = false;
+  bool searchTextFormField = false;
   bool radiusSlider = false;
   bool cardTapped = false;
   bool pressedNear = false;
@@ -57,8 +57,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return BlocConsumer<MapBloc, MapState>(
-      listener: (context, state) {},
+    return BlocBuilder<MapBloc, MapState>(
       builder: (context, state) {
         return Scaffold(
           body: SingleChildScrollView(
@@ -77,7 +76,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       },
                     ),
                   ),
-                  searchToggle
+                  searchTextFormField
                       ? Padding(
                           padding: EdgeInsets.fromLTRB(15.0, 40.0, 15.0, 5.0),
                           child: Column(
@@ -90,20 +89,23 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                 child: TextFormField(
                                   controller: searchController,
                                   decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 20.0, vertical: 15.0),
-                                      border: InputBorder.none,
-                                      hintText: "Search",
-                                      suffixIcon: IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              searchToggle = false;
-                                              searchController.text = '';
-                                              _markers = {};
-                                              // searchFlag.toggleSearch();
-                                            });
-                                          },
-                                          icon: Icon(Icons.close))),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 20.0, vertical: 15.0),
+                                    border: InputBorder.none,
+                                    hintText: "Search",
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          searchTextFormField = false;
+                                          searchController.text = '';
+                                          _markers = {};
+                                          context.read<MapBloc>().add(
+                                              const MapEventSearchResultBoard());
+                                        });
+                                      },
+                                      icon: Icon(Icons.close),
+                                    ),
+                                  ),
                                   onChanged: (value) {
                                     if (_debounce?.isActive ?? false) {
                                       _debounce?.cancel();
@@ -112,7 +114,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                         Duration(milliseconds: 700), () async {
                                       if (value.length > 2) {
                                         // here to call google API get the search of List<Place>
-                                        if (searchToggle) {
+                                        if (!state.searchResultBoard) {
+                                          // context.read<MapBloc>().add(
+                                          //     const MapEventSearchToggle());
                                           _markers = {};
                                         }
 
@@ -132,7 +136,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       : Container(),
 
                   // if the search of List<Place> > 0, then show the below
-                  (state is MapStateSearchPlacesSuccess)
+                  (state.searchResultBoard)
                       ? Positioned(
                           top: 100.0,
                           left: 15.0,
@@ -143,7 +147,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                               borderRadius: BorderRadius.circular(10.0),
                               color: Colors.white.withOpacity(0.7),
                             ),
-                            child: state.autoComplete!.isNotEmpty
+                            child: (state is MapStateSearchPlacesSuccess &&
+                                    state.autoComplete!.isNotEmpty)
                                 ? ListView(
                                     children: [
                                       ...state.autoComplete!
@@ -200,7 +205,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
               IconButton(
                 onPressed: () {
                   setState(() {
-                    searchToggle = true;
+                    searchTextFormField = true;
                     radiusSlider = false;
                     pressedNear = false;
                     cardTapped = false;

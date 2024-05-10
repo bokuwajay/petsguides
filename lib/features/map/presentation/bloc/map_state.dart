@@ -5,6 +5,7 @@ import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dar
 abstract class MapState extends Equatable {
   final List<AutoCompleteEntity>? autoComplete;
   final bool isLoading;
+  final bool searchResultBoard;
   final DioException? dioException;
   final Exception? genericException;
 
@@ -12,27 +13,35 @@ abstract class MapState extends Equatable {
       {this.autoComplete,
       this.dioException,
       this.genericException,
-      required this.isLoading});
+      required this.isLoading,
+      required this.searchResultBoard});
 
   @override
-  List<Object?> get props => [autoComplete, isLoading];
+  List<Object?> get props => [
+        autoComplete,
+        isLoading,
+        searchResultBoard,
+        dioException,
+        genericException
+      ];
 }
 
 class MapStateUninitialized extends MapState {
-  const MapStateUninitialized({required bool isLoading})
-      : super(isLoading: isLoading);
+  const MapStateUninitialized(
+      {required bool isLoading, required bool searchResultBoard})
+      : super(isLoading: isLoading, searchResultBoard: searchResultBoard);
 }
 
 class MapStateSearchPlacesSuccess extends MapState {
   final List<AutoCompleteEntity>? autoComplete;
-  const MapStateSearchPlacesSuccess(
-      {this.autoComplete, required bool isLoading})
-      : super(autoComplete: autoComplete, isLoading: isLoading);
-}
-
-class MapStateSearching extends MapState {
-  const MapStateSearching({required bool isLoading})
-      : super(isLoading: isLoading);
+  MapStateSearchPlacesSuccess(
+      {this.autoComplete,
+      required bool isLoading,
+      required bool searchResultBoard})
+      : super(
+            autoComplete: autoComplete,
+            isLoading: isLoading,
+            searchResultBoard: searchResultBoard);
 }
 
 class MapStateSearchPlacesFail extends MapState {
@@ -43,15 +52,17 @@ class MapStateSearchPlacesFail extends MapState {
     this.dioException,
     this.genericException,
     required bool isLoading,
+    required bool searchResultBoard,
   }) : super(
           dioException: dioException,
           genericException: genericException,
           isLoading: isLoading,
+          searchResultBoard: searchResultBoard,
         );
 }
 
 class MapStateSearchToggle extends MapState {
-  final bool isSearchToggle;
-  MapStateSearchToggle({required bool isLoading, this.isSearchToggle = false})
-      : super(isLoading: isLoading);
+  MapStateSearchToggle(
+      {required bool isLoading, required bool searchResultBoard})
+      : super(isLoading: isLoading, searchResultBoard: searchResultBoard);
 }

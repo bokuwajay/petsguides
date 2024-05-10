@@ -8,27 +8,33 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   final MapUseCase _mapUseCase;
 
   MapBloc(this._mapUseCase)
-      : super(const MapStateUninitialized(isLoading: true)) {
+      : super(const MapStateUninitialized(
+            isLoading: true, searchResultBoard: false)) {
     on<MapEventSearchPlaces>((event, emit) async {
-      emit(const MapStateSearching(isLoading: true));
       final searchInput = event.searchInput;
 
       final dataState = await _mapUseCase(params: {'search': searchInput});
 
       if (dataState is DataSuccess) {
         emit(MapStateSearchPlacesSuccess(
-            autoComplete: dataState.data, isLoading: false));
+          autoComplete: dataState.data,
+          isLoading: false,
+          searchResultBoard: true,
+        ));
       } else if (dataState is GenericDataFailed) {
         emit(MapStateSearchPlacesFail(
-            genericException: dataState.genericException, isLoading: false));
+            genericException: dataState.genericException,
+            isLoading: false,
+            searchResultBoard: true));
       }
     });
 
-    on<MapEventSearchToggle>(
+    on<MapEventSearchResultBoard>(
       (event, emit) async {
-        final bool searchToggle = !event.searchToggle;
+        final currentState = state;
         emit(MapStateSearchToggle(
-            isLoading: false, isSearchToggle: searchToggle));
+            isLoading: false,
+            searchResultBoard: !currentState.searchResultBoard));
       },
     );
   }

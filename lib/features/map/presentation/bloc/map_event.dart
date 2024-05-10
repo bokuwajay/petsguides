@@ -8,7 +8,6 @@ class MapEventSearchPlaces extends MapEvent {
   const MapEventSearchPlaces({required this.searchInput});
 }
 
-class MapEventSearchToggle extends MapEvent {
-  final bool searchToggle;
-  const MapEventSearchToggle({required this.searchToggle});
+class MapEventSearchResultBoard extends MapEvent {
+  const MapEventSearchResultBoard();
 }
