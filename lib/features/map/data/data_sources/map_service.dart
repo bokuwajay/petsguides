@@ -16,7 +16,19 @@ class MapService {
 
     var results = json['predictions'] as List;
 
-    var list = results.map((e) => AutoCompleteModel.fromJson(e)).toList();
-    return list;
+    return results.map((e) => AutoCompleteModel.fromJson(e)).toList();
+  }
+
+  Future<Map<String, dynamic>> getPlace(String? placeId) async {
+    final String url =
+        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$key';
+
+    var response = await http.get(Uri.parse(url));
+
+    var json = convert.jsonDecode(response.body);
+
+    var results = json['result'] as Map<String, dynamic>;
+
+    return results;
   }
 }

@@ -247,6 +247,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           // var place = await MapServices().getPlace(placeItem.placeId);
           // gotoSearchedPlace(place['geometry']['location']['lat'], place['geometry']['location']['lng']);
           // searchFlag.toggleSearch();
+          context.read<MapBloc>().add(const MapEventSearchResultBoard());
+          context
+              .read<MapBloc>()
+              .add(MapEventGetPlace(placeId: placeItem.placeId ?? ''));
         },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

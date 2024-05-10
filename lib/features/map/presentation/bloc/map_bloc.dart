@@ -37,5 +37,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
             searchResultBoard: !currentState.searchResultBoard));
       },
     );
+
+    on<MapEventGetPlace>(
+      (event, emit) async {
+        final placeId = event.placeId;
+        final data = await _mapUseCase.getPlace(params: {'placeId': placeId});
+        print('dtaaaaaa-------$data');
+      },
+    );
   }
 }

@@ -17,4 +17,14 @@ class MapRepositoryImpl implements MapRepository {
       return GenericDataFailed(genericException);
     }
   }
+
+  @override
+  Future<Map<String, dynamic>> getPlace({required String placeId}) async {
+    try {
+      final httpResponse = await _mapService.getPlace(placeId);
+      return httpResponse;
+    } on Exception {
+      throw Exception().toString();
+    }
+  }
 }

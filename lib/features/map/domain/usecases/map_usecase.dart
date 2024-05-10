@@ -15,4 +15,9 @@ class MapUseCase
     final searchInput = params?['search'];
     return _mapRepository.searchPlaces(searchInput: searchInput ?? "");
   }
+
+  Future<Map<String, dynamic>> getPlace({required Map<String, String> params}) {
+    final placeId = params['placeId'] as String;
+    return _mapRepository.getPlace(placeId: placeId);
+  }
 }

@@ -11,3 +11,9 @@ class MapEventSearchPlaces extends MapEvent {
 class MapEventSearchResultBoard extends MapEvent {
   const MapEventSearchResultBoard();
 }
+
+class MapEventGetPlace extends MapEvent {
+  final String placeId;
+
+  const MapEventGetPlace({required this.placeId});
+}

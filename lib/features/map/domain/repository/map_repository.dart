@@ -4,4 +4,6 @@ import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dar
 abstract class MapRepository {
   Future<DataState<List<AutoCompleteEntity>>> searchPlaces(
       {required String searchInput});
+
+  Future<Map<String, dynamic>> getPlace({required String placeId});
 }
