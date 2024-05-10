@@ -237,7 +237,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   Future<void> gotoSearchedPlace(double lat, double lng) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(lat, lng), zoom: 16)));
+        CameraPosition(target: LatLng(lat, lng), zoom: 12)));
+    _setMarker(LatLng(lat, lng));
   }
 
   Widget buildListItem(AutoCompleteEntity placeItem) {
