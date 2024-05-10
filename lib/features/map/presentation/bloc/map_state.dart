@@ -8,7 +8,7 @@ abstract class MapState extends Equatable {
   final bool searchResultBoard;
   final DioException? dioException;
   final Exception? genericException;
-  final Future<Map<String, dynamic>>? getPlaceResult;
+  final Map<String, dynamic>? getPlaceResult;
 
   const MapState(
       {this.autoComplete,
@@ -71,11 +71,11 @@ class MapStateSearchToggle extends MapState {
 }
 
 class MapStateGetPlaceSuccess extends MapState {
-  final Future<Map<String, dynamic>>? getPlaceResult;
+  final Map<String, dynamic> getPlaceResult;
   MapStateGetPlaceSuccess(
       {required bool isLoading,
       required bool searchResultBoard,
-      this.getPlaceResult})
+      required this.getPlaceResult})
       : super(
           isLoading: isLoading,
           searchResultBoard: searchResultBoard,

@@ -57,7 +57,16 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return BlocBuilder<MapBloc, MapState>(
+    return BlocConsumer<MapBloc, MapState>(
+      listener: (context, state) {
+        if (state is MapStateGetPlaceSuccess &&
+            state.getPlaceResult.isNotEmpty) {
+          gotoSearchedPlace(
+            state.getPlaceResult['geometry']['location']['lat'],
+            state.getPlaceResult['geometry']['location']['lng'],
+          );
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           body: SingleChildScrollView(
@@ -100,7 +109,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                           searchController.text = '';
                                           _markers = {};
                                           context.read<MapBloc>().add(
-                                              const MapEventSearchResultBoard());
+                                              const MapEventCloseResultBoard());
                                         });
                                       },
                                       icon: Icon(Icons.close),
@@ -115,8 +124,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                       if (value.length > 2) {
                                         // here to call google API get the search of List<Place>
                                         if (!state.searchResultBoard) {
-                                          // context.read<MapBloc>().add(
-                                          //     const MapEventSearchToggle());
                                           _markers = {};
                                         }
 
@@ -151,8 +158,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                     state.autoComplete!.isNotEmpty)
                                 ? ListView(
                                     children: [
-                                      ...state.autoComplete!
-                                          .map((e) => buildListItem(e))
+                                      ...state.autoComplete!.map((placeItem) =>
+                                          buildListItem(placeItem))
                                     ],
                                   )
                                 : Center(
@@ -230,12 +237,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   Future<void> gotoSearchedPlace(double lat, double lng) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(lat, lng), zoom: 12)));
+        CameraPosition(target: LatLng(lat, lng), zoom: 16)));
   }
 
-  Widget buildListItem(
-    AutoCompleteEntity placeItem,
-  ) {
+  Widget buildListItem(AutoCompleteEntity placeItem) {
     return Padding(
       padding: EdgeInsets.all(5.0),
       child: GestureDetector(
@@ -243,11 +248,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           FocusManager.instance.primaryFocus?.unfocus();
         },
         onTap: () async {
-          // 48:24 call another google API
-          // var place = await MapServices().getPlace(placeItem.placeId);
-          // gotoSearchedPlace(place['geometry']['location']['lat'], place['geometry']['location']['lng']);
-          // searchFlag.toggleSearch();
-          context.read<MapBloc>().add(const MapEventSearchResultBoard());
+          context.read<MapBloc>().add(const MapEventCloseResultBoard());
           context
               .read<MapBloc>()
               .add(MapEventGetPlace(placeId: placeItem.placeId ?? ''));

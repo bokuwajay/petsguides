@@ -29,12 +29,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       }
     });
 
-    on<MapEventSearchResultBoard>(
+    on<MapEventCloseResultBoard>(
       (event, emit) async {
-        final currentState = state;
-        emit(MapStateSearchToggle(
-            isLoading: false,
-            searchResultBoard: !currentState.searchResultBoard));
+        emit(MapStateSearchToggle(isLoading: false, searchResultBoard: false));
       },
     );
 
@@ -42,7 +39,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       (event, emit) async {
         final placeId = event.placeId;
         final data = await _mapUseCase.getPlace(params: {'placeId': placeId});
-        print('dtaaaaaa-------$data');
+
+        emit(MapStateGetPlaceSuccess(
+            isLoading: false, searchResultBoard: false, getPlaceResult: data));
       },
     );
   }
