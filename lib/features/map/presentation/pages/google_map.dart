@@ -37,6 +37,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   var radiusValue = 3000.0;
 
+  var tappedPoint;
+
   Set<Circle> _circles = Set<Circle>();
 
   TextEditingController searchController = TextEditingController();
@@ -88,6 +90,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           strokeWidth: 1));
       getDirections = false;
       searchTextFormField = false;
+      radiusSlider = true;
     });
   }
 
@@ -135,6 +138,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                         _controller.complete(controller);
                       },
                       onTap: (point) {
+                        tappedPoint = point;
                         _setCircle(point);
                       },
                     ),
@@ -324,6 +328,30 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                 ),
                               )
                             ],
+                          ),
+                        )
+                      : Container(),
+                  radiusSlider
+                      ? Padding(
+                          padding: EdgeInsets.fromLTRB(15.0, 60.0, 15.0, 0.0),
+                          child: Container(
+                            height: 50.0,
+                            color: Colors.black.withOpacity(0.3),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Slider(
+                                  max: 7000.0,
+                                  min: 1000.0,
+                                  value: radiusValue,
+                                  onChanged: (newVal) {
+                                    radiusValue = newVal;
+                                    pressedNear = false;
+                                    _setCircle(tappedPoint);
+                                  },
+                                ))
+                              ],
+                            ),
                           ),
                         )
                       : Container()
