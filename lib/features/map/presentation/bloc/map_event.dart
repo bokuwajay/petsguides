@@ -17,3 +17,11 @@ class MapEventGetPlace extends MapEvent {
 
   const MapEventGetPlace({required this.placeId});
 }
+
+class MapEventGetDirections extends MapEvent {
+  final String origin;
+  final String destination;
+
+  const MapEventGetDirections(
+      {required this.origin, required this.destination});
+}

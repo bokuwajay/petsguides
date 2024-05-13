@@ -3,6 +3,7 @@ import 'package:fab_circular_menu_plus/fab_circular_menu_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
@@ -30,9 +31,13 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   List searchResult = [];
 
   Set<Marker> _markers = Set<Marker>();
+  Set<Polyline> _polylines = Set<Polyline>();
   int markerIdCounter = 1;
+  int polylineIdCounter = 1;
 
   TextEditingController searchController = TextEditingController();
+  TextEditingController _originController = TextEditingController();
+  TextEditingController _destinationController = TextEditingController();
 
   static final CameraPosition _kGooglePlex = CameraPosition(
       target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746);
@@ -52,6 +57,17 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     });
   }
 
+  void _setPolyline(List<PointLatLng> points) {
+    final String polylineIdVal = 'polylin_$polylineIdCounter';
+    polylineIdCounter++;
+
+    _polylines.add(Polyline(
+        polylineId: PolylineId(polylineIdVal),
+        width: 2,
+        color: Colors.blue,
+        points: points.map((e) => LatLng(e.latitude, e.longitude)).toList()));
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -65,6 +81,16 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             state.getPlaceResult['geometry']['location']['lat'],
             state.getPlaceResult['geometry']['location']['lng'],
           );
+        } else if (state is MapStateGetDirectionsSuccess &&
+            state.getDirections.isNotEmpty) {
+          gotoPlace(
+              state.getDirections['start_location']['lat'],
+              state.getDirections['start_location']['lng'],
+              state.getDirections['end_location']['lat'],
+              state.getDirections['end_location']['lng'],
+              state.getDirections['bounds_ne'],
+              state.getDirections['bounds_sw']);
+          _setPolyline(state.getDirections['polyline_decoded']);
         }
       },
       builder: (context, state) {
@@ -79,6 +105,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                     child: GoogleMap(
                       mapType: MapType.normal,
                       markers: _markers,
+                      polylines: _polylines,
                       initialCameraPosition: _kGooglePlex,
                       onMapCreated: (GoogleMapController controller) {
                         _controller.complete(controller);
@@ -195,6 +222,83 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                     ),
                                   ),
                           ))
+                      : Container(),
+                  getDirections
+                      ? Padding(
+                          padding: EdgeInsets.fromLTRB(15.0, 40.0, 15.0, 5.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: Colors.white),
+                                child: TextFormField(
+                                  controller: _originController,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 15.0),
+                                      border: InputBorder.none,
+                                      hintText: 'Origin'),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 3.0,
+                              ),
+                              Container(
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: Colors.white),
+                                child: TextFormField(
+                                  controller: _destinationController,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 15.0),
+                                      border: InputBorder.none,
+                                      hintText: 'Destination',
+                                      suffixIcon: Container(
+                                        width: 96.0,
+                                        child: Row(
+                                          children: [
+                                            IconButton(
+                                              onPressed: () async {
+                                                context.read<MapBloc>().add(
+                                                      MapEventGetDirections(
+                                                          origin:
+                                                              _originController
+                                                                  .text,
+                                                          destination:
+                                                              _destinationController
+                                                                  .text),
+                                                    );
+
+                                                _markers = {};
+                                                _polylines = {};
+                                              },
+                                              icon: Icon(Icons.search),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  getDirections = false;
+                                                  _originController.text = '';
+                                                  _destinationController.text =
+                                                      '';
+                                                  _markers = {};
+                                                  _polylines = {};
+                                                });
+                                              },
+                                              icon: Icon(Icons.close),
+                                            )
+                                          ],
+                                        ),
+                                      )),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
                       : Container()
                 ])
               ],
@@ -223,7 +327,13 @@ class _GoogleMapViewState extends State<GoogleMapView> {
               ),
               IconButton(
                 onPressed: () {
-                  setState(() {});
+                  setState(() {
+                    searchTextFormField = false;
+                    radiusSlider = false;
+                    pressedNear = false;
+                    cardTapped = false;
+                    getDirections = true;
+                  });
                 },
                 icon: Icon(Icons.navigation),
               ),
@@ -232,6 +342,20 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         );
       },
     );
+  }
+
+  gotoPlace(double lat, double lng, double endLat, double endLng,
+      Map<String, dynamic> boundNe, Map<String, dynamic> boundSw) async {
+    final GoogleMapController controller = await _controller.future;
+
+    controller.animateCamera(CameraUpdate.newLatLngBounds(
+        LatLngBounds(
+            southwest: LatLng(boundSw['lat'], boundSw['lng']),
+            northeast: LatLng(boundNe['lat'], boundNe['lng'])),
+        25));
+
+    _setMarker(LatLng(lat, lng));
+    _setMarker(LatLng(endLat, endLng));
   }
 
   Future<void> gotoSearchedPlace(double lat, double lng) async {

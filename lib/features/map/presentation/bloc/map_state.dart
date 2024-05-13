@@ -9,12 +9,14 @@ abstract class MapState extends Equatable {
   final DioException? dioException;
   final Exception? genericException;
   final Map<String, dynamic>? getPlaceResult;
+  final Map<String, dynamic>? getDirections;
 
   const MapState(
       {this.autoComplete,
       this.dioException,
       this.genericException,
       this.getPlaceResult,
+      this.getDirections,
       required this.isLoading,
       required this.searchResultBoard});
 
@@ -25,7 +27,8 @@ abstract class MapState extends Equatable {
         searchResultBoard,
         dioException,
         genericException,
-        getPlaceResult
+        getPlaceResult,
+        getDirections
       ];
 }
 
@@ -80,5 +83,19 @@ class MapStateGetPlaceSuccess extends MapState {
           isLoading: isLoading,
           searchResultBoard: searchResultBoard,
           getPlaceResult: getPlaceResult,
+        );
+}
+
+class MapStateGetDirectionsSuccess extends MapState {
+  final Map<String, dynamic> getDirections;
+
+  MapStateGetDirectionsSuccess({
+    required bool isLoading,
+    required this.getDirections,
+    required bool searchResultBoard,
+  }) : super(
+          isLoading: isLoading,
+          getDirections: getDirections,
+          searchResultBoard: searchResultBoard,
         );
 }

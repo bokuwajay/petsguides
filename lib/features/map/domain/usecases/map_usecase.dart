@@ -20,4 +20,13 @@ class MapUseCase
     final placeId = params['placeId'] as String;
     return _mapRepository.getPlace(placeId: placeId);
   }
+
+  Future<Map<String, dynamic>> getDirections(
+      {required Map<String, String> params}) {
+    final origin = params['origin'] as String;
+    final destination = params['destination'] as String;
+
+    return _mapRepository.getDirections(
+        origin: origin, destination: destination);
+  }
 }

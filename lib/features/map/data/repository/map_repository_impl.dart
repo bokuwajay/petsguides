@@ -27,4 +27,15 @@ class MapRepositoryImpl implements MapRepository {
       throw Exception().toString();
     }
   }
+
+  @override
+  Future<Map<String, dynamic>> getDirections(
+      {required String origin, required String destination}) async {
+    try {
+      final httpResponse = await _mapService.getDirections(origin, destination);
+      return httpResponse;
+    } on Exception {
+      throw Exception().toString();
+    }
+  }
 }

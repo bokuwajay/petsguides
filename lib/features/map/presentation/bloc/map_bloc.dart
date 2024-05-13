@@ -44,5 +44,18 @@ class MapBloc extends Bloc<MapEvent, MapState> {
             isLoading: false, searchResultBoard: false, getPlaceResult: data));
       },
     );
+
+    on<MapEventGetDirections>(
+      (event, emit) async {
+        final origin = event.origin;
+        final destination = event.destination;
+
+        final data = await _mapUseCase.getDirections(
+            params: {'origin': origin, 'destination': destination});
+
+        emit(MapStateGetDirectionsSuccess(
+            isLoading: false, getDirections: data, searchResultBoard: false));
+      },
+    );
   }
 }
