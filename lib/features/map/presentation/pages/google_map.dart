@@ -35,6 +35,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   int markerIdCounter = 1;
   int polylineIdCounter = 1;
 
+  var radiusValue = 3000.0;
+
+  Set<Circle> _circles = Set<Circle>();
+
   TextEditingController searchController = TextEditingController();
   TextEditingController _originController = TextEditingController();
   TextEditingController _destinationController = TextEditingController();
@@ -66,6 +70,25 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         width: 2,
         color: Colors.blue,
         points: points.map((e) => LatLng(e.latitude, e.longitude)).toList()));
+  }
+
+  void _setCircle(LatLng point) async {
+    final GoogleMapController controller = await _controller.future;
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: point, zoom: 12)));
+
+    setState(() {
+      _circles.add(Circle(
+          circleId: CircleId('raj'),
+          center: point,
+          fillColor: Colors.blue.withOpacity(0.1),
+          radius: radiusValue,
+          strokeColor: Colors.blue,
+          strokeWidth: 1));
+      getDirections = false;
+      searchTextFormField = false;
+    });
   }
 
   @override
@@ -106,9 +129,13 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       mapType: MapType.normal,
                       markers: _markers,
                       polylines: _polylines,
+                      circles: _circles,
                       initialCameraPosition: _kGooglePlex,
                       onMapCreated: (GoogleMapController controller) {
                         _controller.complete(controller);
+                      },
+                      onTap: (point) {
+                        _setCircle(point);
                       },
                     ),
                   ),
