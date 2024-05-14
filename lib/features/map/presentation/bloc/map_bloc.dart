@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/core/resources/data_state.dart';
 import 'package:petsguides/features/map/domain/usecases/map_usecase.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
@@ -55,6 +56,32 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
         emit(MapStateGetDirectionsSuccess(
             isLoading: false, getDirections: data, searchResultBoard: false));
+      },
+    );
+
+    on<MapEventGetPlaceDetails>((event, emit) async {
+      final tappedPointLng = event.tappedPoint as LatLng;
+      final radiusValue = event.radius;
+
+      final data = await _mapUseCase.getPlaceDetails(params: {
+        'tappedPointLat': tappedPointLng.latitude,
+        'tappedPointLng': tappedPointLng.longitude,
+        'radiusValue': radiusValue
+      });
+      emit(MapStateGetPlaceDetailsSuccess(
+          isLoading: false, getPlaceDetails: data, searchResultBoard: false));
+    });
+
+    on<MapEventGetMorePlaceDetails>(
+      (event, emit) async {
+        final tokenKey = event.tokenKey;
+
+        final data = await _mapUseCase
+            .getMorePlaceDetails(params: {'tokenKey': tokenKey});
+        emit(MapStateGetMorePlaceDetailsSuccess(
+            isLoading: false,
+            getMorePlaceDetails: data,
+            searchResultBoard: false));
       },
     );
   }

@@ -52,4 +52,25 @@ class MapService {
 
     return results;
   }
+
+  Future<Map<String, dynamic>> getPlaceDetails(
+      double lat, double lng, int radius) async {
+    final String url =
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&location=$lat,$lng&radius=$radius&key=$key';
+
+    var response = await http.get(Uri.parse(url));
+    var json = convert.jsonDecode(response.body);
+
+    return json;
+  }
+
+  Future<Map<String, dynamic>> getMorePlaceDetails(String tokenKey) async {
+    final String url =
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&pagetoken=$tokenKey&key=$key';
+
+    var response = await http.get(Uri.parse(url));
+    var json = convert.jsonDecode(response.body);
+
+    return json;
+  }
 }

@@ -10,6 +10,8 @@ abstract class MapState extends Equatable {
   final Exception? genericException;
   final Map<String, dynamic>? getPlaceResult;
   final Map<String, dynamic>? getDirections;
+  final Map<String, dynamic>? getPlaceDetails;
+  final Map<String, dynamic>? getMorePlaceDetails;
 
   const MapState(
       {this.autoComplete,
@@ -17,6 +19,8 @@ abstract class MapState extends Equatable {
       this.genericException,
       this.getPlaceResult,
       this.getDirections,
+      this.getPlaceDetails,
+      this.getMorePlaceDetails,
       required this.isLoading,
       required this.searchResultBoard});
 
@@ -28,7 +32,9 @@ abstract class MapState extends Equatable {
         dioException,
         genericException,
         getPlaceResult,
-        getDirections
+        getDirections,
+        getPlaceDetails,
+        getMorePlaceDetails
       ];
 }
 
@@ -96,6 +102,34 @@ class MapStateGetDirectionsSuccess extends MapState {
   }) : super(
           isLoading: isLoading,
           getDirections: getDirections,
+          searchResultBoard: searchResultBoard,
+        );
+}
+
+class MapStateGetPlaceDetailsSuccess extends MapState {
+  final Map<String, dynamic> getPlaceDetails;
+
+  MapStateGetPlaceDetailsSuccess({
+    required bool isLoading,
+    required this.getPlaceDetails,
+    required bool searchResultBoard,
+  }) : super(
+          isLoading: isLoading,
+          getPlaceDetails: getPlaceDetails,
+          searchResultBoard: searchResultBoard,
+        );
+}
+
+class MapStateGetMorePlaceDetailsSuccess extends MapState {
+  final Map<String, dynamic> getMorePlaceDetails;
+
+  MapStateGetMorePlaceDetailsSuccess({
+    required bool isLoading,
+    required this.getMorePlaceDetails,
+    required bool searchResultBoard,
+  }) : super(
+          isLoading: isLoading,
+          getMorePlaceDetails: getMorePlaceDetails,
           searchResultBoard: searchResultBoard,
         );
 }

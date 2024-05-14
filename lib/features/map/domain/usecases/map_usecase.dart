@@ -29,4 +29,19 @@ class MapUseCase
     return _mapRepository.getDirections(
         origin: origin, destination: destination);
   }
+
+  Future<Map<String, dynamic>> getPlaceDetails(
+      {required Map<String, dynamic> params}) {
+    final lat = params['tappedPointLat'] as double;
+    final lng = params['tappedPointLng'] as double;
+    final radius = params['radiusValue'] as int;
+
+    return _mapRepository.getPlaceDetails(lat: lat, lng: lng, radius: radius);
+  }
+
+  Future<Map<String, dynamic>> getMorePlaceDetails(
+      {required Map<String, dynamic> params}) {
+    final tokenKey = params['tokenKey'] as String;
+    return _mapRepository.getMorePlaceDetails(tokenKey: tokenKey);
+  }
 }

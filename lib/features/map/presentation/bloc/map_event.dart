@@ -25,3 +25,17 @@ class MapEventGetDirections extends MapEvent {
   const MapEventGetDirections(
       {required this.origin, required this.destination});
 }
+
+class MapEventGetPlaceDetails extends MapEvent {
+  final tappedPoint;
+  final int radius;
+
+  const MapEventGetPlaceDetails(
+      {required this.tappedPoint, required this.radius});
+}
+
+class MapEventGetMorePlaceDetails extends MapEvent {
+  final String tokenKey;
+
+  const MapEventGetMorePlaceDetails({required this.tokenKey});
+}

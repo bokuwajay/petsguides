@@ -9,4 +9,9 @@ abstract class MapRepository {
 
   Future<Map<String, dynamic>> getDirections(
       {required String origin, required String destination});
+
+  Future<Map<String, dynamic>> getPlaceDetails(
+      {required double lat, required double lng, required int radius});
+
+  Future<Map<String, dynamic>> getMorePlaceDetails({required String tokenKey});
 }

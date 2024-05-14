@@ -38,4 +38,26 @@ class MapRepositoryImpl implements MapRepository {
       throw Exception().toString();
     }
   }
+
+  @override
+  Future<Map<String, dynamic>> getPlaceDetails(
+      {required double lat, required double lng, required int radius}) async {
+    try {
+      final httpResponse = await _mapService.getPlaceDetails(lat, lng, radius);
+      return httpResponse;
+    } on Exception {
+      throw Exception().toString();
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getMorePlaceDetails(
+      {required String tokenKey}) async {
+    try {
+      final httpResponse = await _mapService.getMorePlaceDetails(tokenKey);
+      return httpResponse;
+    } on Exception {
+      throw Exception().toString();
+    }
+  }
 }

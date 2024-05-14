@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:fab_circular_menu_plus/fab_circular_menu_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -9,6 +11,8 @@ import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dar
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
+
+import 'dart:ui' as ui;
 
 class GoogleMapView extends StatefulWidget {
   const GoogleMapView({super.key});
@@ -31,6 +35,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   List searchResult = [];
 
   Set<Marker> _markers = Set<Marker>();
+  Set<Marker> _markersDupe = Set<Marker>();
+
   Set<Polyline> _polylines = Set<Polyline>();
   int markerIdCounter = 1;
   int polylineIdCounter = 1;
@@ -38,6 +44,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   var radiusValue = 3000.0;
 
   var tappedPoint;
+
+  List allFavoritePlaces = [];
+
+  var tokenKey;
 
   Set<Circle> _circles = Set<Circle>();
 
@@ -94,6 +104,54 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     });
   }
 
+  _setNearMarker(LatLng point, String label, List types, String status) async {
+    var counter = markerIdCounter++;
+    final Uint8List markerIcon;
+
+    if (types.contains('restaurants')) {
+      markerIcon =
+          await getBytesFromAsset('assets/mapicons/restaurants.png', 75);
+    } else if (types.contains('food')) {
+      markerIcon = await getBytesFromAsset('assets/mapicons/food.png', 75);
+    } else if (types.contains('school')) {
+      markerIcon = await getBytesFromAsset('assets/mapicons/schools.png', 75);
+    } else if (types.contains('bar')) {
+      markerIcon = await getBytesFromAsset('assets/mapicons/bars.png', 75);
+    } else if (types.contains('lodging')) {
+      markerIcon = await getBytesFromAsset('assets/mapicons/hotels.png', 75);
+    } else if (types.contains('store')) {
+      markerIcon =
+          await getBytesFromAsset('assets/mapicons/retail-stores.png', 75);
+    } else if (types.contains('locality')) {
+      markerIcon =
+          await getBytesFromAsset('assets/mapicons/local-services.png', 75);
+    } else {
+      markerIcon = await getBytesFromAsset('assets/mapicons/places.png', 75);
+    }
+
+    final Marker marker = Marker(
+        markerId: MarkerId('marker_$counter'),
+        position: point,
+        onTap: () {},
+        icon: BitmapDescriptor.fromBytes(markerIcon));
+
+    setState(() {
+      _markers.add(marker);
+    });
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -117,6 +175,38 @@ class _GoogleMapViewState extends State<GoogleMapView> {
               state.getDirections['bounds_ne'],
               state.getDirections['bounds_sw']);
           _setPolyline(state.getDirections['polyline_decoded']);
+        } else if (state is MapStateGetPlaceDetailsSuccess) {
+          List<dynamic> placesWithin = state.getPlaceDetails['results'] as List;
+
+          allFavoritePlaces = placesWithin;
+
+          tokenKey = state.getPlaceDetails['next_page_token'] ?? 'none';
+
+          placesWithin.forEach((element) {
+            _setNearMarker(
+              LatLng(element['geometry']['location']['lat'],
+                  element['geometry']['location']['lng']),
+              element['name'],
+              element['types'],
+              element['business_status'] ?? 'not available',
+            );
+          });
+        } else if (state is MapStateGetMorePlaceDetailsSuccess) {
+          List<dynamic> placesWithin =
+              state.getMorePlaceDetails['results'] as List;
+          allFavoritePlaces.addAll(placesWithin);
+
+          tokenKey = state.getMorePlaceDetails['next_page_token'] ?? 'none';
+
+          placesWithin.forEach((element) {
+            _setNearMarker(
+              LatLng(element['geometry']['location']['lat'],
+                  element['geometry']['location']['lng']),
+              element['name'],
+              element['types'],
+              element['business_status'] ?? 'not available',
+            );
+          });
         }
       },
       builder: (context, state) {
@@ -349,7 +439,41 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                     pressedNear = false;
                                     _setCircle(tappedPoint);
                                   },
-                                ))
+                                )),
+                                !pressedNear
+                                    ? IconButton(
+                                        onPressed: () {
+                                          if (_debounce?.isActive ?? false) {
+                                            _debounce?.cancel();
+                                          }
+                                          _debounce = Timer(
+                                              Duration(seconds: 2), () async {
+                                            context.read<MapBloc>().add(
+                                                MapEventGetPlaceDetails(
+                                                    tappedPoint: tappedPoint,
+                                                    radius:
+                                                        radiusValue.toInt()));
+                                            _markers = {};
+                                            _markersDupe = _markers;
+                                            pressedNear = true;
+                                          });
+                                        },
+                                        icon: Icon(Icons.near_me))
+                                    : IconButton(
+                                        onPressed: () {
+                                          if (_debounce?.isActive ?? false) {
+                                            _debounce?.cancel();
+                                          }
+                                          _debounce = Timer(
+                                              Duration(seconds: 2), () async {
+                                            if (tokenKey != 'none') {
+                                              context.read<MapBloc>().add(
+                                                  MapEventGetMorePlaceDetails(
+                                                      tokenKey: tokenKey));
+                                            }
+                                          });
+                                        },
+                                        icon: Icon(Icons.timer_10_rounded))
                               ],
                             ),
                           ),
