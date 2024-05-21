@@ -9,6 +9,7 @@ abstract class MapState extends Equatable {
   final DioException? dioException;
   final Exception? genericException;
   final Map<String, dynamic>? getPlaceResult;
+  final Map<String, dynamic>? tapOnPlaceResult;
   final Map<String, dynamic>? getDirections;
   final Map<String, dynamic>? getPlaceDetails;
   final Map<String, dynamic>? getMorePlaceDetails;
@@ -18,6 +19,7 @@ abstract class MapState extends Equatable {
       this.dioException,
       this.genericException,
       this.getPlaceResult,
+      this.tapOnPlaceResult,
       this.getDirections,
       this.getPlaceDetails,
       this.getMorePlaceDetails,
@@ -32,6 +34,7 @@ abstract class MapState extends Equatable {
         dioException,
         genericException,
         getPlaceResult,
+        tapOnPlaceResult,
         getDirections,
         getPlaceDetails,
         getMorePlaceDetails
@@ -89,6 +92,19 @@ class MapStateGetPlaceSuccess extends MapState {
           isLoading: isLoading,
           searchResultBoard: searchResultBoard,
           getPlaceResult: getPlaceResult,
+        );
+}
+
+class MapStateTapOnPlaceSuccess extends MapState {
+  final Map<String, dynamic> tapOnPlaceResult;
+  MapStateTapOnPlaceSuccess(
+      {required bool isLoading,
+      required bool searchResultBoard,
+      required this.tapOnPlaceResult})
+      : super(
+          isLoading: isLoading,
+          searchResultBoard: searchResultBoard,
+          tapOnPlaceResult: tapOnPlaceResult,
         );
 }
 

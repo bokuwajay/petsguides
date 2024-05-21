@@ -18,6 +18,12 @@ class MapEventGetPlace extends MapEvent {
   const MapEventGetPlace({required this.placeId});
 }
 
+class MapEventTapOnPlace extends MapEvent {
+  final String placeId;
+
+  const MapEventTapOnPlace({required this.placeId});
+}
+
 class MapEventGetDirections extends MapEvent {
   final String origin;
   final String destination;

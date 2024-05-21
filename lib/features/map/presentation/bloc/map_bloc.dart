@@ -46,6 +46,18 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       },
     );
 
+    on<MapEventTapOnPlace>(
+      (event, emit) async {
+        final placeId = event.placeId;
+        final data = await _mapUseCase.getPlace(params: {'placeId': placeId});
+
+        emit(MapStateTapOnPlaceSuccess(
+            isLoading: false,
+            searchResultBoard: false,
+            tapOnPlaceResult: data));
+      },
+    );
+
     on<MapEventGetDirections>(
       (event, emit) async {
         final origin = event.origin;
