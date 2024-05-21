@@ -733,6 +733,24 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                       ],
                                     ),
                                   ),
+                                  Container(
+                                    height: 250.0,
+                                    child: isReviews
+                                        ? ListView(
+                                            children: [
+                                              if (isReviews &&
+                                                  tappedPlaceDetail?[
+                                                          'reviews'] !=
+                                                      null)
+                                                ...tappedPlaceDetail['reviews']!
+                                                    .map((e) {
+                                                  return _buildReviewItem(e);
+                                                })
+                                            ],
+                                          )
+                                        : _buildPhotoGallery(
+                                            tappedPlaceDetail?['photos'] ?? []),
+                                  )
                                 ],
                               ),
                             ),
@@ -781,6 +799,204 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         );
       },
     );
+  }
+
+  _buildReviewItem(review) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+          child: Row(
+            children: [
+              Container(
+                height: 35.0,
+                width: 35.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: NetworkImage(review['profile_photo_url']),
+                      fit: BoxFit.cover),
+                ),
+              ),
+              SizedBox(
+                width: 4.0,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 160.0,
+                    child: Text(
+                      review['author_name'],
+                      style: TextStyle(
+                          fontFamily: 'WorkSans',
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  SizedBox(height: 3.0),
+                  RatingStars(
+                    value: review['rating'] * 1.0,
+                    starCount: 5,
+                    starSize: 7,
+                    valueLabelColor: const Color(0xff9b9b9b),
+                    valueLabelTextStyle: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'WorkSans',
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 9.0),
+                    valueLabelRadius: 7,
+                    maxValue: 5,
+                    starSpacing: 2,
+                    maxValueVisibility: false,
+                    valueLabelVisibility: true,
+                    animationDuration: Duration(milliseconds: 1000),
+                    valueLabelPadding:
+                        const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+                    valueLabelMargin: const EdgeInsets.only(right: 4),
+                    starOffColor: const Color(0xffe7e8ea),
+                    starColor: Colors.yellow,
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Container(
+            child: Text(
+              review['text'],
+              style: TextStyle(
+                  fontFamily: 'WorkSans',
+                  fontSize: 11.0,
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
+        ),
+        Divider(
+          color: Colors.grey.shade600,
+          height: 1.0,
+        )
+      ],
+    );
+  }
+
+  _buildPhotoGallery(photoElement) {
+    if (photoElement == null || photoElement.length == 0) {
+      showBlankCard = true;
+      return Container(
+        child: Center(
+          child: Text(
+            'No Photos',
+            style: TextStyle(
+                fontFamily: 'WorkSans',
+                fontSize: 12.0,
+                fontWeight: FontWeight.w500),
+          ),
+        ),
+      );
+    } else {
+      var placeImg = photoElement[photoGalleryIndex]['photo_reference'];
+      var maxWidth = photoElement[photoGalleryIndex]['width'];
+      var maxHeight = photoElement[photoGalleryIndex]['height'];
+      var tempDisplayIndex = photoGalleryIndex + 1;
+
+      return Column(
+        children: [
+          SizedBox(
+            height: 10.0,
+          ),
+          Container(
+              height: 200.0,
+              width: 200.0,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          'https://maps.googleapis.com/maps/api/place/photo?maxwidth=$maxWidth&maxheight=$maxHeight&photo_reference=$placeImg&key=$key'),
+                      fit: BoxFit.cover))),
+          SizedBox(
+            height: 10.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (photoGalleryIndex != 0) {
+                      photoGalleryIndex = photoGalleryIndex - 1;
+                    } else {
+                      photoGalleryIndex = 0;
+                    }
+                  });
+                },
+                child: Container(
+                  width: 40.0,
+                  height: 20.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(9.0),
+                    color: photoGalleryIndex != 0
+                        ? Colors.green.shade500
+                        : Colors.grey.shade500,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Prev',
+                      style: TextStyle(
+                          fontFamily: 'WorkSans',
+                          color: Colors.white,
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ),
+              Text(
+                '$tempDisplayIndex/' + photoElement.length.toString(),
+                style: TextStyle(
+                    fontFamily: 'WorkSans',
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w500),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (photoGalleryIndex != photoElement.length - 1) {
+                      photoGalleryIndex = photoGalleryIndex + 1;
+                    } else {
+                      photoGalleryIndex = photoElement.length - 1;
+                    }
+                  });
+                },
+                child: Container(
+                  width: 40.0,
+                  height: 20.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(9.0),
+                    color: photoGalleryIndex != photoElement.length - 1
+                        ? Colors.green.shade500
+                        : Colors.grey.shade500,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Next',
+                      style: TextStyle(
+                          fontFamily: 'WorkSans',
+                          color: Colors.white,
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      );
+    }
   }
 
   gotoPlace(double lat, double lng, double endLat, double endLng,
@@ -905,7 +1121,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                             ),
                           ),
                           RatingStars(
-                            value: 3,
+                            value: allFavoritePlaces[index]['rating']
+                                        .runtimeType ==
+                                    int
+                                ? allFavoritePlaces[index]['rating'] * 1.0
+                                : allFavoritePlaces[index]['rating'] ?? 0.0,
                             starCount: 5,
                             starSize: 10,
                             valueLabelColor: const Color(0xff9b9b9b),
