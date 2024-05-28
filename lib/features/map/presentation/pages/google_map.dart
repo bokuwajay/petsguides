@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:fab_circular_menu_plus/fab_circular_menu_plus.dart';
 import 'package:flip_card/flip_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -37,7 +38,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   List searchResult = [];
 
   Set<Marker> _markers = Set<Marker>();
-  Set<Marker> _markersDupe = Set<Marker>();
+  // Set<Marker> _markersDupe = Set<Marker>();
 
   Set<Polyline> _polylines = Set<Polyline>();
   int markerIdCounter = 1;
@@ -264,7 +265,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             child: Column(
               children: [
                 Stack(children: [
-                  Container(
+                  SizedBox(
                     height: screenHeight,
                     width: screenWidth,
                     child: GoogleMap(
@@ -290,7 +291,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                               Container(
                                 height: 50.0,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderRadius: BorderRadius.circular(14.0),
                                     color: Colors.white),
                                 child: TextFormField(
                                   controller: searchController,
@@ -503,7 +504,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                                     radius:
                                                         radiusValue.toInt()));
                                             _markers = {};
-                                            _markersDupe = _markers;
+                                            // _markersDupe = _markers;
                                             pressedNear = true;
                                           });
                                         },

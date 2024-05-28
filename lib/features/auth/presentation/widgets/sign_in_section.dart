@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/core/util/validator.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
-import 'package:petsguides/features/auth/presentation/widgets/build_text_form_field.dart';
+import 'package:petsguides/components/build_text_form_field.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 
 class SignInSection extends StatefulWidget {
@@ -42,21 +42,27 @@ class _SignInSectionState extends State<SignInSection> with Validator {
         key: _formKey,
         child: Column(
           children: [
-            buildTextFormField(
-              controller: _email,
-              keyboardType: TextInputType.emailAddress,
-              hintText: AppLocalizations.of(context)!.email,
-              prefixIcon: const Icon(Icons.email),
-              validator: (value) =>
-                  validateEmail(value, AppLocalizations.of(context)!.email),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: buildTextFormField(
+                controller: _email,
+                keyboardType: TextInputType.emailAddress,
+                hintText: AppLocalizations.of(context)!.email,
+                prefixIcon: const Icon(Icons.email),
+                validator: (value) =>
+                    validateEmail(value, AppLocalizations.of(context)!.email),
+              ),
             ),
-            buildTextFormField(
-              controller: _password,
-              hintText: AppLocalizations.of(context)!.password,
-              prefixIcon: const Icon(Icons.lock),
-              obscureText: true,
-              validator: (value) => validateRequiredField(
-                  value, AppLocalizations.of(context)!.password),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: buildTextFormField(
+                controller: _password,
+                hintText: AppLocalizations.of(context)!.password,
+                prefixIcon: const Icon(Icons.lock),
+                obscureText: true,
+                validator: (value) => validateRequiredField(
+                    value, AppLocalizations.of(context)!.password),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

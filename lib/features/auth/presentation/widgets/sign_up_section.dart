@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petsguides/core/util/validator.dart';
-import 'package:petsguides/features/auth/presentation/widgets/build_text_form_field.dart';
+import 'package:petsguides/components/build_text_form_field.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 
 class SignUpSection extends StatefulWidget {
@@ -50,47 +50,65 @@ class _SignUpSectionState extends State<SignUpSection> with Validator {
           key: _formKey,
           child: Column(
             children: [
-              buildTextFormField(
-                controller: _firstName,
-                hintText: AppLocalizations.of(context)!.firstName,
-                validator: (value) => validateRequiredField(
-                    value, AppLocalizations.of(context)!.firstName),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: buildTextFormField(
+                  controller: _firstName,
+                  hintText: AppLocalizations.of(context)!.firstName,
+                  validator: (value) => validateRequiredField(
+                      value, AppLocalizations.of(context)!.firstName),
+                ),
               ),
-              buildTextFormField(
-                controller: _lastName,
-                hintText: AppLocalizations.of(context)!.lastName,
-                validator: (value) => validateRequiredField(
-                    value, AppLocalizations.of(context)!.lastName),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: buildTextFormField(
+                  controller: _lastName,
+                  hintText: AppLocalizations.of(context)!.lastName,
+                  validator: (value) => validateRequiredField(
+                      value, AppLocalizations.of(context)!.lastName),
+                ),
               ),
-              buildTextFormField(
-                controller: _email,
-                hintText: AppLocalizations.of(context)!.email,
-                validator: (value) =>
-                    validateEmail(value, AppLocalizations.of(context)!.email),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: buildTextFormField(
+                  controller: _email,
+                  hintText: AppLocalizations.of(context)!.email,
+                  validator: (value) =>
+                      validateEmail(value, AppLocalizations.of(context)!.email),
+                ),
               ),
-              buildTextFormField(
-                controller: _password,
-                hintText: AppLocalizations.of(context)!.password,
-                prefixIcon: const Icon(Icons.lock),
-                obscureText: true,
-                validator: (value) => validateRequiredField(
-                    value, AppLocalizations.of(context)!.password),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: buildTextFormField(
+                  controller: _password,
+                  hintText: AppLocalizations.of(context)!.password,
+                  prefixIcon: const Icon(Icons.lock),
+                  obscureText: true,
+                  validator: (value) => validateRequiredField(
+                      value, AppLocalizations.of(context)!.password),
+                ),
               ),
-              buildTextFormField(
-                controller: _confirmPassword,
-                hintText: AppLocalizations.of(context)!.repeatPassword,
-                prefixIcon: const Icon(Icons.lock),
-                obscureText: true,
-                validator: (value) => validateConfirmPassword(
-                    value,
-                    _password.text,
-                    AppLocalizations.of(context)!.repeatPassword),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: buildTextFormField(
+                  controller: _confirmPassword,
+                  hintText: AppLocalizations.of(context)!.repeatPassword,
+                  prefixIcon: const Icon(Icons.lock),
+                  obscureText: true,
+                  validator: (value) => validateConfirmPassword(
+                      value,
+                      _password.text,
+                      AppLocalizations.of(context)!.repeatPassword),
+                ),
               ),
-              buildTextFormField(
-                controller: _phone,
-                hintText: AppLocalizations.of(context)!.phone,
-                validator: (value) =>
-                    validatePhone(value, AppLocalizations.of(context)!.phone),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: buildTextFormField(
+                  controller: _phone,
+                  hintText: AppLocalizations.of(context)!.phone,
+                  validator: (value) =>
+                      validatePhone(value, AppLocalizations.of(context)!.phone),
+                ),
               ),
               SizedBox(
                 width: 160,

@@ -31,6 +31,7 @@ GoRouter initRouter(context) {
                 context.go('/get_started');
               } else if (state is AuthStateLoggedOut) {
                 context.go('/goMap');
+                // context.go('/home');
               } else if (state is AuthStateLoggedIn) {
                 context.go('/goMap');
               }
@@ -52,6 +53,11 @@ GoRouter initRouter(context) {
       GoRoute(
         path: '/home',
         builder: (context, state) {
+          // GenericOverlay().show(
+          //   context: context,
+          //   builder: (context) => const SignInSignUpOverlay(),
+          // );
+
           return BlocListener<AuthBloc, AuthState>(
             listener: (context, state) async {
               final renderBox = context.findRenderObject() as RenderBox;
