@@ -320,8 +320,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                     _debounce = Timer(
                                         Duration(milliseconds: 700), () async {
                                       if (value.length > 2) {
-                                        // here to call google API get the search of List<Place>
-                                        if (!state.searchResultBoard) {
+                                        if (state is MapStateSearchPlaces &&
+                                            !state.showResultBoard) {
                                           _markers = {};
                                         }
 
@@ -341,7 +341,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       : Container(),
 
                   // if the search of List<Place> > 0, then show the below
-                  (state.searchResultBoard)
+                  (state is MapStateSearchPlaces)
                       ? Positioned(
                           top: 100.0,
                           left: 15.0,
@@ -352,8 +352,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                               borderRadius: BorderRadius.circular(10.0),
                               color: Colors.white.withOpacity(0.7),
                             ),
-                            child: (state is MapStateSearchPlacesSuccess &&
-                                    state.autoComplete!.isNotEmpty)
+                            child: state.autoComplete != null
                                 ? ListView(
                                     children: [
                                       ...state.autoComplete!.map((placeItem) =>
