@@ -29,11 +29,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   Timer? _debounce;
 
-  bool searchTextFormField = false;
-  bool radiusSlider = false;
+  // bool searchTextFormField = false;
+  // bool radiusSlider = false;
   bool cardTapped = false;
   bool pressedNear = false;
-  bool getDirections = false;
+  // bool getDirections = false;
 
   List searchResult = [];
 
@@ -114,9 +114,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           radius: radiusValue,
           strokeColor: Colors.blue,
           strokeWidth: 1));
-      getDirections = false;
-      searchTextFormField = false;
-      radiusSlider = true;
+      // getDirections = false;
+      // searchTextFormField = false;
+      // radiusSlider = true;
     });
   }
 
@@ -280,10 +280,13 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       onTap: (point) {
                         tappedPoint = point;
                         _setCircle(point);
+                        context
+                            .read<MapBloc>()
+                            .add(MapEventWidgetControl(showNearbyPlaces: true));
                       },
                     ),
                   ),
-                  searchTextFormField
+                  (state is MapStateWidgetControl && state.showSearchPlaces)
                       ? Padding(
                           padding: EdgeInsets.fromLTRB(15.0, 40.0, 15.0, 5.0),
                           child: Column(
@@ -302,8 +305,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                     hintText: "Search",
                                     suffixIcon: IconButton(
                                       onPressed: () {
+                                        context.read<MapBloc>().add(
+                                            MapEventWidgetControl(
+                                                showSearchPlaces: false));
                                         setState(() {
-                                          searchTextFormField = false;
+                                          // searchTextFormField = false;
                                           searchController.text = '';
                                           _markers = {};
                                           context.read<MapBloc>().add(
@@ -320,10 +326,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                     _debounce = Timer(
                                         Duration(milliseconds: 700), () async {
                                       if (value.length > 2) {
-                                        if (state is MapStateSearchPlaces &&
-                                            !state.showResultBoard) {
-                                          _markers = {};
-                                        }
+                                        // if (state is MapStateSearchPlaces &&
+                                        //     !state.showResultBoard) {
+                                        //   _markers = {};
+                                        // }
 
                                         context.read<MapBloc>().add(
                                               MapEventSearchPlaces(
@@ -341,7 +347,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       : Container(),
 
                   // if the search of List<Place> > 0, then show the below
-                  (state is MapStateSearchPlaces)
+                  (state is MapStateSearchPlaces && state.showResultBoard)
                       ? Positioned(
                           top: 100.0,
                           left: 15.0,
@@ -393,7 +399,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                   ),
                           ))
                       : Container(),
-                  getDirections
+                  (state is MapStateWidgetControl && state.showGetDirection)
                       ? Padding(
                           padding: EdgeInsets.fromLTRB(15.0, 40.0, 15.0, 5.0),
                           child: Column(
@@ -450,8 +456,13 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                             ),
                                             IconButton(
                                               onPressed: () {
+                                                context
+                                                    .read<MapBloc>()
+                                                    .add(MapEventWidgetControl(
+                                                      showGetDirection: false,
+                                                    ));
                                                 setState(() {
-                                                  getDirections = false;
+                                                  // getDirections = false;
                                                   _originController.text = '';
                                                   _destinationController.text =
                                                       '';
@@ -470,7 +481,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                           ),
                         )
                       : Container(),
-                  radiusSlider
+                  (state is MapStateWidgetControl && state.showNearbyPlaces)
                       ? Padding(
                           padding: EdgeInsets.fromLTRB(15.0, 60.0, 15.0, 0.0),
                           child: Container(
@@ -528,12 +539,16 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                         )),
                                 IconButton(
                                     onPressed: () {
+                                      context.read<MapBloc>().add(
+                                          MapEventWidgetControl(
+                                              showNearbyPlaces: false));
+                                      _circles.clear();
                                       setState(() {
-                                        radiusSlider = false;
+                                        // radiusSlider = false;
                                         pressedNear = false;
                                         cardTapped = false;
                                         radiusValue = 3000.0;
-                                        _circles = {};
+                                        // _circles = {};
                                         _markers = {};
                                         allFavoritePlaces = [];
                                       });
@@ -772,24 +787,32 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             children: <Widget>[
               IconButton(
                 onPressed: () {
+                  context
+                      .read<MapBloc>()
+                      .add(MapEventWidgetControl(showSearchPlaces: true));
+                  _circles.clear();
                   setState(() {
-                    searchTextFormField = true;
-                    radiusSlider = false;
-                    pressedNear = false;
-                    cardTapped = false;
-                    getDirections = false;
+                    // searchTextFormField = true;
+                    // radiusSlider = false;
+                    // pressedNear = false;
+                    // cardTapped = false;
+                    // getDirections = false;
                   });
                 },
                 icon: Icon(Icons.search),
               ),
               IconButton(
                 onPressed: () {
+                  context
+                      .read<MapBloc>()
+                      .add(MapEventWidgetControl(showGetDirection: true));
+                  _circles.clear();
                   setState(() {
-                    searchTextFormField = false;
-                    radiusSlider = false;
-                    pressedNear = false;
-                    cardTapped = false;
-                    getDirections = true;
+                    // searchTextFormField = false;
+                    // radiusSlider = false;
+                    // pressedNear = false;
+                    // cardTapped = false;
+                    // getDirections = true;
                   });
                 },
                 icon: Icon(Icons.navigation),

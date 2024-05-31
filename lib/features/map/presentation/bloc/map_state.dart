@@ -93,3 +93,18 @@ class MapStateGetMorePlaceDetailsSuccess extends MapState {
   @override
   List<Object?> get props => [isLoading, getMorePlaceDetails];
 }
+
+class MapStateWidgetControl extends MapState {
+  final bool isLoading;
+  final bool showSearchPlaces;
+  final bool showGetDirection;
+  final bool showNearbyPlaces;
+
+  const MapStateWidgetControl(this.isLoading, this.showSearchPlaces,
+      this.showGetDirection, this.showNearbyPlaces)
+      : super(isLoading: isLoading);
+
+  @override
+  List<Object?> get props =>
+      [isLoading, showSearchPlaces, showGetDirection, showNearbyPlaces];
+}

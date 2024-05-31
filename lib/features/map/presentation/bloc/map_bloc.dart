@@ -98,5 +98,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         }
       },
     );
+
+    on<MapEventWidgetControl>(
+      (event, emit) {
+        final bool showSearchPlaces = event.showSearchPlaces;
+        final bool showGetDirection = event.showGetDirection;
+        final bool showNearbyPlaces = event.showNearbyPlaces;
+
+        emit(MapStateWidgetControl(
+          false,
+          showSearchPlaces,
+          showGetDirection,
+          showNearbyPlaces,
+        ));
+      },
+    );
   }
 }

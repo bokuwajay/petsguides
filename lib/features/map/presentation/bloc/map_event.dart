@@ -45,3 +45,18 @@ class MapEventGetMorePlaceDetails extends MapEvent {
 
   const MapEventGetMorePlaceDetails({required this.tokenKey});
 }
+
+// searchPlaces
+// get direction
+// nearbyPlaces
+class MapEventWidgetControl extends MapEvent {
+  bool showSearchPlaces;
+  bool showGetDirection;
+  bool showNearbyPlaces;
+
+  MapEventWidgetControl({
+    this.showSearchPlaces = false,
+    this.showGetDirection = false,
+    this.showNearbyPlaces = false,
+  });
+}
