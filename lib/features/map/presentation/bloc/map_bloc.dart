@@ -17,9 +17,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         final dataState = await _mapUseCase(params: {'search': searchInput});
         if (dataState is DataSuccess<List<AutoCompleteEntity>> &&
             dataState.data!.isNotEmpty) {
-          emit(MapStateSearchPlaces(false, true, dataState.data));
+          // emit(MapStateSearchPlaces(false, true, dataState.data));
+          emit(MapStateWidgetControl(
+              false, true, false, false, true, dataState.data));
         } else {
-          emit(const MapStateSearchPlaces(false, true, null));
+          // emit(const MapStateSearchPlaces(false, true, null));
+          emit(const MapStateWidgetControl(
+              false, true, false, false, true, null));
         }
       } on Exception catch (genericException) {
         emit(MapStateException(false, genericException));
@@ -101,16 +105,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     on<MapEventWidgetControl>(
       (event, emit) {
-        final bool showSearchPlaces = event.showSearchPlaces;
+        final bool showSearchPlacesTextFormField =
+            event.showSearchPlacesTextFormField;
         final bool showGetDirection = event.showGetDirection;
         final bool showNearbyPlaces = event.showNearbyPlaces;
+        final bool showSearchResultBoard = event.showSearchResultBoard;
 
-        emit(MapStateWidgetControl(
-          false,
-          showSearchPlaces,
-          showGetDirection,
-          showNearbyPlaces,
-        ));
+        emit(MapStateWidgetControl(false, showSearchPlacesTextFormField,
+            showGetDirection, showNearbyPlaces, showSearchResultBoard, null));
       },
     );
   }

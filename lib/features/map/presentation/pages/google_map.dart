@@ -10,10 +10,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
+import 'package:petsguides/components/build_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
+import 'package:petsguides/features/map/presentation/widgets/get_direction_widgets/build_get_direction_text_form_field.dart';
+import 'package:petsguides/features/map/presentation/widgets/search_places_widgets/build_search_places_text_form_field.dart';
+import 'package:petsguides/features/map/presentation/widgets/search_places_widgets/build_search_result_board.dart';
 
 import 'dart:ui' as ui;
 
@@ -26,9 +29,16 @@ class GoogleMapView extends StatefulWidget {
 
 class _GoogleMapViewState extends State<GoogleMapView> {
   Completer<GoogleMapController> _controller = Completer();
-
+  TextEditingController searchController = TextEditingController();
   Timer? _debounce;
-
+  TextEditingController _originController = TextEditingController();
+  TextEditingController _destinationController = TextEditingController();
+  //
+  //
+  //
+  //
+  //
+  //
   // bool searchTextFormField = false;
   // bool radiusSlider = false;
   bool cardTapped = false;
@@ -66,10 +76,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   var selectedPlaceDetails;
 
   Set<Circle> _circles = Set<Circle>();
-
-  TextEditingController searchController = TextEditingController();
-  TextEditingController _originController = TextEditingController();
-  TextEditingController _destinationController = TextEditingController();
 
   static final CameraPosition _kGooglePlex = CameraPosition(
       target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746);
@@ -286,200 +292,12 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       },
                     ),
                   ),
-                  (state is MapStateWidgetControl && state.showSearchPlaces)
-                      ? Padding(
-                          padding: EdgeInsets.fromLTRB(15.0, 40.0, 15.0, 5.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 50.0,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14.0),
-                                    color: Colors.white),
-                                child: TextFormField(
-                                  controller: searchController,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 15.0),
-                                    border: InputBorder.none,
-                                    hintText: "Search",
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        context.read<MapBloc>().add(
-                                            MapEventWidgetControl(
-                                                showSearchPlaces: false));
-                                        setState(() {
-                                          // searchTextFormField = false;
-                                          searchController.text = '';
-                                          _markers = {};
-                                          context.read<MapBloc>().add(
-                                              const MapEventCloseResultBoard());
-                                        });
-                                      },
-                                      icon: Icon(Icons.close),
-                                    ),
-                                  ),
-                                  onChanged: (value) {
-                                    if (_debounce?.isActive ?? false) {
-                                      _debounce?.cancel();
-                                    }
-                                    _debounce = Timer(
-                                        Duration(milliseconds: 700), () async {
-                                      if (value.length > 2) {
-                                        // if (state is MapStateSearchPlaces &&
-                                        //     !state.showResultBoard) {
-                                        //   _markers = {};
-                                        // }
-
-                                        context.read<MapBloc>().add(
-                                              MapEventSearchPlaces(
-                                                searchInput: value,
-                                              ),
-                                            );
-                                      }
-                                    });
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      : Container(),
-
-                  // if the search of List<Place> > 0, then show the below
-                  (state is MapStateSearchPlaces && state.showResultBoard)
-                      ? Positioned(
-                          top: 100.0,
-                          left: 15.0,
-                          child: Container(
-                            height: 200.0,
-                            width: screenWidth - 30.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: Colors.white.withOpacity(0.7),
-                            ),
-                            child: state.autoComplete != null
-                                ? ListView(
-                                    children: [
-                                      ...state.autoComplete!.map((placeItem) =>
-                                          buildListItem(placeItem))
-                                    ],
-                                  )
-                                : Center(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "No results to show",
-                                          style: TextStyle(
-                                              fontFamily: 'WorkSans',
-                                              fontWeight: FontWeight.w200),
-                                        ),
-                                        SizedBox(
-                                          height: 5.0,
-                                        ),
-                                        Container(
-                                          width: 125.0,
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                // searchFlag.toggleSearch();
-                                              },
-                                              child: Center(
-                                                child: Text(
-                                                  'Close this',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily: 'WorkSans',
-                                                      fontWeight:
-                                                          FontWeight.w300),
-                                                ),
-                                              )),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                          ))
-                      : Container(),
+                  buildSearchPlacesTextFormField(
+                      context, state, searchController, _debounce),
+                  buildSearchResultBoard(context, state),
                   (state is MapStateWidgetControl && state.showGetDirection)
-                      ? Padding(
-                          padding: EdgeInsets.fromLTRB(15.0, 40.0, 15.0, 5.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 50.0,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: Colors.white),
-                                child: TextFormField(
-                                  controller: _originController,
-                                  decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 15.0),
-                                      border: InputBorder.none,
-                                      hintText: 'Origin'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 3.0,
-                              ),
-                              Container(
-                                height: 50.0,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: Colors.white),
-                                child: TextFormField(
-                                  controller: _destinationController,
-                                  decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 15.0),
-                                      border: InputBorder.none,
-                                      hintText: 'Destination',
-                                      suffixIcon: Container(
-                                        width: 96.0,
-                                        child: Row(
-                                          children: [
-                                            IconButton(
-                                              onPressed: () async {
-                                                context.read<MapBloc>().add(
-                                                      MapEventGetDirections(
-                                                          origin:
-                                                              _originController
-                                                                  .text,
-                                                          destination:
-                                                              _destinationController
-                                                                  .text),
-                                                    );
-
-                                                _markers = {};
-                                                _polylines = {};
-                                              },
-                                              icon: Icon(Icons.search),
-                                            ),
-                                            IconButton(
-                                              onPressed: () {
-                                                context
-                                                    .read<MapBloc>()
-                                                    .add(MapEventWidgetControl(
-                                                      showGetDirection: false,
-                                                    ));
-                                                setState(() {
-                                                  // getDirections = false;
-                                                  _originController.text = '';
-                                                  _destinationController.text =
-                                                      '';
-                                                  _markers = {};
-                                                  _polylines = {};
-                                                });
-                                              },
-                                              icon: Icon(Icons.close),
-                                            )
-                                          ],
-                                        ),
-                                      )),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
+                      ? buildGetDirectionTextFormField(
+                          context, _originController, _destinationController)
                       : Container(),
                   (state is MapStateWidgetControl && state.showNearbyPlaces)
                       ? Padding(
@@ -576,7 +394,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                 }),
                           ))
                       : Container(),
-
                   cardTapped
                       ? Positioned(
                           top: 100.0,
@@ -787,9 +604,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             children: <Widget>[
               IconButton(
                 onPressed: () {
-                  context
-                      .read<MapBloc>()
-                      .add(MapEventWidgetControl(showSearchPlaces: true));
+                  context.read<MapBloc>().add(MapEventWidgetControl(
+                      showSearchPlacesTextFormField: true));
                   _circles.clear();
                   setState(() {
                     // searchTextFormField = true;
@@ -1223,43 +1039,5 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(lat, lng), zoom: 12)));
     _setMarker(LatLng(lat, lng));
-  }
-
-  Widget buildListItem(AutoCompleteEntity placeItem) {
-    return Padding(
-      padding: EdgeInsets.all(5.0),
-      child: GestureDetector(
-        onTapDown: (_) {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        onTap: () async {
-          context.read<MapBloc>().add(const MapEventCloseResultBoard());
-          context
-              .read<MapBloc>()
-              .add(MapEventGetPlace(placeId: placeItem.placeId ?? ''));
-        },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.location_on,
-              color: Colors.green,
-              size: 25.0,
-            ),
-            SizedBox(
-              width: 4.0,
-            ),
-            Container(
-              height: 40.0,
-              width: MediaQuery.of(context).size.width - 75.0,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(placeItem.description ?? ''),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
   }
 }

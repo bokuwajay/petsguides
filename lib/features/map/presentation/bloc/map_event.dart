@@ -50,13 +50,15 @@ class MapEventGetMorePlaceDetails extends MapEvent {
 // get direction
 // nearbyPlaces
 class MapEventWidgetControl extends MapEvent {
-  bool showSearchPlaces;
+  bool showSearchPlacesTextFormField;
   bool showGetDirection;
   bool showNearbyPlaces;
+  bool showSearchResultBoard;
 
   MapEventWidgetControl({
-    this.showSearchPlaces = false,
+    this.showSearchPlacesTextFormField = false,
     this.showGetDirection = false,
     this.showNearbyPlaces = false,
+    this.showSearchResultBoard = false,
   });
 }

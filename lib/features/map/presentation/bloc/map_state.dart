@@ -96,15 +96,28 @@ class MapStateGetMorePlaceDetailsSuccess extends MapState {
 
 class MapStateWidgetControl extends MapState {
   final bool isLoading;
-  final bool showSearchPlaces;
+  final bool showSearchPlacesTextFormField;
   final bool showGetDirection;
   final bool showNearbyPlaces;
+  final bool showSearchResultBoard;
+  final List<AutoCompleteEntity>? autoComplete;
 
-  const MapStateWidgetControl(this.isLoading, this.showSearchPlaces,
-      this.showGetDirection, this.showNearbyPlaces)
+  const MapStateWidgetControl(
+      this.isLoading,
+      this.showSearchPlacesTextFormField,
+      this.showGetDirection,
+      this.showNearbyPlaces,
+      this.showSearchResultBoard,
+      this.autoComplete)
       : super(isLoading: isLoading);
 
   @override
-  List<Object?> get props =>
-      [isLoading, showSearchPlaces, showGetDirection, showNearbyPlaces];
+  List<Object?> get props => [
+        isLoading,
+        showSearchPlacesTextFormField,
+        showGetDirection,
+        showNearbyPlaces,
+        showSearchResultBoard,
+        autoComplete,
+      ];
 }
