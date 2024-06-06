@@ -3,11 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/components/build_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
+import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 
 Widget buildGetDirectionTextFormField(
-    BuildContext context,
-    TextEditingController _originController,
-    TextEditingController _destinationController) {
+  BuildContext context,
+  MapState state,
+  TextEditingController _originController,
+  TextEditingController _destinationController,
+) {
+  if (!(state is MapStateWidgetControl && state.showGetDirection)) {
+    return Container();
+  }
+
   return Padding(
     padding: const EdgeInsets.fromLTRB(15.0, 40.0, 15.0, 5.0),
     child: Column(

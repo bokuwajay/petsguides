@@ -39,7 +39,7 @@ Widget buildSearchPlacesTextFormField(
                     );
                 searchController.text = '';
                 // _markers = {};
-                context.read<MapBloc>().add(const MapEventCloseResultBoard());
+                context.read<MapBloc>().add(MapEventWidgetControl());
               },
               icon: const Icon(Icons.close),
             ),

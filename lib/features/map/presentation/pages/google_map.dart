@@ -1,24 +1,21 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:fab_circular_menu_plus/fab_circular_menu_plus.dart';
 import 'package:flip_card/flip_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:petsguides/components/build_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 import 'package:petsguides/features/map/presentation/widgets/get_direction_widgets/build_get_direction_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/widgets/search_places_widgets/build_search_places_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/widgets/search_places_widgets/build_search_result_board.dart';
-
-import 'dart:ui' as ui;
+import 'package:petsguides/features/map/utils/get_bytes_from_assets.dart';
+import 'package:petsguides/features/map/utils/go_to_origin_destination.dart';
+import 'package:petsguides/features/map/utils/go_to_searched_place.dart';
 
 class GoogleMapView extends StatefulWidget {
   const GoogleMapView({super.key});
@@ -28,12 +25,75 @@ class GoogleMapView extends StatefulWidget {
 }
 
 class _GoogleMapViewState extends State<GoogleMapView> {
-  Completer<GoogleMapController> _controller = Completer();
-  TextEditingController searchController = TextEditingController();
+  final Completer<GoogleMapController> _controller = Completer();
+  final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
-  TextEditingController _originController = TextEditingController();
-  TextEditingController _destinationController = TextEditingController();
+  final TextEditingController _originController = TextEditingController();
+  final TextEditingController _destinationController = TextEditingController();
+  Set<Marker> _markers = <Marker>{};
+  int markerIdCounter = 1;
+
+  Set<Polyline> _polylines = <Polyline>{};
+  int polylineIdCounter = 1;
+
+  final Set<Circle> _circles = <Circle>{};
+
   //
+  //
+  //
+  //
+  //
+  //
+
+  void _setMarker(point) {
+    var counter = markerIdCounter++;
+    final Marker marker = Marker(
+      markerId: MarkerId('marker_$counter'),
+      position: point,
+      onTap: () {},
+      icon: BitmapDescriptor.defaultMarker,
+    );
+    setState(() {
+      _markers.add(marker);
+    });
+  }
+
+  void _setPolyline(List<PointLatLng> points) {
+    final String polylineIdVal = 'polylin_$polylineIdCounter';
+    polylineIdCounter++;
+    _polylines.add(Polyline(
+        polylineId: PolylineId(polylineIdVal),
+        width: 2,
+        color: Colors.blue,
+        points: points.map((e) => LatLng(e.latitude, e.longitude)).toList()));
+  }
+
+  void _setCircle(LatLng point) async {
+    final GoogleMapController controller = await _controller.future;
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: point, zoom: 12)));
+
+    setState(() {
+      _circles.add(Circle(
+          circleId: const CircleId('raj'),
+          center: point,
+          fillColor: Colors.blue.withOpacity(0.1),
+          radius: radiusValue,
+          strokeColor: Colors.blue,
+          strokeWidth: 1));
+      // getDirections = false;
+      // searchTextFormField = false;
+      // radiusSlider = true;
+    });
+  }
+
+  //
+  //
+  //
+  //
+  //
+  ////
   //
   //
   //
@@ -47,12 +107,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   List searchResult = [];
 
-  Set<Marker> _markers = Set<Marker>();
   // Set<Marker> _markersDupe = Set<Marker>();
 
-  Set<Polyline> _polylines = Set<Polyline>();
-  int markerIdCounter = 1;
-  int polylineIdCounter = 1;
+  // Set<Polyline> _polylines = Set<Polyline>();
+  // int markerIdCounter = 1;
+  // int polylineIdCounter = 1;
 
   var radiusValue = 3000.0;
 
@@ -75,56 +134,19 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   var selectedPlaceDetails;
 
-  Set<Circle> _circles = Set<Circle>();
-
   static final CameraPosition _kGooglePlex = CameraPosition(
       target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746);
 
-  void _setMarker(point) {
-    var counter = markerIdCounter++;
+  // void _setPolyline(List<PointLatLng> points) {
+  //   final String polylineIdVal = 'polylin_$polylineIdCounter';
+  //   polylineIdCounter++;
 
-    final Marker marker = Marker(
-      markerId: MarkerId('marker_$counter'),
-      position: point,
-      onTap: () {},
-      icon: BitmapDescriptor.defaultMarker,
-    );
-
-    setState(() {
-      _markers.add(marker);
-    });
-  }
-
-  void _setPolyline(List<PointLatLng> points) {
-    final String polylineIdVal = 'polylin_$polylineIdCounter';
-    polylineIdCounter++;
-
-    _polylines.add(Polyline(
-        polylineId: PolylineId(polylineIdVal),
-        width: 2,
-        color: Colors.blue,
-        points: points.map((e) => LatLng(e.latitude, e.longitude)).toList()));
-  }
-
-  void _setCircle(LatLng point) async {
-    final GoogleMapController controller = await _controller.future;
-
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: point, zoom: 12)));
-
-    setState(() {
-      _circles.add(Circle(
-          circleId: CircleId('raj'),
-          center: point,
-          fillColor: Colors.blue.withOpacity(0.1),
-          radius: radiusValue,
-          strokeColor: Colors.blue,
-          strokeWidth: 1));
-      // getDirections = false;
-      // searchTextFormField = false;
-      // radiusSlider = true;
-    });
-  }
+  //   _polylines.add(Polyline(
+  //       polylineId: PolylineId(polylineIdVal),
+  //       width: 2,
+  //       color: Colors.blue,
+  //       points: points.map((e) => LatLng(e.latitude, e.longitude)).toList()));
+  // }
 
   _setNearMarker(LatLng point, String label, List types, String status) async {
     var counter = markerIdCounter++;
@@ -160,18 +182,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     setState(() {
       _markers.add(marker);
     });
-  }
-
-  Future<Uint8List> getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-        .buffer
-        .asUint8List();
   }
 
   @override
@@ -212,21 +222,26 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
     return BlocConsumer<MapBloc, MapState>(
       listener: (context, state) {
-        if (state is MapStateGetPlaceSuccess &&
-            state.getPlaceResult.isNotEmpty) {
+        if (state is MapStateSelectFromListSuccess &&
+            state.selectedPlace.isNotEmpty) {
           gotoSearchedPlace(
-            state.getPlaceResult['geometry']['location']['lat'],
-            state.getPlaceResult['geometry']['location']['lng'],
+            state.selectedPlace['geometry']['location']['lat'],
+            state.selectedPlace['geometry']['location']['lng'],
+            _controller.future,
+            _setMarker,
           );
         } else if (state is MapStateGetDirectionsSuccess &&
             state.getDirections.isNotEmpty) {
-          gotoPlace(
-              state.getDirections['start_location']['lat'],
-              state.getDirections['start_location']['lng'],
-              state.getDirections['end_location']['lat'],
-              state.getDirections['end_location']['lng'],
-              state.getDirections['bounds_ne'],
-              state.getDirections['bounds_sw']);
+          gotoOriginDestination(
+            state.getDirections['start_location']['lat'],
+            state.getDirections['start_location']['lng'],
+            state.getDirections['end_location']['lat'],
+            state.getDirections['end_location']['lng'],
+            state.getDirections['bounds_ne'],
+            state.getDirections['bounds_sw'],
+            _controller.future,
+            _setMarker,
+          );
           _setPolyline(state.getDirections['polyline_decoded']);
         } else if (state is MapStateGetPlaceDetailsSuccess) {
           List<dynamic> placesWithin = state.getPlaceDetails['results'] as List;
@@ -293,12 +308,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                     ),
                   ),
                   buildSearchPlacesTextFormField(
-                      context, state, searchController, _debounce),
+                      context, state, _searchController, _debounce),
                   buildSearchResultBoard(context, state),
-                  (state is MapStateWidgetControl && state.showGetDirection)
-                      ? buildGetDirectionTextFormField(
-                          context, _originController, _destinationController)
-                      : Container(),
+                  buildGetDirectionTextFormField(context, state,
+                      _originController, _destinationController),
                   (state is MapStateWidgetControl && state.showNearbyPlaces)
                       ? Padding(
                           padding: EdgeInsets.fromLTRB(15.0, 60.0, 15.0, 0.0),
@@ -604,6 +617,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             children: <Widget>[
               IconButton(
                 onPressed: () {
+                  _searchController.clear();
                   context.read<MapBloc>().add(MapEventWidgetControl(
                       showSearchPlacesTextFormField: true));
                   _circles.clear();
@@ -615,14 +629,17 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                     // getDirections = false;
                   });
                 },
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
               ),
               IconButton(
                 onPressed: () {
+                  _circles.clear();
+                  _originController.clear();
+                  _destinationController.clear();
                   context
                       .read<MapBloc>()
                       .add(MapEventWidgetControl(showGetDirection: true));
-                  _circles.clear();
+
                   setState(() {
                     // searchTextFormField = false;
                     // radiusSlider = false;
@@ -631,7 +648,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                     // getDirections = true;
                   });
                 },
-                icon: Icon(Icons.navigation),
+                icon: const Icon(Icons.navigation),
               ),
             ],
           ),
@@ -838,20 +855,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     }
   }
 
-  gotoPlace(double lat, double lng, double endLat, double endLng,
-      Map<String, dynamic> boundNe, Map<String, dynamic> boundSw) async {
-    final GoogleMapController controller = await _controller.future;
-
-    controller.animateCamera(CameraUpdate.newLatLngBounds(
-        LatLngBounds(
-            southwest: LatLng(boundSw['lat'], boundSw['lng']),
-            northeast: LatLng(boundNe['lat'], boundNe['lng'])),
-        25));
-
-    _setMarker(LatLng(lat, lng));
-    _setMarker(LatLng(endLat, endLng));
-  }
-
   Future<void> moveCameraSlightly() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
@@ -1032,12 +1035,5 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         zoom: 14.0,
         bearing: 45.0,
         tilt: 45.0)));
-  }
-
-  Future<void> gotoSearchedPlace(double lat, double lng) async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(lat, lng), zoom: 12)));
-    _setMarker(LatLng(lat, lng));
   }
 }

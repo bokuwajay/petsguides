@@ -8,14 +8,10 @@ class MapEventSearchPlaces extends MapEvent {
   const MapEventSearchPlaces({required this.searchInput});
 }
 
-class MapEventCloseResultBoard extends MapEvent {
-  const MapEventCloseResultBoard();
-}
-
-class MapEventGetPlace extends MapEvent {
+class MapEventSelectFromSearchList extends MapEvent {
   final String placeId;
 
-  const MapEventGetPlace({required this.placeId});
+  const MapEventSelectFromSearchList({required this.placeId});
 }
 
 class MapEventTapOnPlace extends MapEvent {

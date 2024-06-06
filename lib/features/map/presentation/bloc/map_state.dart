@@ -39,15 +39,15 @@ class MapStateSearchPlaces extends MapState {
   List<Object?> get props => [isLoading, showResultBoard, autoComplete];
 }
 
-class MapStateGetPlaceSuccess extends MapState {
+class MapStateSelectFromListSuccess extends MapState {
   final bool isLoading;
-  final Map<String, dynamic> getPlaceResult;
+  final Map<String, dynamic> selectedPlace;
 
-  const MapStateGetPlaceSuccess(this.isLoading, this.getPlaceResult)
+  const MapStateSelectFromListSuccess(this.isLoading, this.selectedPlace)
       : super(isLoading: isLoading);
 
   @override
-  List<Object?> get props => [isLoading, getPlaceResult];
+  List<Object?> get props => [isLoading, selectedPlace];
 }
 
 class MapStateTapOnPlaceSuccess extends MapState {

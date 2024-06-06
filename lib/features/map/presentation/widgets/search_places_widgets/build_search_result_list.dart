@@ -13,10 +13,9 @@ Widget buildSearchResultList(
         FocusManager.instance.primaryFocus?.unfocus();
       },
       onTap: () async {
-        context.read<MapBloc>().add(const MapEventCloseResultBoard());
-        context
-            .read<MapBloc>()
-            .add(MapEventGetPlace(placeId: placeItem.placeId ?? ''));
+        context.read<MapBloc>().add(MapEventWidgetControl());
+        context.read<MapBloc>().add(
+            MapEventSelectFromSearchList(placeId: placeItem.placeId ?? ''));
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
