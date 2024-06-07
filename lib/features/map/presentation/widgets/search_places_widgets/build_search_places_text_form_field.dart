@@ -12,7 +12,7 @@ Widget buildSearchPlacesTextFormField(
   TextEditingController searchController,
   Timer? _debounce,
 ) {
-  if (!(state is MapStateWidgetControl &&
+  if (!(state is MapStateSearchWidgetControl &&
       state.showSearchPlacesTextFormField)) {
     return Container();
   }
@@ -34,12 +34,11 @@ Widget buildSearchPlacesTextFormField(
             suffixIcon: IconButton(
               onPressed: () {
                 context.read<MapBloc>().add(
-                      MapEventWidgetControl(
-                          showSearchPlacesTextFormField: false),
+                      MapEventSearchWidgetControl(),
                     );
                 searchController.text = '';
                 // _markers = {};
-                context.read<MapBloc>().add(MapEventWidgetControl());
+                context.read<MapBloc>().add(MapEventSearchWidgetControl());
               },
               icon: const Icon(Icons.close),
             ),

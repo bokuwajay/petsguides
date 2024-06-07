@@ -37,6 +37,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   int polylineIdCounter = 1;
 
   final Set<Circle> _circles = <Circle>{};
+  var tappedPoint;
+  var radiusValue = 3000.0;
 
   //
   //
@@ -101,8 +103,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   //
   // bool searchTextFormField = false;
   // bool radiusSlider = false;
-  bool cardTapped = false;
-  bool pressedNear = false;
+  // bool cardTapped = false;
+  // bool pressedNear = false;
   // bool getDirections = false;
 
   List searchResult = [];
@@ -112,10 +114,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   // Set<Polyline> _polylines = Set<Polyline>();
   // int markerIdCounter = 1;
   // int polylineIdCounter = 1;
-
-  var radiusValue = 3000.0;
-
-  var tappedPoint;
 
   List allFavoritePlaces = [];
 
@@ -194,7 +192,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   void _onScroll() {
     if (_pageController.page!.toInt() != prevPage) {
       prevPage = _pageController.page!.toInt();
-      cardTapped = false;
+      // cardTapped = false;
       photoGalleryIndex = 1;
       showBlankCard = false;
       gotoTappedPlace();
@@ -243,12 +241,14 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             _setMarker,
           );
           _setPolyline(state.getDirections['polyline_decoded']);
-        } else if (state is MapStateGetPlaceDetailsSuccess) {
-          List<dynamic> placesWithin = state.getPlaceDetails['results'] as List;
+        } else if (state is MapStatePlacesDetailCardsWidgetControl &&
+            state.carouselSliderData != null) {
+          List<dynamic> placesWithin =
+              state.carouselSliderData!['results'] as List;
 
           allFavoritePlaces = placesWithin;
 
-          tokenKey = state.getPlaceDetails['next_page_token'] ?? 'none';
+          tokenKey = state.carouselSliderData!['next_page_token'] ?? 'none';
 
           placesWithin.forEach((element) {
             _setNearMarker(
@@ -275,9 +275,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
               element['business_status'] ?? 'not available',
             );
           });
-        } else if (state is MapStateTapOnPlaceSuccess &&
-            state.tapOnPlaceResult.isNotEmpty) {
-          tappedPlaceDetail = state.tapOnPlaceResult;
+        } else if (state is MapStatePlacesDetailCardsWidgetControl &&
+            state.flipCardData != null) {
+          tappedPlaceDetail = state.flipCardData;
         }
       },
       builder: (context, state) {
@@ -301,9 +301,14 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       onTap: (point) {
                         tappedPoint = point;
                         _setCircle(point);
+                        _polylines.clear();
+                        allFavoritePlaces.clear();
+                        // pressedNear = false;
+                        // cardTapped = false;
+                        _markers.clear();
                         context
                             .read<MapBloc>()
-                            .add(MapEventWidgetControl(showNearbyPlaces: true));
+                            .add(MapEventNearbyPlaces(showSlider: true));
                       },
                     ),
                   ),
@@ -312,9 +317,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   buildSearchResultBoard(context, state),
                   buildGetDirectionTextFormField(context, state,
                       _originController, _destinationController),
-                  (state is MapStateWidgetControl && state.showNearbyPlaces)
+                  (state is MapStateNearbyPlaces && state.showSlider)
                       ? Padding(
-                          padding: EdgeInsets.fromLTRB(15.0, 60.0, 15.0, 0.0),
+                          padding:
+                              const EdgeInsets.fromLTRB(15.0, 60.0, 15.0, 0.0),
                           child: Container(
                             height: 50.0,
                             color: Colors.black.withOpacity(0.3),
@@ -327,36 +333,36 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                   value: radiusValue,
                                   onChanged: (newVal) {
                                     radiusValue = newVal;
-                                    pressedNear = false;
+                                    // pressedNear = false;
                                     _setCircle(tappedPoint);
                                   },
                                 )),
-                                !pressedNear
+                                !state.pressNearby
                                     ? IconButton(
                                         onPressed: () {
                                           if (_debounce?.isActive ?? false) {
                                             _debounce?.cancel();
                                           }
-                                          _debounce = Timer(
-                                              Duration(seconds: 2), () async {
+                                          _debounce =
+                                              Timer(const Duration(seconds: 2),
+                                                  () async {
                                             context.read<MapBloc>().add(
                                                 MapEventGetPlaceDetails(
                                                     tappedPoint: tappedPoint,
                                                     radius:
                                                         radiusValue.toInt()));
                                             _markers = {};
-                                            // _markersDupe = _markers;
-                                            pressedNear = true;
                                           });
                                         },
-                                        icon: Icon(Icons.near_me))
+                                        icon: const Icon(Icons.near_me))
                                     : IconButton(
                                         onPressed: () {
                                           if (_debounce?.isActive ?? false) {
                                             _debounce?.cancel();
                                           }
-                                          _debounce = Timer(
-                                              Duration(seconds: 2), () async {
+                                          _debounce =
+                                              Timer(const Duration(seconds: 2),
+                                                  () async {
                                             if (tokenKey != 'none') {
                                               context.read<MapBloc>().add(
                                                   MapEventGetMorePlaceDetails(
@@ -364,20 +370,20 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                             }
                                           });
                                         },
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.more_time,
                                           color: Colors.blue,
                                         )),
                                 IconButton(
                                     onPressed: () {
-                                      context.read<MapBloc>().add(
-                                          MapEventWidgetControl(
-                                              showNearbyPlaces: false));
+                                      context
+                                          .read<MapBloc>()
+                                          .add(MapEventNearbyPlaces());
                                       _circles.clear();
                                       setState(() {
                                         // radiusSlider = false;
-                                        pressedNear = false;
-                                        cardTapped = false;
+                                        // pressedNear = false;
+                                        // cardTapped = false;
                                         radiusValue = 3000.0;
                                         // _circles = {};
                                         _markers = {};
@@ -393,7 +399,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                           ),
                         )
                       : Container(),
-                  pressedNear
+                  (state is MapStatePlacesDetailCardsWidgetControl &&
+                          state.showCarouselSlider)
                       ? Positioned(
                           bottom: 20.0,
                           child: Container(
@@ -407,7 +414,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                 }),
                           ))
                       : Container(),
-                  cardTapped
+                  (state is MapStatePlacesDetailCardsWidgetControl &&
+                          state.showFlipDetailCard)
                       ? Positioned(
                           top: 100.0,
                           left: 15.0,
@@ -617,8 +625,12 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             children: <Widget>[
               IconButton(
                 onPressed: () {
+                  _circles.clear();
+                  _markers.clear();
+                  // pressedNear = false;
+                  // cardTapped = false;
                   _searchController.clear();
-                  context.read<MapBloc>().add(MapEventWidgetControl(
+                  context.read<MapBloc>().add(MapEventSearchWidgetControl(
                       showSearchPlacesTextFormField: true));
                   _circles.clear();
                   setState(() {
@@ -634,11 +646,14 @@ class _GoogleMapViewState extends State<GoogleMapView> {
               IconButton(
                 onPressed: () {
                   _circles.clear();
+                  _markers.clear();
+                  // pressedNear = false;
+                  // cardTapped = false;
                   _originController.clear();
                   _destinationController.clear();
                   context
                       .read<MapBloc>()
-                      .add(MapEventWidgetControl(showGetDirection: true));
+                      .add(MapEventSearchWidgetControl(showGetDirection: true));
 
                   setState(() {
                     // searchTextFormField = false;
@@ -891,12 +906,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
       },
       child: InkWell(
         onTap: () async {
-          cardTapped = !cardTapped;
-          if (cardTapped) {
-            context.read<MapBloc>().add(MapEventTapOnPlace(
-                placeId: allFavoritePlaces[index]['place_id']));
-            setState(() {});
-          }
+          context.read<MapBloc>().add(MapEventTapOnCarouselCard(
+              placeId: allFavoritePlaces[index]['place_id']));
+
           moveCameraSlightly();
         },
         child: Stack(

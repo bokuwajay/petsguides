@@ -14,10 +14,10 @@ class MapEventSelectFromSearchList extends MapEvent {
   const MapEventSelectFromSearchList({required this.placeId});
 }
 
-class MapEventTapOnPlace extends MapEvent {
+class MapEventTapOnCarouselCard extends MapEvent {
   final String placeId;
 
-  const MapEventTapOnPlace({required this.placeId});
+  const MapEventTapOnCarouselCard({required this.placeId});
 }
 
 class MapEventGetDirections extends MapEvent {
@@ -44,17 +44,24 @@ class MapEventGetMorePlaceDetails extends MapEvent {
 
 // searchPlaces
 // get direction
-// nearbyPlaces
-class MapEventWidgetControl extends MapEvent {
+class MapEventSearchWidgetControl extends MapEvent {
   bool showSearchPlacesTextFormField;
   bool showGetDirection;
-  bool showNearbyPlaces;
   bool showSearchResultBoard;
 
-  MapEventWidgetControl({
+  MapEventSearchWidgetControl({
     this.showSearchPlacesTextFormField = false,
     this.showGetDirection = false,
-    this.showNearbyPlaces = false,
     this.showSearchResultBoard = false,
+  });
+}
+
+class MapEventNearbyPlaces extends MapEvent {
+  bool showSlider;
+  bool pressNearby;
+
+  MapEventNearbyPlaces({
+    this.showSlider = false,
+    this.pressNearby = false,
   });
 }

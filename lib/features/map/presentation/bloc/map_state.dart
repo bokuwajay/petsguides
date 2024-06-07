@@ -28,15 +28,15 @@ class MapStateException extends MapState {
 
 class MapStateSearchPlaces extends MapState {
   final bool isLoading;
-  final bool showResultBoard;
+  final bool showSearchResultBoard;
   final List<AutoCompleteEntity>? autoComplete;
 
   const MapStateSearchPlaces(
-      this.isLoading, this.showResultBoard, this.autoComplete)
+      this.isLoading, this.showSearchResultBoard, this.autoComplete)
       : super(isLoading: isLoading);
 
   @override
-  List<Object?> get props => [isLoading, showResultBoard, autoComplete];
+  List<Object?> get props => [isLoading, showSearchResultBoard, autoComplete];
 }
 
 class MapStateSelectFromListSuccess extends MapState {
@@ -50,15 +50,15 @@ class MapStateSelectFromListSuccess extends MapState {
   List<Object?> get props => [isLoading, selectedPlace];
 }
 
-class MapStateTapOnPlaceSuccess extends MapState {
-  final bool isLoading;
-  final Map<String, dynamic> tapOnPlaceResult;
-  const MapStateTapOnPlaceSuccess(this.isLoading, this.tapOnPlaceResult)
-      : super(isLoading: isLoading);
+// class MapStateTapOnPlaceSuccess extends MapState {
+//   final bool isLoading;
+//   final Map<String, dynamic> tapOnPlaceResult;
+//   const MapStateTapOnPlaceSuccess(this.isLoading, this.tapOnPlaceResult)
+//       : super(isLoading: isLoading);
 
-  @override
-  List<Object?> get props => [isLoading, tapOnPlaceResult];
-}
+//   @override
+//   List<Object?> get props => [isLoading, tapOnPlaceResult];
+// }
 
 class MapStateGetDirectionsSuccess extends MapState {
   final bool isLoading;
@@ -71,15 +71,29 @@ class MapStateGetDirectionsSuccess extends MapState {
   List<Object?> get props => [isLoading, getDirections];
 }
 
-class MapStateGetPlaceDetailsSuccess extends MapState {
+class MapStatePlacesDetailCardsWidgetControl extends MapState {
   final bool isLoading;
-  final Map<String, dynamic> getPlaceDetails;
+  final Map<String, dynamic>? carouselSliderData;
+  final bool showCarouselSlider;
+  final bool showFlipDetailCard;
+  final Map<String, dynamic>? flipCardData;
 
-  const MapStateGetPlaceDetailsSuccess(this.isLoading, this.getPlaceDetails)
-      : super(isLoading: isLoading);
+  const MapStatePlacesDetailCardsWidgetControl(
+    this.isLoading,
+    this.carouselSliderData,
+    this.showCarouselSlider,
+    this.showFlipDetailCard,
+    this.flipCardData,
+  ) : super(isLoading: isLoading);
 
   @override
-  List<Object?> get props => [isLoading, getPlaceDetails];
+  List<Object?> get props => [
+        isLoading,
+        carouselSliderData,
+        showCarouselSlider,
+        showFlipDetailCard,
+        flipCardData
+      ];
 }
 
 class MapStateGetMorePlaceDetailsSuccess extends MapState {
@@ -94,19 +108,17 @@ class MapStateGetMorePlaceDetailsSuccess extends MapState {
   List<Object?> get props => [isLoading, getMorePlaceDetails];
 }
 
-class MapStateWidgetControl extends MapState {
+class MapStateSearchWidgetControl extends MapState {
   final bool isLoading;
   final bool showSearchPlacesTextFormField;
   final bool showGetDirection;
-  final bool showNearbyPlaces;
   final bool showSearchResultBoard;
   final List<AutoCompleteEntity>? autoComplete;
 
-  const MapStateWidgetControl(
+  const MapStateSearchWidgetControl(
       this.isLoading,
       this.showSearchPlacesTextFormField,
       this.showGetDirection,
-      this.showNearbyPlaces,
       this.showSearchResultBoard,
       this.autoComplete)
       : super(isLoading: isLoading);
@@ -116,8 +128,26 @@ class MapStateWidgetControl extends MapState {
         isLoading,
         showSearchPlacesTextFormField,
         showGetDirection,
-        showNearbyPlaces,
         showSearchResultBoard,
         autoComplete,
+      ];
+}
+
+class MapStateNearbyPlaces extends MapState {
+  final bool isLoading;
+  final bool showSlider;
+  final bool pressNearby;
+
+  const MapStateNearbyPlaces(
+    this.isLoading,
+    this.showSlider,
+    this.pressNearby,
+  ) : super(isLoading: isLoading);
+
+  @override
+  List<Object?> get props => [
+        isLoading,
+        showSlider,
+        pressNearby,
       ];
 }

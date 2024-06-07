@@ -7,7 +7,7 @@ Widget buildSearchResultBoard(
   MapState state,
 ) {
   final screenWidth = MediaQuery.of(context).size.width;
-  if (!(state is MapStateWidgetControl && state.showSearchResultBoard)) {
+  if (!(state is MapStateSearchWidgetControl && state.showSearchResultBoard)) {
     return Container();
   }
 
