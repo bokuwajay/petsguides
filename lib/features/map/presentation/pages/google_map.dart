@@ -11,6 +11,8 @@ import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 import 'package:petsguides/features/map/presentation/widgets/get_direction_widgets/build_get_direction_text_form_field.dart';
+import 'package:petsguides/features/map/presentation/widgets/get_nearby_places_widgets/build_carousel_container.dart';
+import 'package:petsguides/features/map/presentation/widgets/get_nearby_places_widgets/build_slider.dart';
 import 'package:petsguides/features/map/presentation/widgets/search_places_widgets/build_search_places_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/widgets/search_places_widgets/build_search_result_board.dart';
 import 'package:petsguides/features/map/utils/get_bytes_from_assets.dart';
@@ -317,103 +319,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   buildSearchResultBoard(context, state),
                   buildGetDirectionTextFormField(context, state,
                       _originController, _destinationController),
-                  (state is MapStateNearbyPlaces && state.showSlider)
-                      ? Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(15.0, 60.0, 15.0, 0.0),
-                          child: Container(
-                            height: 50.0,
-                            color: Colors.black.withOpacity(0.3),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                    child: Slider(
-                                  max: 7000.0,
-                                  min: 1000.0,
-                                  value: radiusValue,
-                                  onChanged: (newVal) {
-                                    radiusValue = newVal;
-                                    // pressedNear = false;
-                                    _setCircle(tappedPoint);
-                                  },
-                                )),
-                                !state.pressNearby
-                                    ? IconButton(
-                                        onPressed: () {
-                                          if (_debounce?.isActive ?? false) {
-                                            _debounce?.cancel();
-                                          }
-                                          _debounce =
-                                              Timer(const Duration(seconds: 2),
-                                                  () async {
-                                            context.read<MapBloc>().add(
-                                                MapEventGetPlaceDetails(
-                                                    tappedPoint: tappedPoint,
-                                                    radius:
-                                                        radiusValue.toInt()));
-                                            _markers = {};
-                                          });
-                                        },
-                                        icon: const Icon(Icons.near_me))
-                                    : IconButton(
-                                        onPressed: () {
-                                          if (_debounce?.isActive ?? false) {
-                                            _debounce?.cancel();
-                                          }
-                                          _debounce =
-                                              Timer(const Duration(seconds: 2),
-                                                  () async {
-                                            if (tokenKey != 'none') {
-                                              context.read<MapBloc>().add(
-                                                  MapEventGetMorePlaceDetails(
-                                                      tokenKey: tokenKey));
-                                            }
-                                          });
-                                        },
-                                        icon: const Icon(
-                                          Icons.more_time,
-                                          color: Colors.blue,
-                                        )),
-                                IconButton(
-                                    onPressed: () {
-                                      context
-                                          .read<MapBloc>()
-                                          .add(MapEventNearbyPlaces());
-                                      _circles.clear();
-                                      setState(() {
-                                        // radiusSlider = false;
-                                        // pressedNear = false;
-                                        // cardTapped = false;
-                                        radiusValue = 3000.0;
-                                        // _circles = {};
-                                        _markers = {};
-                                        allFavoritePlaces = [];
-                                      });
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.red,
-                                    ))
-                              ],
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  (state is MapStatePlacesDetailCardsWidgetControl &&
-                          state.showCarouselSlider)
-                      ? Positioned(
-                          bottom: 20.0,
-                          child: Container(
-                            height: 200.0,
-                            width: MediaQuery.of(context).size.width,
-                            child: PageView.builder(
-                                controller: _pageController,
-                                itemCount: allFavoritePlaces.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return _nearbyPlacesList(index);
-                                }),
-                          ))
-                      : Container(),
+                  buildSlider(context, state, radiusValue, tappedPoint,
+                      _setCircle, _circles, _debounce, tokenKey),
+                  buildCarouselContainer(context, state, _pageController,
+                      allFavoritePlaces, placeImg, moveCameraSlightly),
                   (state is MapStatePlacesDetailCardsWidgetControl &&
                           state.showFlipDetailCard)
                       ? Positioned(
@@ -423,7 +332,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                             front: Container(
                               height: 250.0,
                               width: 175.0,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8.0))),
@@ -434,7 +343,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                       height: 150.0,
                                       width: 175.0,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(8.0),
                                             topRight: Radius.circular(8.0)),
                                         image: DecorationImage(
@@ -451,14 +360,14 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          const Text(
                                             'Address ',
                                             style: TextStyle(
                                                 fontFamily: 'WorkSans',
                                                 fontSize: 12.0,
                                                 fontWeight: FontWeight.w500),
                                           ),
-                                          Container(
+                                          SizedBox(
                                             width: 105.0,
                                             child: Text(
                                               tappedPlaceDetail?[
@@ -466,7 +375,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                                   // tappedPlaceDetail[
                                                   //         'formatted_address'] ??
                                                   'none given',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontFamily: 'WorkSans',
                                                   fontSize: 11.0,
                                                   fontWeight: FontWeight.w500),
@@ -476,27 +385,27 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                       ),
                                     ),
                                     Container(
-                                      padding: EdgeInsets.fromLTRB(
+                                      padding: const EdgeInsets.fromLTRB(
                                           7.0, 0.0, 7.0, 0.0),
                                       width: 175.0,
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          const Text(
                                             'Contact ',
                                             style: TextStyle(
                                                 fontFamily: 'WorkSans',
                                                 fontSize: 12.0,
                                                 fontWeight: FontWeight.w500),
                                           ),
-                                          Container(
+                                          SizedBox(
                                             width: 105.0,
                                             child: Text(
                                               tappedPlaceDetail?[
                                                       'formatted_phone_number'] ??
                                                   'none given',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontFamily: 'WorkSans',
                                                   fontSize: 11.0,
                                                   fontWeight: FontWeight.w500),
@@ -531,10 +440,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                             });
                                           },
                                           child: AnimatedContainer(
-                                            duration:
-                                                Duration(milliseconds: 700),
+                                            duration: const Duration(
+                                                milliseconds: 700),
                                             curve: Curves.easeIn,
-                                            padding: EdgeInsets.fromLTRB(
+                                            padding: const EdgeInsets.fromLTRB(
                                                 7.0, 4.0, 7.0, 4.0),
                                             decoration: BoxDecoration(
                                                 borderRadius:
@@ -561,10 +470,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                                             });
                                           },
                                           child: AnimatedContainer(
-                                            duration:
-                                                Duration(milliseconds: 700),
+                                            duration: const Duration(
+                                                milliseconds: 700),
                                             curve: Curves.easeIn,
-                                            padding: EdgeInsets.fromLTRB(
+                                            padding: const EdgeInsets.fromLTRB(
                                                 7.0, 4.0, 7.0, 4.0),
                                             decoration: BoxDecoration(
                                                 borderRadius:
@@ -676,7 +585,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
           child: Row(
             children: [
               Container(
@@ -689,23 +598,23 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       fit: BoxFit.cover),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 4.0,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 160.0,
                     child: Text(
                       review['author_name'],
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'WorkSans',
                           fontSize: 12.0,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  SizedBox(height: 3.0),
+                  const SizedBox(height: 3.0),
                   RatingStars(
                     value: review['rating'] * 1.0,
                     starCount: 5,
@@ -722,7 +631,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                     starSpacing: 2,
                     maxValueVisibility: false,
                     valueLabelVisibility: true,
-                    animationDuration: Duration(milliseconds: 1000),
+                    animationDuration: const Duration(milliseconds: 1000),
                     valueLabelPadding:
                         const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
                     valueLabelMargin: const EdgeInsets.only(right: 4),
@@ -735,11 +644,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Container(
             child: Text(
               review['text'],
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'WorkSans',
                   fontSize: 11.0,
                   fontWeight: FontWeight.w400),
@@ -758,7 +667,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     if (photoElement == null || photoElement.length == 0) {
       showBlankCard = true;
       return Container(
-        child: Center(
+        child: const Center(
           child: Text(
             'No Photos',
             style: TextStyle(
@@ -776,7 +685,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
       return Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
           Container(
@@ -788,7 +697,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       image: NetworkImage(
                           'https://maps.googleapis.com/maps/api/place/photo?maxwidth=$maxWidth&maxheight=$maxHeight&photo_reference=$placeImg&key=$key'),
                       fit: BoxFit.cover))),
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
           Row(
@@ -813,7 +722,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                         ? Colors.green.shade500
                         : Colors.grey.shade500,
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       'Prev',
                       style: TextStyle(
@@ -827,7 +736,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
               ),
               Text(
                 '$tempDisplayIndex/' + photoElement.length.toString(),
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'WorkSans',
                     fontSize: 12.0,
                     fontWeight: FontWeight.w500),
@@ -851,7 +760,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                         ? Colors.green.shade500
                         : Colors.grey.shade500,
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       'Next',
                       style: TextStyle(
@@ -885,146 +794,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           bearing: 45.0,
           tilt: 45.0),
     ));
-  }
-
-  _nearbyPlacesList(index) {
-    return AnimatedBuilder(
-      animation: _pageController,
-      builder: (BuildContext context, Widget? widget) {
-        double value = 1;
-        if (_pageController.position.haveDimensions) {
-          value = (_pageController.page! - index);
-          value = (1 - (value.abs() * 0.3) + 0.06).clamp(0.0, 1.0);
-        }
-        return Center(
-          child: SizedBox(
-            height: Curves.easeInOut.transform(value) * 125.0,
-            width: Curves.easeInOut.transform(value) * 350.0,
-            child: widget,
-          ),
-        );
-      },
-      child: InkWell(
-        onTap: () async {
-          context.read<MapBloc>().add(MapEventTapOnCarouselCard(
-              placeId: allFavoritePlaces[index]['place_id']));
-
-          moveCameraSlightly();
-        },
-        child: Stack(
-          children: [
-            Center(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                height: 125.0,
-                width: 275.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black54,
-                          offset: Offset(0.0, 4.0),
-                          blurRadius: 10.0)
-                    ]),
-                child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.white),
-                    child: Row(children: [
-                      _pageController.position.haveDimensions
-                          ? _pageController.page!.toInt() == index
-                              ? Container(
-                                  height: 90.0,
-                                  width: 90.0,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(10.0),
-                                          topLeft: Radius.circular(10.0)),
-                                      image: DecorationImage(
-                                          image: NetworkImage(placeImg != ''
-                                              ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$placeImg&key=$key'
-                                              : 'https://pic.onlinewebfonts.com/svg/img_546302.png'),
-                                          fit: BoxFit.cover)),
-                                )
-                              : Container(
-                                  height: 90.0,
-                                  width: 20.0,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(10.0),
-                                        topLeft: Radius.circular(10.0),
-                                      ),
-                                      color: Colors.blue),
-                                )
-                          : Container(),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 170.0,
-                            child: Text(
-                              allFavoritePlaces[index]['name'],
-                              style: TextStyle(
-                                  fontSize: 12.5,
-                                  fontFamily: 'WorkSans',
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          RatingStars(
-                            value: allFavoritePlaces[index]['rating']
-                                        .runtimeType ==
-                                    int
-                                ? allFavoritePlaces[index]['rating'] * 1.0
-                                : allFavoritePlaces[index]['rating'] ?? 0.0,
-                            starCount: 5,
-                            starSize: 10,
-                            valueLabelColor: const Color(0xff9b9b9b),
-                            valueLabelTextStyle: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'WorkSans',
-                                fontWeight: FontWeight.w400,
-                                fontStyle: FontStyle.normal,
-                                fontSize: 12.0),
-                            valueLabelRadius: 10,
-                            maxValue: 5,
-                            starSpacing: 2,
-                            maxValueVisibility: false,
-                            valueLabelVisibility: true,
-                            animationDuration: Duration(milliseconds: 1000),
-                            valueLabelPadding: const EdgeInsets.symmetric(
-                                vertical: 1, horizontal: 8),
-                            valueLabelMargin: const EdgeInsets.only(right: 4),
-                            starOffColor: const Color(0xffe7e8ea),
-                            starColor: Colors.yellow,
-                          ),
-                          Container(
-                            width: 170.0,
-                            child: Text(
-                              allFavoritePlaces[index]['business_status'] ??
-                                  'none',
-                              style: TextStyle(
-                                  color: allFavoritePlaces[index]
-                                              ['business_status'] ==
-                                          'OPERATIONAL'
-                                      ? Colors.green
-                                      : Colors.red,
-                                  fontSize: 11.0,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          )
-                        ],
-                      )
-                    ])),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
   }
 
   Future<void> gotoTappedPlace() async {
