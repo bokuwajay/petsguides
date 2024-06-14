@@ -40,7 +40,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   final Set<Circle> _circles = <Circle>{};
   var tappedPoint;
-  var radiusValue = 3000.0;
+  // var radiusValue = 3000.0;
 
   //
   //
@@ -72,7 +72,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         points: points.map((e) => LatLng(e.latitude, e.longitude)).toList()));
   }
 
-  void _setCircle(LatLng point) async {
+  void _setCircle(LatLng point, double radiusValue) async {
     final GoogleMapController controller = await _controller.future;
 
     controller.animateCamera(CameraUpdate.newCameraPosition(
@@ -280,6 +280,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         } else if (state is MapStatePlacesDetailCardsWidgetControl &&
             state.flipCardData != null) {
           tappedPlaceDetail = state.flipCardData;
+        } else if (state is MapStateNearbyPlaces) {
+          print('state---${state.radiusValue}');
+          _setCircle(point, radiusValue)
         }
       },
       builder: (context, state) {
@@ -302,11 +305,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       },
                       onTap: (point) {
                         tappedPoint = point;
-                        _setCircle(point);
                         _polylines.clear();
                         allFavoritePlaces.clear();
-                        // pressedNear = false;
-                        // cardTapped = false;
                         _markers.clear();
                         context
                             .read<MapBloc>()

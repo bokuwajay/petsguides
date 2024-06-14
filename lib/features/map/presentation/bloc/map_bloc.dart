@@ -112,13 +112,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<MapEventNearbyPlaces>(
       (event, emit) {
         final bool showSlider = event.showSlider;
-        final bool pressNearby = event.pressNearby;
+        final double radiusValue = event.radiusValue;
 
-        emit(MapStateNearbyPlaces(
-          false,
-          showSlider,
-          pressNearby,
-        ));
+        emit(MapStateNearbyPlaces(false, showSlider, radiusValue));
       },
     );
   }

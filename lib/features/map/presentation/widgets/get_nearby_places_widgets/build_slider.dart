@@ -33,7 +33,7 @@ Widget buildSlider(
               child: Slider(
             max: 7000.0,
             min: 1000.0,
-            value: radiusValue,
+            value: state.radiusValue,
             onChanged: (newVal) {
               radiusValue = newVal;
               setCircle(tappedPoint);

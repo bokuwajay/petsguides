@@ -58,10 +58,10 @@ class MapEventSearchWidgetControl extends MapEvent {
 
 class MapEventNearbyPlaces extends MapEvent {
   bool showSlider;
-  bool pressNearby;
+  double radiusValue;
 
   MapEventNearbyPlaces({
     this.showSlider = false,
-    this.pressNearby = false,
+    this.radiusValue = 3000.0,
   });
 }

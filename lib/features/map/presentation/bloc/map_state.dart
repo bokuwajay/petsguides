@@ -136,18 +136,15 @@ class MapStateSearchWidgetControl extends MapState {
 class MapStateNearbyPlaces extends MapState {
   final bool isLoading;
   final bool showSlider;
-  final bool pressNearby;
+  final double radiusValue;
 
-  const MapStateNearbyPlaces(
-    this.isLoading,
-    this.showSlider,
-    this.pressNearby,
-  ) : super(isLoading: isLoading);
+  const MapStateNearbyPlaces(this.isLoading, this.showSlider, this.radiusValue)
+      : super(isLoading: isLoading);
 
   @override
   List<Object?> get props => [
         isLoading,
         showSlider,
-        pressNearby,
+        radiusValue,
       ];
 }
