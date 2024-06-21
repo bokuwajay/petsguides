@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:petsguides/app.dart';
 import 'package:petsguides/core/constants/languages.dart';
 import 'package:petsguides/core/util/dialogs/error_dialog.dart';
 // import 'package:petsguides/core/util/loading/loading_screen.dart';
@@ -14,7 +15,7 @@ import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart'
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:petsguides/core/util/validator.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
-import 'package:petsguides/main.dart';
+
 import 'package:snappable_thanos/snappable_thanos.dart';
 
 class LoginView extends StatefulWidget {

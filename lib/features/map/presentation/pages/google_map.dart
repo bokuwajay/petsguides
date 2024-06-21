@@ -12,7 +12,7 @@ import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 import 'package:petsguides/features/map/presentation/widgets/get_direction_widgets/build_get_direction_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/widgets/get_nearby_places_widgets/build_carousel_container.dart';
-import 'package:petsguides/features/map/presentation/widgets/get_nearby_places_widgets/build_slider.dart';
+// import 'package:petsguides/features/map/presentation/widgets/get_nearby_places_widgets/build_slider.dart';
 import 'package:petsguides/features/map/presentation/widgets/search_places_widgets/build_search_places_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/widgets/search_places_widgets/build_search_result_board.dart';
 import 'package:petsguides/features/map/utils/get_bytes_from_assets.dart';
@@ -282,7 +282,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           tappedPlaceDetail = state.flipCardData;
         } else if (state is MapStateNearbyPlaces) {
           print('state---${state.radiusValue}');
-          _setCircle(point, radiusValue)
+          // _setCircle(point, radiusValue)
         }
       },
       builder: (context, state) {
@@ -319,8 +319,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   buildSearchResultBoard(context, state),
                   buildGetDirectionTextFormField(context, state,
                       _originController, _destinationController),
-                  buildSlider(context, state, radiusValue, tappedPoint,
-                      _setCircle, _circles, _debounce, tokenKey),
+                  // buildSlider(context, state, radiusValue, tappedPoint,
+                  //     _setCircle, _circles, _debounce, tokenKey),
                   buildCarouselContainer(context, state, _pageController,
                       allFavoritePlaces, placeImg, moveCameraSlightly),
                   (state is MapStatePlacesDetailCardsWidgetControl &&

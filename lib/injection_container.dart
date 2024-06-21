@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:petsguides/config/routes/app_route_config.dart';
 import 'package:petsguides/core/util/secure_storage.dart';
 import 'package:petsguides/features/auth/data/data_sources/auth_service.dart';
 import 'package:petsguides/features/auth/data/repository/auth_repository_impl.dart';
@@ -41,4 +42,6 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<MapRepository>(MapRepositoryImpl(sl()));
   sl.registerSingleton<MapUseCase>(MapUseCase(sl()));
   sl.registerFactory<MapBloc>(() => MapBloc(sl()));
+
+  sl.registerLazySingleton<AppRouteConfig>(() => AppRouteConfig());
 }
