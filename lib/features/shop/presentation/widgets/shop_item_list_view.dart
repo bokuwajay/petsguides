@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/core/util/secure_storage.dart';
-import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
-import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/shop/presentation/widgets/carousel_widget.dart';
 import 'package:petsguides/features/shop/presentation/widgets/category_widget.dart';
 import 'package:petsguides/features/shop/presentation/widgets/pets_widget.dart';
@@ -55,9 +52,9 @@ class ShopItemListView extends StatelessWidget {
                     // ),
                     IconButton(
                       onPressed: () async {
-                        context
-                            .read<AuthBloc>()
-                            .add(const AuthEventCheckToken());
+                        // context
+                        //     .read<AuthBloc>()
+                        //     .add(const AuthEventCheckToken());
                       },
                       icon: const Icon(Icons.bookmark_add_outlined, size: 36),
                     ),

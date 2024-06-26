@@ -8,10 +8,7 @@ import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart'
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:petsguides/features/auth/presentation/pages/get_started_view.dart';
 import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
-import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
-import 'package:petsguides/features/map/presentation/pages/google_map.dart';
 import 'package:petsguides/features/shop/presentation/pages/shop_view.dart';
-import 'package:petsguides/injection_container.dart';
 
 class AppRouteConfig {
   GoRouter get router => _router;
@@ -23,15 +20,23 @@ class AppRouteConfig {
         path: AppRoute.initialScreen.path,
         name: AppRoute.initialScreen.name,
         builder: (context, state) {
-          context.read<AuthBloc>().add(const AuthEventInitialize());
+          context.read<AuthBloc>().add(const AuthEventCheckSignInStatus());
           return BlocListener<AuthBloc, AuthState>(
             listener: (context, state) async {
-              if (state is AuthStateFirstLaunch) {
-                router.goNamed(AppRoute.getStarted.name);
-              } else if (state is AuthStateLoggedOut) {
-                router.goNamed(AppRoute.home.name);
-              } else if (state is AuthStateLoggedIn) {
-                router.goNamed(AppRoute.map.name);
+              if (state is AuthStateCheckSignInStatusSuccessful) {
+                if (state.signIn) {
+                  router.goNamed(AppRoute.home.name);
+                } else {
+                  context
+                      .read<AuthBloc>()
+                      .add(const AuthEventCheckFirstLaunch());
+                }
+              } else if (state is AuthStateCheckFirstLaunchSuccessful) {
+                if (state.isFirstLaunch) {
+                  router.goNamed(AppRoute.getStarted.name);
+                } else {
+                  router.goNamed(AppRoute.login.name);
+                }
               }
             },
             child: Center(
@@ -50,16 +55,16 @@ class AppRouteConfig {
         name: AppRoute.home.name,
         builder: (context, state) => const ShopView(),
       ),
-      GoRoute(
-        path: AppRoute.map.path,
-        name: AppRoute.map.name,
-        builder: (context, state) {
-          return BlocProvider<MapBloc>(
-            create: (context) => sl.get<MapBloc>(),
-            child: const GoogleMapView(),
-          );
-        },
-      ),
+      // GoRoute(
+      //   path: AppRoute.map.path,
+      //   name: AppRoute.map.name,
+      //   builder: (context, state) {
+      //     return BlocProvider<MapBloc>(
+      //       create: (context) => sl.get<MapBloc>(),
+      //       child: const GoogleMapView(),
+      //     );
+      //   },
+      // ),
       GoRoute(
         path: AppRoute.login.path,
         name: AppRoute.login.name,

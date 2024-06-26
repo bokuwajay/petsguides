@@ -15,6 +15,14 @@ class AuthEventLogIn extends AuthEvent {
   });
 }
 
-class AuthEventCheckToken extends AuthEvent {
-  const AuthEventCheckToken();
+class AuthEventCheckSignInStatus extends AuthEvent {
+  const AuthEventCheckSignInStatus();
+}
+
+class AuthEventFirstLaunch extends AuthEvent {
+  const AuthEventFirstLaunch();
+}
+
+class AuthEventCheckFirstLaunch extends AuthEvent {
+  const AuthEventCheckFirstLaunch();
 }

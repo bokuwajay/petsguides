@@ -1,41 +1,79 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
-import 'package:petsguides/core/error/dio_exception_handler.dart';
-import 'package:petsguides/core/resources/data_state.dart';
-import 'package:petsguides/features/auth/data/data_sources/auth_service.dart';
-import 'package:petsguides/features/auth/data/models/auth_model.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:petsguides/core/api/api_exception.dart';
+import 'package:petsguides/core/cache/hive_local_storage.dart';
+import 'package:petsguides/core/error/exceptions.dart';
+import 'package:petsguides/core/error/failures.dart';
+import 'package:petsguides/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:petsguides/features/auth/data/datasources/auth_remote_datasource.dart';
+
+import 'package:petsguides/features/auth/domain/entities/auth_entity.dart';
 import 'package:petsguides/features/auth/domain/repository/auth_repository.dart';
+import 'package:petsguides/features/auth/domain/usecases/usecase_params.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthService _authService;
+  final AuthRemoteDataSource _authRemoteDataSource;
+  final AuthLocalDataSource _authLocalDataSource;
+  final HiveLocalStorage _hiveLocalStorage;
 
-  AuthRepositoryImpl(this._authService);
+  AuthRepositoryImpl(
+    this._authRemoteDataSource,
+    this._authLocalDataSource,
+    this._hiveLocalStorage,
+  );
 
   @override
-  Future<DataState<AuthModel>> authenticate({
-    required String email,
-    required String password,
-  }) async {
+  Future<Either<Failure, AuthEntity>> authenticate(LoginParams params) async {
     try {
-      final httpResponse = await _authService.authenticate({
-        'email': email,
-        'password': password,
-      });
-      if (httpResponse.response.statusCode == HttpStatus.ok) {
-        return DataSuccess(httpResponse.data);
-      } else {
-        return DioDataFailed(
-          DioException(
-            requestOptions: httpResponse.response.requestOptions,
-            message: httpResponse.response.data['detail'],
-          ),
+      final result = await _authRemoteDataSource.authenticate(params);
+      if (result.statusCode == HttpStatus.ok) {
+        await _hiveLocalStorage.save(
+          key: 'pgToken',
+          value: result.data,
+          boxName: 'cache',
         );
+        return Right(result);
       }
-    } on DioException catch (dioException) {
-      return DioDataFailed(dioExceptionHandler(dioException));
-    } on Exception catch (genericException) {
-      return GenericDataFailed(genericException);
+      return Left(CredentialFailure());
+    } on ApiException {
+      return Left(CredentialFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> checkSignInStatus() async {
+    try {
+      final result = await _authLocalDataSource.checkSignInStatus();
+      return Right(result);
+    } on CacheException {
+      return Left(CacheFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> firstLaunch() async {
+    try {
+      await _hiveLocalStorage.save(
+        key: 'FIRST_LAUNCH',
+        value: 'pets_guides',
+        boxName: 'cache',
+      );
+      return const Right(true);
+    } on CacheException {
+      return Left(CacheFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> checkFirstLaunch() async {
+    try {
+      final result = await _authLocalDataSource.checkFirstLaunch();
+      return Right(result);
+    } on CacheException {
+      return Left(CacheFailure());
     }
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:petsguides/app.dart';
 import 'package:petsguides/injection_container.dart';
 
@@ -10,6 +13,17 @@ void main() async {
   } else {
     await dotenv.load(fileName: 'assets/env/.env.production');
   }
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Future.wait([
+    Hive.initFlutter(),
+    getTemporaryDirectory().then((path) async {
+      HydratedBloc.storage =
+          await HydratedStorage.build(storageDirectory: path);
+    })
+  ]);
+
   await initializeDependencies();
   runApp(const MyApp());
 }

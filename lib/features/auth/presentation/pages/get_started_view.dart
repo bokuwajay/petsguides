@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:petsguides/core/util/secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
+import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 
 class GetStartedView extends StatelessWidget {
   const GetStartedView({super.key});
@@ -43,10 +44,7 @@ class GetStartedView extends StatelessWidget {
           const SizedBox(height: 24),
           GestureDetector(
             onTap: () async {
-              await SecureStorage.writeSecureData(
-                'FIRST_LAUNCH',
-                'pets_guides',
-              );
+              context.read<AuthBloc>().add(const AuthEventFirstLaunch());
               GoRouter.of(context).go('/home');
             },
             child: Container(

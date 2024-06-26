@@ -1,20 +1,35 @@
-import 'package:petsguides/core/resources/data_state.dart';
+import 'package:equatable/equatable.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:petsguides/core/error/failures.dart';
 import 'package:petsguides/core/usecases/usecase.dart';
 import 'package:petsguides/features/auth/domain/entities/auth_entity.dart';
 import 'package:petsguides/features/auth/domain/repository/auth_repository.dart';
 
-class AuthUseCase
-    implements UseCase<DataState<AuthEntity>, Map<String, String>> {
+class AuthUseCase implements UseCase<AuthEntity, Params> {
   final AuthRepository _authRepository;
   AuthUseCase(this._authRepository);
 
   @override
-  Future<DataState<AuthEntity>> call({Map<String, String>? params}) {
-    final email = params?['email'];
-    final password = params?['password'];
-    return _authRepository.authenticate(
-      email: email ?? "",
-      password: password ?? "",
-    );
+  Future<Either<Failure, AuthEntity>> call(Params params) async {
+    if (params.email.isEmpty || params.password.isEmpty) {
+      return Left(CredentialFailure());
+    }
+    final result = await _authRepository.authenticate(params);
+    return result;
   }
+}
+
+class Params extends Equatable {
+  final String email;
+  final String password;
+  const Params({
+    required this.email,
+    required this.password,
+  });
+
+  @override
+  List<Object?> get props => [
+        email,
+        password,
+      ];
 }

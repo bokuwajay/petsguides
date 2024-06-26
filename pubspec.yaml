@@ -49,6 +49,13 @@ dependencies:
   flutter_bloc: ^8.1.3
   flutter_dotenv: ^5.1.0
   carousel_slider: ^4.2.1
+  fpdart:
+  logger:
+  internet_connection_checker:
+  hive:
+  hive_flutter:
+  path_provider:
+  hydrated_bloc:
 
   # comparing dart objects
   equatable: ^2.0.5

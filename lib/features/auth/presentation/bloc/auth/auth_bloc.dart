@@ -1,110 +1,70 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:petsguides/core/resources/data_state.dart';
+import 'package:petsguides/core/usecases/usecase.dart';
+import 'package:petsguides/core/util/failure_converter.dart';
+import 'package:petsguides/core/util/logger.dart';
+import 'package:petsguides/features/auth/domain/usecases/auth_check_first_launch_usecase.dart';
+import 'package:petsguides/features/auth/domain/usecases/auth_check_signin_status_usecase.dart';
+import 'package:petsguides/features/auth/domain/usecases/auth_first_launch_usecase.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_usecase.dart';
+import 'package:petsguides/features/auth/domain/usecases/usecase_params.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
-import 'package:petsguides/core/util/secure_storage.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUseCase _authUseCase;
+  final AuthCheckSignInStatusUseCase _authCheckSignInStatusUseCase;
+  final AuthFirstLaunchUseCase _authFirstLaunchUseCase;
+  final AuthCheckFirstLaunchUseCase _authCheckFirstLaunchUseCase;
 
-  AuthBloc(this._authUseCase)
-      : super(const AuthStateUninitialized(isLoading: true)) {
-    on<AuthEventInitialize>(
+  AuthBloc(this._authUseCase, this._authCheckSignInStatusUseCase,
+      this._authFirstLaunchUseCase, this._authCheckFirstLaunchUseCase)
+      : super(AuthStateInitial()) {
+    // login
+    on<AuthEventLogIn>((event, emit) async {
+      emit(AuthStateLoading());
+      final result = await _authUseCase
+          .call(LoginParams(email: event.email, password: event.password));
+      result.fold(
+        (l) => emit(AuthStateLoginFailed(failureConverter(l))),
+        (r) => emit(AuthStateLoginSuccessful(r)),
+      );
+    });
+    // check login status
+    on<AuthEventCheckSignInStatus>(
       (event, emit) async {
-        try {
-          final token = await SecureStorage.readSecureData('pgToken');
-          final String? firstLaunch =
-              await SecureStorage.readSecureData('FIRST_LAUNCH');
-
-          if (firstLaunch != 'pets_guides') {
-            emit(const AuthStateFirstLaunch(isLoading: false));
-            return;
-          }
-
-          if (token != null) {
-            final Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-
-            if (decodedToken['exp'] != null &&
-                DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000)
-                    .isAfter(DateTime.now())) {
-              emit(const AuthStateLoggedIn(isLoading: false));
-            } else {
-              emit(const AuthStateLoggedOut(
-                dioException: null,
-                genericException: null,
-                isLoading: false,
-              ));
-            }
-          } else {
-            emit(const AuthStateLoggedOut(
-              dioException: null,
-              genericException: null,
-              isLoading: false,
-            ));
-          }
-        } on Exception catch (genericException) {
-          emit(AuthStateLoggedOut(
-              dioException: null,
-              genericException: genericException,
-              isLoading: false));
-        }
+        emit(AuthStateLoading());
+        final result = await _authCheckSignInStatusUseCase.call(NoParams());
+        result.fold(
+            (l) => emit(AuthStateCheckSignInStatusFailed(failureConverter(l))),
+            (r) => emit(AuthStateCheckSignInStatusSuccessful(r)));
+      },
+    );
+    // first time launch
+    on<AuthEventFirstLaunch>(
+      (event, emit) async {
+        emit(AuthStateLoading());
+        final result = await _authFirstLaunchUseCase.call(NoParams());
+        result.fold(
+            (l) => emit(AuthStateFirstLaunchFailed(failureConverter(l))),
+            (r) => emit(AuthStateFirstLaunchSuccessful()));
       },
     );
 
-    on<AuthEventLogIn>((event, emit) async {
-      emit(const AuthStateLoggedOut(
-          dioException: null, genericException: null, isLoading: true));
-      final email = event.email;
-      final password = event.password;
+// check if first time launch
+    on<AuthEventCheckFirstLaunch>(
+      (event, emit) async {
+        emit(AuthStateLoading());
+        final result = await _authCheckFirstLaunchUseCase.call(NoParams());
+        result.fold(
+            (l) => emit(AuthStateCheckFirstLaunchFailed(failureConverter(l))),
+            (r) => emit(AuthStateCheckFirstLaunchSuccessful(r)));
+      },
+    );
+  }
 
-      final dataState = await _authUseCase(
-        params: {
-          'email': email,
-          'password': password,
-        },
-      );
-
-      if (dataState is DataSuccess && dataState.data!.statusCode == 200) {
-        final token = dataState.data!.data!;
-        await SecureStorage.writeSecureData('pgToken', token);
-        emit(AuthStateLoggedIn(auth: dataState.data, isLoading: false));
-      } else if (dataState is DioDataFailed) {
-        emit(AuthStateLoggedOut(
-          dioException: dataState.dioException,
-          isLoading: false,
-        ));
-      } else if (dataState is GenericDataFailed) {
-        emit(AuthStateLoggedOut(
-          genericException: dataState.genericException,
-          isLoading: false,
-        ));
-      }
-    });
-
-    on<AuthEventCheckToken>((event, emit) async {
-      final token = await SecureStorage.readSecureData('pgToken');
-      if (token == null) {
-        emit(const AuthStateLoggedOut(
-          dioException: null,
-          genericException: null,
-          isLoading: false,
-        ));
-        return;
-      } else {
-        final Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-        if (decodedToken['exp'] == null ||
-            DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000)
-                .isBefore(DateTime.now())) {
-          emit(const AuthStateLoggedOut(
-            dioException: null,
-            genericException: null,
-            isLoading: false,
-          ));
-          return;
-        }
-      }
-    });
+  @override
+  Future<void> close() {
+    logger.i("===== CLOSE AuthBloc =====");
+    return super.close();
   }
 }
