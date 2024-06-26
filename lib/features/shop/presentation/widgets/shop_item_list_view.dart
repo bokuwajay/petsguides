@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:petsguides/core/util/secure_storage.dart';
 import 'package:petsguides/features/shop/presentation/widgets/carousel_widget.dart';
 import 'package:petsguides/features/shop/presentation/widgets/category_widget.dart';
 import 'package:petsguides/features/shop/presentation/widgets/pets_widget.dart';
@@ -61,7 +60,7 @@ class ShopItemListView extends StatelessWidget {
 
                     IconButton(
                       onPressed: () async {
-                        await SecureStorage.deleteSecureData('pgToken');
+                        // await SecureStorage.deleteSecureData('pgToken');
                         // await SecureStorage.deleteSecureData('FIRST_LAUNCH');
                       },
                       icon: const Icon(Icons.chat_bubble_outline, size: 36),

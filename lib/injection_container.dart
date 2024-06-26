@@ -11,7 +11,6 @@ import 'package:petsguides/core/api/api_interceptor.dart';
 import 'package:petsguides/core/cache/hive_local_storage.dart';
 import 'package:petsguides/core/cache/secure_local_storage.dart';
 import 'package:petsguides/core/network/network_checker.dart';
-import 'package:petsguides/core/util/secure_storage.dart';
 import 'package:petsguides/features/auth/di/auth_dependency.dart';
 
 final sl = GetIt.instance;
@@ -32,23 +31,11 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(
       () => SecureLocalStorage(sl<FlutterSecureStorage>()));
 
-  // Dio dio = Dio(BaseOptions(baseUrl: dotenv.env['baseURL']!));
-  final String? languageCode = await SecureStorage.readSecureData('language');
-  final locale =
-      Locale(languageCode ?? Platform.localeName.substring(0, 2), '');
-  sl.registerSingleton<Locale>(locale);
-  // sl.registerSingleton<Dio>(dio);
+  final String? languageCode =
+      await sl<HiveLocalStorage>().load(key: 'language', boxName: 'cache');
 
-  // register dependencies
-  // sl.registerSingleton<AuthService>(AuthService(sl()));
-
-  // sl.registerSingleton<AuthRepository>(AuthRepositoryImpl(sl()));
-
-  // //  register UseCases
-  // sl.registerSingleton<AuthUseCase>(AuthUseCase(sl()));
-
-  // // register Blocs
-  // sl.registerFactory<AuthBloc>(() => AuthBloc(sl()));
+  sl.registerLazySingleton<Locale>(
+      () => Locale(languageCode ?? Platform.localeName.substring(0, 2)));
 
   // sl.registerSingleton<MapService>(MapService());
   // sl.registerSingleton<MapRepository>(MapRepositoryImpl(sl()));

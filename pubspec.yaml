@@ -64,7 +64,7 @@ dependencies:
   get_it: ^7.6.7
 
   # dateFormat
-  intl: ^0.18.1
+  intl:
 
   # database use sqlite to store data locally
   floor: ^1.4.2

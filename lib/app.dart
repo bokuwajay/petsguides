@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/config/routes/app_route_config.dart';
-import 'package:petsguides/core/util/secure_storage.dart';
+import 'package:petsguides/core/cache/hive_local_storage.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/injection_container.dart';
 import 'package:petsguides/config/themes/themes.dart';
@@ -32,7 +32,12 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _locale = lang;
     });
-    await SecureStorage.writeSecureData('language', lang.languageCode);
+
+    await sl<HiveLocalStorage>().save(
+      key: 'language',
+      value: lang.languageCode,
+      boxName: 'cache',
+    );
   }
 
   @override
