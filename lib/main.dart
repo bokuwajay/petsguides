@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:petsguides/app.dart';
+import 'package:petsguides/core/util/observer.dart';
 import 'package:petsguides/injection_container.dart';
 
 void main() async {
@@ -16,6 +17,7 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
+  // init Hive Local storage , create table (open box) and temporary database directory
   await Future.wait([
     Hive.initFlutter(),
     getTemporaryDirectory().then((path) async {
@@ -24,6 +26,11 @@ void main() async {
     })
   ]);
 
+  // register outside/ global instance / dependency
   await initializeDependencies();
+
+// init this to observe the App state changes
+  Bloc.observer = AppBlocObserver();
+
   runApp(const MyApp());
 }
