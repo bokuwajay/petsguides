@@ -12,26 +12,30 @@ class ApiHelper {
 
   Future<Map<String, dynamic>> execute({
     required Method method,
-    required String url,
+    String? baseUrl,
+    required String endpoint,
     dynamic payload,
   }) async {
     try {
+      if (baseUrl != null) {
+        _dio.options.baseUrl = baseUrl;
+      }
       Response? response;
       switch (method) {
         case Method.get:
-          response = await _dio.get(url);
+          response = await _dio.get(endpoint);
           break;
         case Method.post:
-          response = await _dio.post(url, data: payload);
+          response = await _dio.post(endpoint, data: payload);
           break;
         case Method.put:
-          response = await _dio.put(url);
+          response = await _dio.put(endpoint);
           break;
         case Method.patch:
-          response = await _dio.patch(url);
+          response = await _dio.patch(endpoint);
           break;
         case Method.delete:
-          response = await _dio.delete(url);
+          response = await _dio.delete(endpoint);
           break;
       }
 

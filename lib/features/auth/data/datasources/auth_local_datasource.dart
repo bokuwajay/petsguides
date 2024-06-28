@@ -21,7 +21,6 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
         key: 'pgToken',
         boxName: 'cache',
       );
-
       // there is a token
       if (token != null) {
         final Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
@@ -30,12 +29,14 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
             DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000)
                 .isAfter(DateTime.now())) {
           return true;
+        } else {
+          // there is a token, but expired
+          return false;
         }
       } else {
         // there is no token (never login e.g guest user)
         return false;
       }
-      throw CacheException();
     } catch (e) {
       logger.e(e);
       throw CacheException();

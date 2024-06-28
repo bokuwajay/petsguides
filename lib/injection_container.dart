@@ -12,11 +12,13 @@ import 'package:petsguides/core/cache/hive_local_storage.dart';
 import 'package:petsguides/core/cache/secure_local_storage.dart';
 import 'package:petsguides/core/network/network_checker.dart';
 import 'package:petsguides/features/auth/di/auth_dependency.dart';
+import 'package:petsguides/features/map/di/map_dependency.dart';
 
 final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
   AuthDependency.init();
+  MapDependency.init();
 
   sl.registerLazySingleton(() => NetworkInfo(sl<InternetConnectionChecker>()));
   sl.registerLazySingleton(() => InternetConnectionChecker());
@@ -36,9 +38,4 @@ Future<void> initializeDependencies() async {
 
   sl.registerLazySingleton<Locale>(
       () => Locale(languageCode ?? Platform.localeName.substring(0, 2)));
-
-  // sl.registerSingleton<MapService>(MapService());
-  // sl.registerSingleton<MapRepository>(MapRepositoryImpl(sl()));
-  // sl.registerSingleton<MapUseCase>(MapUseCase(sl()));
-  // sl.registerFactory<MapBloc>(() => MapBloc(sl()));
 }

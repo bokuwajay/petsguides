@@ -10,3 +10,5 @@ class ServerFailure extends Failure {}
 class CacheFailure extends Failure {}
 
 class CredentialFailure extends Failure {}
+
+class MissingParamsFailure extends Failure {}
