@@ -7,7 +7,8 @@ Widget buildSearchResultBoard(
   MapState state,
 ) {
   final screenWidth = MediaQuery.of(context).size.width;
-  if (state is! MapStateSearchPlacesSuccessful) {
+  if (!(state is MapStateSearchWidgetControlSuccessful &&
+      state.showSearchResultBoard)) {
     return Container();
   }
 
@@ -21,7 +22,7 @@ Widget buildSearchResultBoard(
           borderRadius: BorderRadius.circular(10.0),
           color: Colors.white.withOpacity(0.7),
         ),
-        child: state.data != null
+        child: state.data!.isNotEmpty
             ? ListView(
                 children: [
                   ...state.data!.map(

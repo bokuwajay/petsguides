@@ -1,14 +1,14 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:petsguides/core/error/failures.dart';
-import 'package:petsguides/core/resources/data_state.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/domain/usecases/usecase_params.dart';
 
 abstract class MapRepository {
-  // Future<DataState<List<AutoCompleteEntity>>> searchPlaces(
-  //     {required String searchInput});
   Future<Either<Failure, List<AutoCompleteEntity>>> searchPlaces(
       SearchPlacesParams params);
+
+  Future<Either<Failure, Map<String, dynamic>>> selectFromSearchList(
+      SelectFromSearchListParams params);
 
   // Future<Map<String, dynamic>> getPlace({required String placeId});
 

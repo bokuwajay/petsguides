@@ -8,6 +8,8 @@ import 'package:petsguides/features/map/domain/usecases/usecase_params.dart';
 
 sealed class MapRemoteDataSource {
   Future<List<AutoCompleteModel>> searchPlaces(SearchPlacesParams params);
+  Future<Map<String, dynamic>> selectFromSearchList(
+      SelectFromSearchListParams params);
 }
 
 class MapRemoteDataSourceImpl implements MapRemoteDataSource {
@@ -30,6 +32,28 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       var result = response['predictions'] as List;
 
       return result.map((e) => AutoCompleteModel.fromJson(e)).toList();
+    } catch (exception) {
+      logger.e(exception);
+      if (exception.toString() == noElement) {
+        throw AuthException();
+      }
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> selectFromSearchList(
+      SelectFromSearchListParams params) async {
+    try {
+      final response = await apiHelper.execute(
+        method: Method.get,
+        baseUrl: dotenv.env['googleMapBaseUrl'],
+        endpoint:
+            '/place/details/json?place_id=${params.placeId}&key=${dotenv.env['googleMapKey']}',
+      );
+      var result = response['result'] as Map<String, dynamic>;
+
+      return result;
     } catch (exception) {
       logger.e(exception);
       if (exception.toString() == noElement) {

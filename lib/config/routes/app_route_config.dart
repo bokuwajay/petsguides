@@ -36,9 +36,9 @@ class AppRouteConfig {
                 }
               } else if (state is AuthStateCheckFirstLaunchSuccessful) {
                 if (state.isFirstLaunch) {
-                  router.goNamed(AppRoute.getStarted.name);
+                  router.goNamed(AppRoute.map.name);
                 } else {
-                  router.goNamed(AppRoute.login.name);
+                  router.goNamed(AppRoute.map.name);
                 }
               }
             },

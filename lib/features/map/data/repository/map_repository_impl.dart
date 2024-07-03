@@ -2,10 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:petsguides/core/api/api_exception.dart';
 import 'package:petsguides/core/error/exceptions.dart';
 import 'package:petsguides/core/error/failures.dart';
-import 'package:petsguides/core/resources/data_state.dart';
 import 'package:petsguides/features/map/data/data_sources/map_remote_datasource.dart';
-import 'package:petsguides/features/map/data/data_sources/map_service.dart';
-import 'package:petsguides/features/map/data/models/auto_complete_model.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/domain/repository/map_repository.dart';
 import 'package:petsguides/features/map/domain/usecases/usecase_params.dart';
@@ -13,7 +10,6 @@ import 'package:petsguides/features/map/domain/usecases/usecase_params.dart';
 class MapRepositoryImpl implements MapRepository {
   final MapRemoteDataSource _mapRemoteDataSource;
 
-  
   MapRepositoryImpl(this._mapRemoteDataSource);
 
   @override
@@ -23,7 +19,20 @@ class MapRepositoryImpl implements MapRepository {
       final result = await _mapRemoteDataSource.searchPlaces(params);
       return Right(result);
     } on ApiException {
-      return Left(CredentialFailure());
+      return Left(MissingParamsFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> selectFromSearchList(
+      SelectFromSearchListParams params) async {
+    try {
+      final result = await _mapRemoteDataSource.selectFromSearchList(params);
+      return Right(result);
+    } on ApiException {
+      return Left(MissingParamsFailure());
     } on ServerException {
       return Left(ServerFailure());
     }

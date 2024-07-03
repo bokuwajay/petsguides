@@ -23,28 +23,28 @@ class MapStateLoading extends MapState {}
 //   List<Object> get props => [isLoading, genericException];
 // }
 
-class MapStateSearchPlacesSuccessful extends MapState {
-  final List<AutoCompleteEntity>? data;
+// class MapStateSearchPlacesSuccessful extends MapState {
+//   final List<AutoCompleteEntity>? data;
 
-  const MapStateSearchPlacesSuccessful(this.data);
+//   const MapStateSearchPlacesSuccessful(this.data);
 
-  @override
-  List<Object?> get props => [data];
-}
+//   @override
+//   List<Object?> get props => [data];
+// }
 
-class MapStateSearchPlacesFailed extends MapState {
-  final String message;
+// class MapStateSearchPlacesFailed extends MapState {
+//   final String message;
 
-  const MapStateSearchPlacesFailed(this.message);
+//   const MapStateSearchPlacesFailed(this.message);
 
-  @override
-  List<Object?> get props => [message];
-}
+//   @override
+//   List<Object?> get props => [message];
+// }
 
 // class MapStateSearchWidgetControl extends MapState {
 //     final bool showSearchPlacesTextFormField;
 //   final bool showGetDirection;
- 
+
 // }
 
 // class MapStateSelectFromListSuccess extends MapState {
@@ -116,31 +116,6 @@ class MapStateSearchPlacesFailed extends MapState {
 //   List<Object?> get props => [isLoading, getMorePlaceDetails];
 // }
 
-// class MapStateSearchWidgetControl extends MapState {
-//   final bool isLoading;
-//   final bool showSearchPlacesTextFormField;
-//   final bool showGetDirection;
-//   final bool showSearchResultBoard;
-//   final List<AutoCompleteEntity>? autoComplete;
-
-//   const MapStateSearchWidgetControl(
-//       this.isLoading,
-//       this.showSearchPlacesTextFormField,
-//       this.showGetDirection,
-//       this.showSearchResultBoard,
-//       this.autoComplete)
-//       : super(isLoading: isLoading);
-
-//   @override
-//   List<Object?> get props => [
-//         isLoading,
-//         showSearchPlacesTextFormField,
-//         showGetDirection,
-//         showSearchResultBoard,
-//         autoComplete,
-//       ];
-// }
-
 // class MapStateNearbyPlaces extends MapState {
 //   final bool isLoading;
 //   final bool showSlider;
@@ -156,3 +131,66 @@ class MapStateSearchPlacesFailed extends MapState {
 //         radiusValue,
 //       ];
 // }
+
+/////////////////////////////////////////////////////////////////////////////////////////
+class MapStateResetSuccessful extends MapState {
+  final String searchPlacesInput;
+
+  const MapStateResetSuccessful({
+    this.searchPlacesInput = '',
+  });
+
+  @override
+  List<Object?> get props => [searchPlacesInput];
+}
+
+// search place
+class MapStateSearchWidgetControlSuccessful extends MapState {
+  final bool showSearchPlacesTextFormField;
+  final bool showSearchResultBoard;
+  final List<AutoCompleteEntity>? data;
+  final bool showGetDirection;
+
+  const MapStateSearchWidgetControlSuccessful(
+    this.showSearchPlacesTextFormField,
+    this.showSearchResultBoard,
+    this.data,
+    this.showGetDirection,
+  );
+
+  @override
+  List<Object?> get props => [
+        showSearchPlacesTextFormField,
+        showSearchResultBoard,
+        data,
+        showGetDirection,
+      ];
+}
+
+class MapStateSearchWidgetControlFailed extends MapState {
+  final String message;
+
+  const MapStateSearchWidgetControlFailed(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+// select place from search result board
+class MapStateSelectFromSearchListSuccessful extends MapState {
+  final Map<String, dynamic> selectedPlace;
+
+  const MapStateSelectFromSearchListSuccessful(this.selectedPlace);
+
+  @override
+  List<Object?> get props => [selectedPlace];
+}
+
+class MapStateSelectFromSearchListFailed extends MapState {
+  final String message;
+
+  const MapStateSelectFromSearchListFailed(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

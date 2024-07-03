@@ -46,7 +46,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   //
   //
   //
-  bool showSearchPlacesTextFormField = false;
   //
   //
   //
@@ -224,15 +223,16 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
     return BlocConsumer<MapBloc, MapState>(
       listener: (context, state) {
-        // if (state is MapStateSelectFromListSuccess &&
-        //     state.selectedPlace.isNotEmpty) {
-        //   gotoSearchedPlace(
-        //     state.selectedPlace['geometry']['location']['lat'],
-        //     state.selectedPlace['geometry']['location']['lng'],
-        //     _controller.future,
-        //     _setMarker,
-        //   );
-        // } else if (state is MapStateGetDirectionsSuccess &&
+        if (state is MapStateSelectFromSearchListSuccessful &&
+            state.selectedPlace.isNotEmpty) {
+          gotoSearchedPlace(
+            state.selectedPlace['geometry']['location']['lat'],
+            state.selectedPlace['geometry']['location']['lng'],
+            _controller.future,
+            _setMarker,
+          );
+        }
+        //else if (state is MapStateGetDirectionsSuccess &&
         //     state.getDirections.isNotEmpty) {
         //   gotoOriginDestination(
         //     state.getDirections['start_location']['lat'],
@@ -318,7 +318,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   ),
                   buildSearchPlacesTextFormField(
                     context,
-                    showSearchPlacesTextFormField,
+                    state,
                     _searchController,
                     _debounce,
                   ),
@@ -540,7 +540,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             children: <Widget>[
               IconButton(
                 onPressed: () {
-                  showSearchPlacesTextFormField = true;
+                  context.read<MapBloc>().add(MapEventSearchWidgetControl(
+                      showSearchPlacesTextFormField: true));
                   _circles.clear();
                   _markers.clear();
                   // pressedNear = false;

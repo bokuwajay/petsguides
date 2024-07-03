@@ -1,26 +1,48 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:petsguides/core/resources/data_state.dart';
 import 'package:petsguides/core/util/failure_converter.dart';
-import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/domain/usecases/map_search_places_usecase.dart';
-import 'package:petsguides/features/map/domain/usecases/map_usecase.dart';
+import 'package:petsguides/features/map/domain/usecases/map_select_from_search_list_usecase.dart';
 import 'package:petsguides/features/map/domain/usecases/usecase_params.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
   final MapSearchPlacesUseCase _mapSearchPlacesUseCase;
+  final MapSelectFromSearchListUseCase _mapSelectFromSearchListUseCase;
 
-  MapBloc(this._mapSearchPlacesUseCase) : super(MapStateInitial()) {
+  MapBloc(
+    this._mapSearchPlacesUseCase,
+    this._mapSelectFromSearchListUseCase,
+  ) : super(MapStateInitial()) {
+    on<MapEventReset>(
+      (event, emit) {
+        emit(const MapStateResetSuccessful());
+      },
+    );
+
     on<MapEventSearchPlaces>((event, emit) async {
-      emit(MapStateLoading());
+      // emit(MapStateLoading());
 
       final result = await _mapSearchPlacesUseCase
           .call(SearchPlacesParams(searchInput: event.searchInput));
-      result.fold((l) => emit(MapStateSearchPlacesFailed(failureConverter(l))),
-          (r) => emit(MapStateSearchPlacesSuccessful(r)));
+      result.fold(
+          (l) => emit(MapStateSearchWidgetControlFailed(failureConverter(l))),
+          (r) => emit(
+              MapStateSearchWidgetControlSuccessful(true, true, r, false)));
     });
+
+    on<MapEventSelectFromSearchList>(
+      (event, emit) async {
+        // emit(MapStateLoading());
+        final result = await _mapSelectFromSearchListUseCase
+            .call(SelectFromSearchListParams(placeId: event.placeId));
+
+        result.fold(
+            (l) =>
+                emit(MapStateSelectFromSearchListFailed(failureConverter(l))),
+            (r) => emit(MapStateSelectFromSearchListSuccessful(r)));
+      },
+    );
 
     // on<MapEventSelectFromSearchList>(
     //   (event, emit) async {
@@ -91,20 +113,21 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     //   },
     // );
 
-    // on<MapEventSearchWidgetControl>(
-    //   (event, emit) {
-    //     final bool showSearchPlacesTextFormField =
-    //         event.showSearchPlacesTextFormField;
-    //     final bool showGetDirection = event.showGetDirection;
-    //     final bool showSearchResultBoard = event.showSearchResultBoard;
+    on<MapEventSearchWidgetControl>(
+      (event, emit) {
+        final bool showSearchPlacesTextFormField =
+            event.showSearchPlacesTextFormField;
+        final bool showSearchResultBoard = event.showSearchResultBoard;
+        final bool showGetDirection = event.showGetDirection;
 
-    //     emit(MapStateSearchPlacesSuccessful(
-    //       showSearchPlacesTextFormField,
-    //       showSearchResultBoard,
-    //       null,
-    //     ));
-    //   },
-    // );
+        emit(MapStateSearchWidgetControlSuccessful(
+          showSearchPlacesTextFormField,
+          showSearchResultBoard,
+          null,
+          showGetDirection,
+        ));
+      },
+    );
 
     // on<MapEventNearbyPlaces>(
     //   (event, emit) {

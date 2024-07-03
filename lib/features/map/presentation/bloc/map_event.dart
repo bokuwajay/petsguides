@@ -8,12 +8,6 @@ class MapEventSearchPlaces extends MapEvent {
   const MapEventSearchPlaces({required this.searchInput});
 }
 
-class MapEventSelectFromSearchList extends MapEvent {
-  final String placeId;
-
-  const MapEventSelectFromSearchList({required this.placeId});
-}
-
 class MapEventTapOnCarouselCard extends MapEvent {
   final String placeId;
 
@@ -44,17 +38,6 @@ class MapEventGetMorePlaceDetails extends MapEvent {
 
 // searchPlaces
 // get direction
-class MapEventSearchWidgetControl extends MapEvent {
-  bool showSearchPlacesTextFormField;
-  bool showGetDirection;
-  bool showSearchResultBoard;
-
-  MapEventSearchWidgetControl({
-    this.showSearchPlacesTextFormField = false,
-    this.showGetDirection = false,
-    this.showSearchResultBoard = false,
-  });
-}
 
 class MapEventNearbyPlaces extends MapEvent {
   bool showSlider;
@@ -64,4 +47,33 @@ class MapEventNearbyPlaces extends MapEvent {
     this.showSlider = false,
     this.radiusValue = 3000.0,
   });
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+// search place
+class MapEventReset extends MapEvent {
+  String searchPlacesInput;
+  MapEventReset({
+    this.searchPlacesInput = '',
+  });
+}
+
+class MapEventSearchWidgetControl extends MapEvent {
+  bool showSearchPlacesTextFormField;
+  bool showSearchResultBoard;
+  bool showGetDirection;
+
+  MapEventSearchWidgetControl({
+    this.showSearchPlacesTextFormField = false,
+    this.showSearchResultBoard = false,
+    this.showGetDirection = false,
+  });
+}
+
+// select place from search result board
+class MapEventSelectFromSearchList extends MapEvent {
+  final String placeId;
+
+  const MapEventSelectFromSearchList({required this.placeId});
 }

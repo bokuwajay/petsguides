@@ -4,14 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/components/build_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
+import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 
 Widget buildSearchPlacesTextFormField(
   BuildContext context,
-  bool showSearchPlacesTextFormField,
+  MapState state,
   TextEditingController searchController,
   Timer? _debounce,
 ) {
-  if (!showSearchPlacesTextFormField) {
+  if (!(state is MapStateSearchWidgetControlSuccessful &&
+      state.showSearchPlacesTextFormField)) {
     return Container();
   }
   return Padding(
@@ -31,12 +33,7 @@ Widget buildSearchPlacesTextFormField(
                 const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
             suffixIcon: IconButton(
               onPressed: () {
-                context.read<MapBloc>().add(
-                      MapEventSearchWidgetControl(),
-                    );
-                searchController.text = '';
-                // _markers = {};
-                context.read<MapBloc>().add(MapEventSearchWidgetControl());
+                context.read<MapBloc>().add(MapEventReset());
               },
               icon: const Icon(Icons.close),
             ),
