@@ -134,14 +134,10 @@ class MapStateLoading extends MapState {}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 class MapStateResetSuccessful extends MapState {
-  final String searchPlacesInput;
-
-  const MapStateResetSuccessful({
-    this.searchPlacesInput = '',
-  });
+  const MapStateResetSuccessful();
 
   @override
-  List<Object?> get props => [searchPlacesInput];
+  List<Object?> get props => [];
 }
 
 // search place

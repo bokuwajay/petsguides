@@ -11,8 +11,8 @@ Widget buildGetDirectionTextFormField(
   TextEditingController _originController,
   TextEditingController _destinationController,
 ) {
-  final bool showdirct = false;
-  if (!showdirct) {
+  if (!(state is MapStateSearchWidgetControlSuccessful &&
+      state.showGetDirection)) {
     return Container();
   }
 
@@ -59,13 +59,11 @@ Widget buildGetDirectionTextFormField(
                     ),
                     IconButton(
                       onPressed: () {
-                        context
-                            .read<MapBloc>()
-                            .add(MapEventSearchWidgetControl());
+                        context.read<MapBloc>().add(const MapEventReset());
                         // setState(() {
                         // getDirections = false;
-                        _originController.text = '';
-                        _destinationController.text = '';
+                        // _originController.text = '';
+                        // _destinationController.text = '';
                         //   _markers = {};
                         //   _polylines = {};
                         // });

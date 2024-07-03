@@ -33,7 +33,7 @@ Widget buildSearchPlacesTextFormField(
                 const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
             suffixIcon: IconButton(
               onPressed: () {
-                context.read<MapBloc>().add(MapEventReset());
+                context.read<MapBloc>().add(const MapEventReset());
               },
               icon: const Icon(Icons.close),
             ),

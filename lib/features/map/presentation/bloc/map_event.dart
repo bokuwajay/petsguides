@@ -53,10 +53,7 @@ class MapEventNearbyPlaces extends MapEvent {
 
 // search place
 class MapEventReset extends MapEvent {
-  String searchPlacesInput;
-  MapEventReset({
-    this.searchPlacesInput = '',
-  });
+  const MapEventReset();
 }
 
 class MapEventSearchWidgetControl extends MapEvent {
