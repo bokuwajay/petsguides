@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/core/util/failure_converter.dart';
+import 'package:petsguides/features/map/domain/usecases/map_get_directions_usecase.dart';
 import 'package:petsguides/features/map/domain/usecases/map_search_places_usecase.dart';
 import 'package:petsguides/features/map/domain/usecases/map_select_from_search_list_usecase.dart';
 import 'package:petsguides/features/map/domain/usecases/usecase_params.dart';
@@ -9,10 +10,12 @@ import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 class MapBloc extends Bloc<MapEvent, MapState> {
   final MapSearchPlacesUseCase _mapSearchPlacesUseCase;
   final MapSelectFromSearchListUseCase _mapSelectFromSearchListUseCase;
+  final MapGetDirectionsUsecase _mapGetDirectionsUsecase;
 
   MapBloc(
     this._mapSearchPlacesUseCase,
     this._mapSelectFromSearchListUseCase,
+    this._mapGetDirectionsUsecase,
   ) : super(MapStateInitial()) {
     on<MapEventReset>(
       (event, emit) {
@@ -41,6 +44,19 @@ class MapBloc extends Bloc<MapEvent, MapState> {
             (l) =>
                 emit(MapStateSelectFromSearchListFailed(failureConverter(l))),
             (r) => emit(MapStateSelectFromSearchListSuccessful(r)));
+      },
+    );
+
+    on<MapEventGetDirections>(
+      (event, emit) async {
+        // emit(MapStateLoading());
+
+        final result = await _mapGetDirectionsUsecase.call(GetDirectionsParams(
+            origin: event.origin, destination: event.destination));
+
+        result.fold(
+            (l) => emit(MapStateGetDirectionsFailed(failureConverter(l))),
+            (r) => emit(MapStateGetDirectionsSuccessful(r)));
       },
     );
 

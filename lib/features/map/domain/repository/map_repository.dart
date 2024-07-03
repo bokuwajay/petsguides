@@ -5,10 +5,16 @@ import 'package:petsguides/features/map/domain/usecases/usecase_params.dart';
 
 abstract class MapRepository {
   Future<Either<Failure, List<AutoCompleteEntity>>> searchPlaces(
-      SearchPlacesParams params);
+    SearchPlacesParams params,
+  );
 
   Future<Either<Failure, Map<String, dynamic>>> selectFromSearchList(
-      SelectFromSearchListParams params);
+    SelectFromSearchListParams params,
+  );
+
+  Future<Either<Failure, Map<String, dynamic>>> getDirections(
+    GetDirectionsParams params,
+  );
 
   // Future<Map<String, dynamic>> getPlace({required String placeId});
 

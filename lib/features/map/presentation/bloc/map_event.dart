@@ -14,14 +14,6 @@ class MapEventTapOnCarouselCard extends MapEvent {
   const MapEventTapOnCarouselCard({required this.placeId});
 }
 
-class MapEventGetDirections extends MapEvent {
-  final String origin;
-  final String destination;
-
-  const MapEventGetDirections(
-      {required this.origin, required this.destination});
-}
-
 class MapEventGetPlaceDetails extends MapEvent {
   final tappedPoint;
   final int radius;
@@ -73,4 +65,13 @@ class MapEventSelectFromSearchList extends MapEvent {
   final String placeId;
 
   const MapEventSelectFromSearchList({required this.placeId});
+}
+
+// get directions
+class MapEventGetDirections extends MapEvent {
+  final String origin;
+  final String destination;
+
+  const MapEventGetDirections(
+      {required this.origin, required this.destination});
 }

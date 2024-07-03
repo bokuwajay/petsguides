@@ -190,3 +190,21 @@ class MapStateSelectFromSearchListFailed extends MapState {
   @override
   List<Object?> get props => [message];
 }
+
+// get directions
+class MapStateGetDirectionsSuccessful extends MapState {
+  final Map<String, dynamic> getDirections;
+  const MapStateGetDirectionsSuccessful(this.getDirections);
+
+  @override
+  List<Object?> get props => [getDirections];
+}
+
+class MapStateGetDirectionsFailed extends MapState {
+  final String message;
+
+  const MapStateGetDirectionsFailed(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
