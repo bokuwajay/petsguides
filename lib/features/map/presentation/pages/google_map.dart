@@ -92,7 +92,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   //
   //
   //
-  /////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  bool showSearchPlacesTextFormField = false;
+  bool showGetDirections = false;
+
   List placesWithinRadius = [];
   //
   //
@@ -198,6 +202,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     }
   }
 
+  void resetLocalVariables() {
+    showSearchPlacesTextFormField = false;
+    showGetDirections = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -205,8 +214,12 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
     return BlocConsumer<MapBloc, MapState>(
       listener: (context, state) {
-        if (state is MapStateSelectFromSearchListSuccessful &&
+        if (state is MapStateResetSuccessful) {
+          showSearchPlacesTextFormField = false;
+          showGetDirections = false;
+        } else if (state is MapStateSelectFromSearchListSuccessful &&
             state.selectedPlace.isNotEmpty) {
+          resetLocalVariables();
           gotoSearchedPlace(
             state.selectedPlace['geometry']['location']['lat'],
             state.selectedPlace['geometry']['location']['lng'],
@@ -215,6 +228,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           );
         } else if (state is MapStateGetDirectionsSuccessful &&
             state.getDirections.isNotEmpty) {
+          resetLocalVariables();
           gotoOriginDestination(
             state.getDirections['start_location']['lat'],
             state.getDirections['start_location']['lng'],
@@ -332,12 +346,17 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   buildSearchPlacesTextFormField(
                     context,
                     state,
+                    showSearchPlacesTextFormField,
                     _searchController,
                     _debounce,
                   ),
                   buildSearchResultBoard(context, state),
-                  buildGetDirectionTextFormField(context, state,
-                      _originController, _destinationController),
+                  buildGetDirectionTextFormField(
+                      context,
+                      state,
+                      showGetDirections,
+                      _originController,
+                      _destinationController),
                   buildSlider(context, state, _circles, _debounce),
                   buildCarouselContainer(context, state, placesWithinRadius,
                       _pageController, placeImg, moveCameraSlightly),
@@ -552,14 +571,15 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             children: <Widget>[
               IconButton(
                 onPressed: () {
-                  context.read<MapBloc>().add(MapEventSearchWidgetControl(
-                      showSearchPlacesTextFormField: true));
+                  // context.read<MapBloc>().add(MapEventSearchWidgetControl(
+                  //     showSearchPlacesTextFormField: true));
                   _circles.clear();
                   _markers.clear();
                   // pressedNear = false;
                   // cardTapped = false;
                   _searchController.clear();
                   _circles.clear();
+                  showSearchPlacesTextFormField = true;
                   setState(() {
                     // searchTextFormField = true;
                     // radiusSlider = false;
@@ -578,9 +598,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   // cardTapped = false;
                   _originController.clear();
                   _destinationController.clear();
-                  context
-                      .read<MapBloc>()
-                      .add(MapEventSearchWidgetControl(showGetDirection: true));
+                  // context
+                  //     .read<MapBloc>()
+                  //     .add(MapEventSearchWidgetControl(showGetDirection: true));
+                  showGetDirections = true;
 
                   setState(() {
                     // searchTextFormField = false;

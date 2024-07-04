@@ -144,32 +144,21 @@ class MapStateResetSuccessful extends MapState {
 }
 
 // search place
-class MapStateSearchWidgetControlSuccessful extends MapState {
-  final bool showSearchPlacesTextFormField;
-  final bool showSearchResultBoard;
+class MapStateSearchPlacesSuccessful extends MapState {
   final List<AutoCompleteEntity>? data;
-  final bool showGetDirection;
 
-  const MapStateSearchWidgetControlSuccessful(
-    this.showSearchPlacesTextFormField,
-    this.showSearchResultBoard,
+  const MapStateSearchPlacesSuccessful(
     this.data,
-    this.showGetDirection,
   );
 
   @override
-  List<Object?> get props => [
-        showSearchPlacesTextFormField,
-        showSearchResultBoard,
-        data,
-        showGetDirection,
-      ];
+  List<Object?> get props => [data];
 }
 
-class MapStateSearchWidgetControlFailed extends MapState {
+class MapStateSearchPlacesFailed extends MapState {
   final String message;
 
-  const MapStateSearchWidgetControlFailed(this.message);
+  const MapStateSearchPlacesFailed(this.message);
 
   @override
   List<Object?> get props => [message];

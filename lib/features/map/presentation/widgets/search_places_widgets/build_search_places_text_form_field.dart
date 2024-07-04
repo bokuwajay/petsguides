@@ -9,11 +9,11 @@ import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 Widget buildSearchPlacesTextFormField(
   BuildContext context,
   MapState state,
+  bool showSearchPlacesTextFormField,
   TextEditingController searchController,
   Timer? _debounce,
 ) {
-  if (!(state is MapStateSearchWidgetControlSuccessful &&
-      state.showSearchPlacesTextFormField)) {
+  if (!showSearchPlacesTextFormField) {
     return Container();
   }
   return Padding(

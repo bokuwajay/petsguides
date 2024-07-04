@@ -30,31 +30,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       },
     );
 
-    on<MapEventSearchWidgetControl>(
-      (event, emit) {
-        final bool showSearchPlacesTextFormField =
-            event.showSearchPlacesTextFormField;
-        final bool showSearchResultBoard = event.showSearchResultBoard;
-        final bool showGetDirection = event.showGetDirection;
-
-        emit(MapStateSearchWidgetControlSuccessful(
-          showSearchPlacesTextFormField,
-          showSearchResultBoard,
-          null,
-          showGetDirection,
-        ));
-      },
-    );
-
     on<MapEventSearchPlaces>((event, emit) async {
       // emit(MapStateLoading());
 
       final result = await _mapSearchPlacesUseCase
           .call(SearchPlacesParams(searchInput: event.searchInput));
-      result.fold(
-          (l) => emit(MapStateSearchWidgetControlFailed(failureConverter(l))),
-          (r) => emit(
-              MapStateSearchWidgetControlSuccessful(true, true, r, false)));
+      result.fold((l) => emit(MapStateSearchPlacesFailed(failureConverter(l))),
+          (r) => emit(MapStateSearchPlacesSuccessful(r)));
     });
 
     on<MapEventSelectFromSearchList>(

@@ -8,11 +8,11 @@ import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 Widget buildGetDirectionTextFormField(
   BuildContext context,
   MapState state,
+  bool showGetDirection,
   TextEditingController _originController,
   TextEditingController _destinationController,
 ) {
-  if (!(state is MapStateSearchWidgetControlSuccessful &&
-      state.showGetDirection)) {
+  if (!showGetDirection) {
     return Container();
   }
 

@@ -25,18 +25,6 @@ class MapEventReset extends MapEvent {
   const MapEventReset();
 }
 
-class MapEventSearchWidgetControl extends MapEvent {
-  bool showSearchPlacesTextFormField;
-  bool showSearchResultBoard;
-  bool showGetDirection;
-
-  MapEventSearchWidgetControl({
-    this.showSearchPlacesTextFormField = false,
-    this.showSearchResultBoard = false,
-    this.showGetDirection = false,
-  });
-}
-
 // search place
 class MapEventSearchPlaces extends MapEvent {
   final String searchInput;
