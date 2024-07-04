@@ -12,6 +12,7 @@ import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 import 'package:petsguides/features/map/presentation/widgets/get_direction_widgets/build_get_direction_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/widgets/get_nearby_places_widgets/build_carousel_container.dart';
+import 'package:petsguides/features/map/presentation/widgets/get_nearby_places_widgets/build_slider.dart';
 // import 'package:petsguides/features/map/presentation/widgets/get_nearby_places_widgets/build_slider.dart';
 import 'package:petsguides/features/map/presentation/widgets/search_places_widgets/build_search_places_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/widgets/search_places_widgets/build_search_result_board.dart';
@@ -40,8 +41,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   int polylineIdCounter = 1;
 
   final Set<Circle> _circles = <Circle>{};
-  var tappedPoint;
-  // var radiusValue = 3000.0;
 
   //
   //
@@ -79,18 +78,13 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: point, zoom: 12)));
 
-    setState(() {
-      _circles.add(Circle(
-          circleId: const CircleId('raj'),
-          center: point,
-          fillColor: Colors.blue.withOpacity(0.1),
-          radius: radiusValue,
-          strokeColor: Colors.blue,
-          strokeWidth: 1));
-      // getDirections = false;
-      // searchTextFormField = false;
-      // radiusSlider = true;
-    });
+    _circles.add(Circle(
+        circleId: const CircleId('raj'),
+        center: point,
+        fillColor: Colors.blue.withOpacity(0.1),
+        radius: radiusValue,
+        strokeColor: Colors.blue,
+        strokeWidth: 1));
   }
 
   //
@@ -137,17 +131,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   static final CameraPosition _kGooglePlex = CameraPosition(
       target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746);
-
-  // void _setPolyline(List<PointLatLng> points) {
-  //   final String polylineIdVal = 'polylin_$polylineIdCounter';
-  //   polylineIdCounter++;
-
-  //   _polylines.add(Polyline(
-  //       polylineId: PolylineId(polylineIdVal),
-  //       width: 2,
-  //       color: Colors.blue,
-  //       points: points.map((e) => LatLng(e.latitude, e.longitude)).toList()));
-  // }
 
   _setNearMarker(LatLng point, String label, List types, String status) async {
     var counter = markerIdCounter++;
@@ -244,6 +227,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             _setMarker,
           );
           _setPolyline(state.getDirections['polyline_decoded']);
+        } else if (state is MapStateNearbyPlacesWidgetControlSuccessful) {
+          _setCircle(state.tappedPoint, state.radiusValue);
         }
         //else if (state is MapStateGetDirectionsSuccess &&
         //     state.getDirections.isNotEmpty) {
@@ -319,13 +304,13 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                         _controller.complete(controller);
                       },
                       onTap: (point) {
-                        tappedPoint = point;
+                        // tappedPoint = point;
                         _polylines.clear();
                         allFavoritePlaces.clear();
                         _markers.clear();
-                        context
-                            .read<MapBloc>()
-                            .add(MapEventNearbyPlaces(showSlider: true));
+                        context.read<MapBloc>().add(
+                            MapEventNearbyPlacesWidgetControl(
+                                showSlider: true, tappedPoint: point));
                       },
                     ),
                   ),
@@ -338,8 +323,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   buildSearchResultBoard(context, state),
                   buildGetDirectionTextFormField(context, state,
                       _originController, _destinationController),
-                  // buildSlider(context, state, radiusValue, tappedPoint,
-                  //     _setCircle, _circles, _debounce, tokenKey),
+                  buildSlider(context, state, _circles, _debounce, tokenKey),
                   buildCarouselContainer(context, state, _pageController,
                       allFavoritePlaces, placeImg, moveCameraSlightly),
                   (showFlipDetailCard)

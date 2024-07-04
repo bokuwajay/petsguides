@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 
 abstract class MapState extends Equatable {
@@ -133,6 +134,8 @@ class MapStateLoading extends MapState {}
 // }
 
 /////////////////////////////////////////////////////////////////////////////////////////
+
+// Reset
 class MapStateResetSuccessful extends MapState {
   const MapStateResetSuccessful();
 
@@ -204,6 +207,28 @@ class MapStateGetDirectionsFailed extends MapState {
   final String message;
 
   const MapStateGetDirectionsFailed(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+// near by places
+class MapStateNearbyPlacesWidgetControlSuccessful extends MapState {
+  final bool showSlider;
+  final double radiusValue;
+  final LatLng tappedPoint;
+
+  const MapStateNearbyPlacesWidgetControlSuccessful(
+      this.showSlider, this.radiusValue, this.tappedPoint);
+
+  @override
+  List<Object?> get props => [showSlider, radiusValue];
+}
+
+class MapStateNearbyPlacesWidgetControlFailed extends MapState {
+  final String message;
+
+  const MapStateNearbyPlacesWidgetControlFailed(this.message);
 
   @override
   List<Object?> get props => [message];

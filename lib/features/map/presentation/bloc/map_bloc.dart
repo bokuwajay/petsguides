@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/core/util/failure_converter.dart';
 import 'package:petsguides/features/map/domain/usecases/map_get_directions_usecase.dart';
 import 'package:petsguides/features/map/domain/usecases/map_search_places_usecase.dart';
@@ -10,16 +11,32 @@ import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 class MapBloc extends Bloc<MapEvent, MapState> {
   final MapSearchPlacesUseCase _mapSearchPlacesUseCase;
   final MapSelectFromSearchListUseCase _mapSelectFromSearchListUseCase;
-  final MapGetDirectionsUseCase _mapGetDirectionsUsecase;
+  final MapGetDirectionsUseCase _mapGetDirectionsUseCase;
 
   MapBloc(
     this._mapSearchPlacesUseCase,
     this._mapSelectFromSearchListUseCase,
-    this._mapGetDirectionsUsecase,
+    this._mapGetDirectionsUseCase,
   ) : super(MapStateInitial()) {
     on<MapEventReset>(
       (event, emit) {
         emit(const MapStateResetSuccessful());
+      },
+    );
+
+    on<MapEventSearchWidgetControl>(
+      (event, emit) {
+        final bool showSearchPlacesTextFormField =
+            event.showSearchPlacesTextFormField;
+        final bool showSearchResultBoard = event.showSearchResultBoard;
+        final bool showGetDirection = event.showGetDirection;
+
+        emit(MapStateSearchWidgetControlSuccessful(
+          showSearchPlacesTextFormField,
+          showSearchResultBoard,
+          null,
+          showGetDirection,
+        ));
       },
     );
 
@@ -50,12 +67,23 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<MapEventGetDirections>(
       (event, emit) async {
         // emit(MapStateLoading());
-        final result = await _mapGetDirectionsUsecase.call(GetDirectionsParams(
+        final result = await _mapGetDirectionsUseCase.call(GetDirectionsParams(
             origin: event.origin, destination: event.destination));
 
         result.fold(
             (l) => emit(MapStateGetDirectionsFailed(failureConverter(l))),
             (r) => emit(MapStateGetDirectionsSuccessful(r)));
+      },
+    );
+
+    on<MapEventNearbyPlacesWidgetControl>(
+      (event, emit) {
+        final bool showSlider = event.showSlider;
+        final double radiusValue = event.radiusValue;
+        final LatLng tappedPoint = event.tappedPoint;
+
+        emit(MapStateNearbyPlacesWidgetControlSuccessful(
+            showSlider, radiusValue, tappedPoint));
       },
     );
 
@@ -127,22 +155,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     //     }
     //   },
     // );
-
-    on<MapEventSearchWidgetControl>(
-      (event, emit) {
-        final bool showSearchPlacesTextFormField =
-            event.showSearchPlacesTextFormField;
-        final bool showSearchResultBoard = event.showSearchResultBoard;
-        final bool showGetDirection = event.showGetDirection;
-
-        emit(MapStateSearchWidgetControlSuccessful(
-          showSearchPlacesTextFormField,
-          showSearchResultBoard,
-          null,
-          showGetDirection,
-        ));
-      },
-    );
 
     // on<MapEventNearbyPlaces>(
     //   (event, emit) {

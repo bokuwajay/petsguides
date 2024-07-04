@@ -1,11 +1,7 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 abstract class MapEvent {
   const MapEvent();
-}
-
-class MapEventSearchPlaces extends MapEvent {
-  final String searchInput;
-
-  const MapEventSearchPlaces({required this.searchInput});
 }
 
 class MapEventTapOnCarouselCard extends MapEvent {
@@ -28,22 +24,9 @@ class MapEventGetMorePlaceDetails extends MapEvent {
   const MapEventGetMorePlaceDetails({required this.tokenKey});
 }
 
-// searchPlaces
-// get direction
-
-class MapEventNearbyPlaces extends MapEvent {
-  bool showSlider;
-  double radiusValue;
-
-  MapEventNearbyPlaces({
-    this.showSlider = false,
-    this.radiusValue = 3000.0,
-  });
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-// search place
+// Reset event
 class MapEventReset extends MapEvent {
   const MapEventReset();
 }
@@ -60,6 +43,13 @@ class MapEventSearchWidgetControl extends MapEvent {
   });
 }
 
+// search place
+class MapEventSearchPlaces extends MapEvent {
+  final String searchInput;
+
+  const MapEventSearchPlaces({required this.searchInput});
+}
+
 // select place from search result board
 class MapEventSelectFromSearchList extends MapEvent {
   final String placeId;
@@ -74,4 +64,17 @@ class MapEventGetDirections extends MapEvent {
 
   const MapEventGetDirections(
       {required this.origin, required this.destination});
+}
+
+// near by places
+class MapEventNearbyPlacesWidgetControl extends MapEvent {
+  bool showSlider;
+  double radiusValue;
+  dynamic tappedPoint;
+
+  MapEventNearbyPlacesWidgetControl({
+    this.showSlider = false,
+    this.radiusValue = 3000.0,
+    this.tappedPoint,
+  });
 }
