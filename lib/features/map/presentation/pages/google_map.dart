@@ -96,7 +96,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   bool showSearchPlacesTextFormField = false;
   bool showGetDirections = false;
-
+  bool showSlider = false;
+//////
+  ///
   List placesWithinRadius = [];
   //
   //
@@ -203,8 +205,19 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   }
 
   void resetLocalVariables() {
-    showSearchPlacesTextFormField = false;
-    showGetDirections = false;
+    setState(() {
+      // clear searh places
+      showSearchPlacesTextFormField = false;
+      _markers.clear();
+
+      // clear get directions
+      showGetDirections = false;
+      _originController.clear();
+      _destinationController.clear();
+      _polylines.clear();
+
+      _circles.clear();
+    });
   }
 
   @override
@@ -215,8 +228,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     return BlocConsumer<MapBloc, MapState>(
       listener: (context, state) {
         if (state is MapStateResetSuccessful) {
-          showSearchPlacesTextFormField = false;
-          showGetDirections = false;
+          // showSearchPlacesTextFormField = state.showSearchPlacesTextFormField;
+          // showGetDirections = state.showGetDirections;
         } else if (state is MapStateSelectFromSearchListSuccessful &&
             state.selectedPlace.isNotEmpty) {
           resetLocalVariables();
@@ -333,10 +346,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                         _controller.complete(controller);
                       },
                       onTap: (point) {
-                        // tappedPoint = point;
-                        _polylines.clear();
-                        placesWithinRadius.clear();
-                        _markers.clear();
+                        resetLocalVariables();
                         context.read<MapBloc>().add(
                             MapEventNearbyPlacesWidgetControl(
                                 showSlider: true, tappedPoint: point));
@@ -349,15 +359,24 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                     showSearchPlacesTextFormField,
                     _searchController,
                     _debounce,
+                    resetLocalVariables,
                   ),
                   buildSearchResultBoard(context, state),
                   buildGetDirectionTextFormField(
-                      context,
-                      state,
-                      showGetDirections,
-                      _originController,
-                      _destinationController),
-                  buildSlider(context, state, _circles, _debounce),
+                    context,
+                    state,
+                    showGetDirections,
+                    _originController,
+                    _destinationController,
+                    resetLocalVariables,
+                  ),
+                  buildSlider(
+                    context,
+                    state,
+                    _circles,
+                    _debounce,
+                    showSlider,
+                  ),
                   buildCarouselContainer(context, state, placesWithinRadius,
                       _pageController, placeImg, moveCameraSlightly),
                   (showFlipDetailCard)
@@ -571,45 +590,29 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             children: <Widget>[
               IconButton(
                 onPressed: () {
-                  // context.read<MapBloc>().add(MapEventSearchWidgetControl(
-                  //     showSearchPlacesTextFormField: true));
-                  _circles.clear();
-                  _markers.clear();
-                  // pressedNear = false;
-                  // cardTapped = false;
-                  _searchController.clear();
-                  _circles.clear();
-                  showSearchPlacesTextFormField = true;
                   setState(() {
-                    // searchTextFormField = true;
-                    // radiusSlider = false;
-                    // pressedNear = false;
-                    // cardTapped = false;
-                    // getDirections = false;
+                    _markers.clear();
+                    _polylines.clear();
+                    _searchController.clear();
+                    _circles.clear();
+                    showGetDirections = false;
+                    showSearchPlacesTextFormField = true;
                   });
+                  context.read<MapBloc>().add(const MapEventReset());
                 },
                 icon: const Icon(Icons.search),
               ),
               IconButton(
                 onPressed: () {
-                  _circles.clear();
-                  _markers.clear();
-                  // pressedNear = false;
-                  // cardTapped = false;
-                  _originController.clear();
-                  _destinationController.clear();
-                  // context
-                  //     .read<MapBloc>()
-                  //     .add(MapEventSearchWidgetControl(showGetDirection: true));
-                  showGetDirections = true;
-
                   setState(() {
-                    // searchTextFormField = false;
-                    // radiusSlider = false;
-                    // pressedNear = false;
-                    // cardTapped = false;
-                    // getDirections = true;
+                    _markers.clear();
+                    _originController.clear();
+                    _destinationController.clear();
+                    _circles.clear();
+                    showSearchPlacesTextFormField = false;
+                    showGetDirections = true;
                   });
+                  context.read<MapBloc>().add(const MapEventReset());
                 },
                 icon: const Icon(Icons.navigation),
               ),

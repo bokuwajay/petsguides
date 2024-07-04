@@ -11,6 +11,7 @@ Widget buildGetDirectionTextFormField(
   bool showGetDirection,
   TextEditingController _originController,
   TextEditingController _destinationController,
+  resetLocalVariables,
 ) {
   if (!showGetDirection) {
     return Container();
@@ -59,7 +60,7 @@ Widget buildGetDirectionTextFormField(
                     ),
                     IconButton(
                       onPressed: () {
-                        context.read<MapBloc>().add(const MapEventReset());
+                        resetLocalVariables();
                         // setState(() {
                         // getDirections = false;
                         // _originController.text = '';
