@@ -1,6 +1,7 @@
 import 'package:petsguides/core/api/api_helper.dart';
 import 'package:petsguides/features/map/data/data_sources/map_remote_datasource.dart';
 import 'package:petsguides/features/map/data/repository/map_repository_impl.dart';
+import 'package:petsguides/features/map/domain/usecases/map_get_directions_usecase.dart';
 import 'package:petsguides/features/map/domain/usecases/map_search_places_usecase.dart';
 import 'package:petsguides/features/map/domain/usecases/map_select_from_search_list_usecase.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
@@ -13,7 +14,11 @@ class MapDependency {
     sl.registerFactory(() => MapBloc(
           sl<MapSearchPlacesUseCase>(),
           sl<MapSelectFromSearchListUseCase>(),
+          sl<MapGetDirectionsUsecase>(),
         ));
+
+    sl.registerLazySingleton(
+        () => MapGetDirectionsUsecase(sl<MapRepositoryImpl>()));
 
     sl.registerLazySingleton(
         () => MapSearchPlacesUseCase(sl<MapRepositoryImpl>()));

@@ -38,6 +38,19 @@ class MapRepositoryImpl implements MapRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> getDirections(
+      GetDirectionsParams params) async {
+    try {
+      final result = await _mapRemoteDataSource.getDirections(params);
+      return Right(result);
+    } on ApiException {
+      return Left(MissingParamsFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
   // @override
   // Future<Map<String, dynamic>> getPlace({required String placeId}) async {
   //   try {
