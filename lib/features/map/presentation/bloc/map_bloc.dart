@@ -10,7 +10,7 @@ import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 class MapBloc extends Bloc<MapEvent, MapState> {
   final MapSearchPlacesUseCase _mapSearchPlacesUseCase;
   final MapSelectFromSearchListUseCase _mapSelectFromSearchListUseCase;
-  final MapGetDirectionsUsecase _mapGetDirectionsUsecase;
+  final MapGetDirectionsUseCase _mapGetDirectionsUsecase;
 
   MapBloc(
     this._mapSearchPlacesUseCase,
@@ -50,7 +50,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<MapEventGetDirections>(
       (event, emit) async {
         // emit(MapStateLoading());
-
         final result = await _mapGetDirectionsUsecase.call(GetDirectionsParams(
             origin: event.origin, destination: event.destination));
 

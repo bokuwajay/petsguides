@@ -14,11 +14,11 @@ class MapDependency {
     sl.registerFactory(() => MapBloc(
           sl<MapSearchPlacesUseCase>(),
           sl<MapSelectFromSearchListUseCase>(),
-          sl<MapGetDirectionsUsecase>(),
+          sl<MapGetDirectionsUseCase>(),
         ));
 
     sl.registerLazySingleton(
-        () => MapGetDirectionsUsecase(sl<MapRepositoryImpl>()));
+        () => MapGetDirectionsUseCase(sl<MapRepositoryImpl>()));
 
     sl.registerLazySingleton(
         () => MapSearchPlacesUseCase(sl<MapRepositoryImpl>()));

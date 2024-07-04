@@ -231,6 +231,19 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             _controller.future,
             _setMarker,
           );
+        } else if (state is MapStateGetDirectionsSuccessful &&
+            state.getDirections.isNotEmpty) {
+          gotoOriginDestination(
+            state.getDirections['start_location']['lat'],
+            state.getDirections['start_location']['lng'],
+            state.getDirections['end_location']['lat'],
+            state.getDirections['end_location']['lng'],
+            state.getDirections['bounds_ne'],
+            state.getDirections['bounds_sw'],
+            _controller.future,
+            _setMarker,
+          );
+          _setPolyline(state.getDirections['polyline_decoded']);
         }
         //else if (state is MapStateGetDirectionsSuccess &&
         //     state.getDirections.isNotEmpty) {

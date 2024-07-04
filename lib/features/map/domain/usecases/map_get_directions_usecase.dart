@@ -4,9 +4,9 @@ import 'package:petsguides/core/error/failures.dart';
 import 'package:petsguides/core/usecases/usecase.dart';
 import 'package:petsguides/features/map/domain/repository/map_repository.dart';
 
-class MapGetDirectionsUsecase implements UseCase<Map<String, dynamic>, Params> {
+class MapGetDirectionsUseCase implements UseCase<Map<String, dynamic>, Params> {
   final MapRepository _mapRepository;
-  MapGetDirectionsUsecase(this._mapRepository);
+  MapGetDirectionsUseCase(this._mapRepository);
 
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) async {
