@@ -92,7 +92,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   //
   //
   //
-  ////
+  /////////////
+  List placesWithinRadius = [];
   //
   //
   //
@@ -111,8 +112,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   // Set<Polyline> _polylines = Set<Polyline>();
   // int markerIdCounter = 1;
   // int polylineIdCounter = 1;
-
-  List allFavoritePlaces = [];
 
   String tokenKey = '';
 
@@ -188,9 +187,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   void fetchImage() async {
     if (_pageController.page != null) {
-      if (allFavoritePlaces[_pageController.page!.toInt()]['photos'] != null) {
+      if (placesWithinRadius[_pageController.page!.toInt()]['photos'] != null) {
         setState(() {
-          placeImg = allFavoritePlaces[_pageController.page!.toInt()]['photos']
+          placeImg = placesWithinRadius[_pageController.page!.toInt()]['photos']
               [0]['photo_reference'];
         });
       } else {
@@ -229,6 +228,22 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           _setPolyline(state.getDirections['polyline_decoded']);
         } else if (state is MapStateNearbyPlacesWidgetControlSuccessful) {
           _setCircle(state.tappedPoint, state.radiusValue);
+        } else if (state is MapStateSearchInRadiusSuccessful &&
+            state.placesInRadius.isNotEmpty) {
+          state.placesInRadius['results'].forEach((element) {
+            _setNearMarker(
+              LatLng(element['geometry']['location']['lat'],
+                  element['geometry']['location']['lng']),
+              element['name'],
+              element['types'],
+              element['business_status'] ?? 'not available',
+            );
+          });
+
+          // local variable to store the data and share with child widgets
+          placesWithinRadius = state.placesInRadius['results'];
+        } else if (state is MapStateTapOnCarouselCardSuccessful) {
+          print(state);
         }
         //else if (state is MapStateGetDirectionsSuccess &&
         //     state.getDirections.isNotEmpty) {
@@ -248,23 +263,23 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         //   List<dynamic> placesWithin =
         //       state.carouselSliderData!['results'] as List;
 
-        //   allFavoritePlaces = placesWithin;
+        //   placesWithinRadius = placesWithin;
 
         //   tokenKey = state.carouselSliderData!['next_page_token'] ?? 'none';
 
-        //   placesWithin.forEach((element) {
-        //     _setNearMarker(
-        //       LatLng(element['geometry']['location']['lat'],
-        //           element['geometry']['location']['lng']),
-        //       element['name'],
-        //       element['types'],
-        //       element['business_status'] ?? 'not available',
-        //     );
-        //   });
+        // placesWithin.forEach((element) {
+        //   _setNearMarker(
+        //     LatLng(element['geometry']['location']['lat'],
+        //         element['geometry']['location']['lng']),
+        //     element['name'],
+        //     element['types'],
+        //     element['business_status'] ?? 'not available',
+        //   );
+        // });
         // } else if (state is MapStateGetMorePlaceDetailsSuccess) {
         //   List<dynamic> placesWithin =
         //       state.getMorePlaceDetails['results'] as List;
-        //   allFavoritePlaces.addAll(placesWithin);
+        //   placesWithinRadius.addAll(placesWithin);
 
         //   tokenKey = state.getMorePlaceDetails['next_page_token'] ?? 'none';
 
@@ -306,7 +321,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       onTap: (point) {
                         // tappedPoint = point;
                         _polylines.clear();
-                        allFavoritePlaces.clear();
+                        placesWithinRadius.clear();
                         _markers.clear();
                         context.read<MapBloc>().add(
                             MapEventNearbyPlacesWidgetControl(
@@ -323,9 +338,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   buildSearchResultBoard(context, state),
                   buildGetDirectionTextFormField(context, state,
                       _originController, _destinationController),
-                  buildSlider(context, state, _circles, _debounce, tokenKey),
-                  buildCarouselContainer(context, state, _pageController,
-                      allFavoritePlaces, placeImg, moveCameraSlightly),
+                  buildSlider(context, state, _circles, _debounce),
+                  buildCarouselContainer(context, state, placesWithinRadius,
+                      _pageController, placeImg, moveCameraSlightly),
                   (showFlipDetailCard)
                       ? Positioned(
                           top: 100.0,
@@ -787,10 +802,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     controller.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
           target: LatLng(
-              allFavoritePlaces[_pageController.page!.toInt()]['geometry']
+              placesWithinRadius[_pageController.page!.toInt()]['geometry']
                       ['location']['lat'] +
                   0.0125,
-              allFavoritePlaces[_pageController.page!.toInt()]['geometry']
+              placesWithinRadius[_pageController.page!.toInt()]['geometry']
                       ['location']['lng'] +
                   0.005),
           zoom: 14.0,
@@ -804,7 +819,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
     _markers = {};
 
-    var selectedPlace = allFavoritePlaces[_pageController.page!.toInt()];
+    var selectedPlace = placesWithinRadius[_pageController.page!.toInt()];
 
     _setNearMarker(
         LatLng(selectedPlace['geometry']['location']['lat'],

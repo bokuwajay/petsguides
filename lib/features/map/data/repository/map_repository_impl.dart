@@ -51,6 +51,32 @@ class MapRepositoryImpl implements MapRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> searchInRadius(
+      SearchInRadiusParams params) async {
+    try {
+      final result = await _mapRemoteDataSource.searchInRadius(params);
+      return Right(result);
+    } on ApiException {
+      return Left(MissingParamsFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> tapOnCarouselCard(
+      TapOnCarouselCardParams params) async {
+    try {
+      final result = await _mapRemoteDataSource.tapOnCarouselCard(params);
+      return Right(result);
+    } on ApiException {
+      return Left(MissingParamsFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
   // @override
   // Future<Map<String, dynamic>> getPlace({required String placeId}) async {
   //   try {

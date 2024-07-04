@@ -16,6 +16,14 @@ abstract class MapRepository {
     GetDirectionsParams params,
   );
 
+  Future<Either<Failure, Map<String, dynamic>>> searchInRadius(
+    SearchInRadiusParams params,
+  );
+
+  Future<Either<Failure, Map<String, dynamic>>> tapOnCarouselCard(
+    TapOnCarouselCardParams params,
+  );
+
   // Future<Map<String, dynamic>> getPlace({required String placeId});
 
   // Future<Map<String, dynamic>> getDirections(

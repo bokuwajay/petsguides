@@ -8,7 +8,7 @@ import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 
 Widget buildSlider(BuildContext context, MapState state, Set<Circle> circles,
-    Timer? debounce, tokenKey) {
+    Timer? debounce) {
   if (!(state is MapStateNearbyPlacesWidgetControlSuccessful &&
       state.showSlider)) {
     return Container();
@@ -39,8 +39,9 @@ Widget buildSlider(BuildContext context, MapState state, Set<Circle> circles,
                   debounce?.cancel();
                 }
                 debounce = Timer(const Duration(seconds: 2), () async {
-                  // context.read<MapBloc>().add(MapEventGetPlaceDetails(
-                  //     tappedPoint: tappedPoint, radius: radiusValue.toInt()));
+                  context.read<MapBloc>().add(MapEventSearchInRadius(
+                      tappedPoint: state.tappedPoint,
+                      radius: state.radiusValue.toInt()));
                   // _markers = {};
                 });
               },

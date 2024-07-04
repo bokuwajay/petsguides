@@ -233,3 +233,42 @@ class MapStateNearbyPlacesWidgetControlFailed extends MapState {
   @override
   List<Object?> get props => [message];
 }
+
+// search within radius
+
+class MapStateSearchInRadiusSuccessful extends MapState {
+  final Map<String, dynamic> placesInRadius;
+
+  const MapStateSearchInRadiusSuccessful(this.placesInRadius);
+
+  @override
+  List<Object?> get props => [placesInRadius];
+}
+
+class MapStateSearchInRadiusFailed extends MapState {
+  final String message;
+
+  const MapStateSearchInRadiusFailed(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+// tap on carousel card
+class MapStateTapOnCarouselCardSuccessful extends MapState {
+  final Map<String, dynamic> flipCardData;
+
+  const MapStateTapOnCarouselCardSuccessful(this.flipCardData);
+
+  @override
+  List<Object?> get props => [flipCardData];
+}
+
+class MapStateTapOnCarouselCardFailed extends MapState {
+  final String message;
+
+  const MapStateTapOnCarouselCardFailed(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

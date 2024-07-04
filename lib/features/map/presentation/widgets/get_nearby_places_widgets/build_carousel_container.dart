@@ -8,13 +8,13 @@ import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 Widget buildCarouselContainer(
   BuildContext context,
   MapState state,
+  placesWithinRadius,
   pageController,
-  allFavoritePlaces,
   placeImg,
   moveCameraSlightly,
 ) {
-  final bool carslide = false;
-  if (!carslide) {
+  if (!(state is MapStateSearchInRadiusSuccessful &&
+      state.placesInRadius.isNotEmpty)) {
     return Container();
   }
 
@@ -25,19 +25,19 @@ Widget buildCarouselContainer(
         width: MediaQuery.of(context).size.width,
         child: PageView.builder(
             controller: pageController,
-            itemCount: allFavoritePlaces.length,
+            itemCount: placesWithinRadius.length,
             itemBuilder: (
               BuildContext context,
               int index,
             ) {
-              return _nearbyPlacesList(index, pageController, allFavoritePlaces,
-                  placeImg, moveCameraSlightly);
+              return _nearbyPlacesList(index, pageController,
+                  placesWithinRadius, placeImg, moveCameraSlightly);
             }),
       ));
 }
 
 _nearbyPlacesList(
-    index, pageController, allFavoritePlaces, placeImg, moveCameraSlightly) {
+    index, pageController, placesWithinRadius, placeImg, moveCameraSlightly) {
   const key = 'AIzaSyDvM7vtrGRyn3Ie3Fcpf0EJJ_8dN4WA4e8';
   return AnimatedBuilder(
       animation: pageController,
@@ -59,7 +59,7 @@ _nearbyPlacesList(
         builder: (context) => InkWell(
           onTap: () async {
             context.read<MapBloc>().add(MapEventTapOnCarouselCard(
-                placeId: allFavoritePlaces[index]['place_id']));
+                placeId: placesWithinRadius[index]['place_id']));
 
             moveCameraSlightly();
           },
@@ -120,7 +120,7 @@ _nearbyPlacesList(
                             SizedBox(
                               width: 170.0,
                               child: Text(
-                                allFavoritePlaces[index]['name'],
+                                placesWithinRadius[index]['name'],
                                 style: const TextStyle(
                                     fontSize: 12.5,
                                     fontFamily: 'WorkSans',
@@ -128,11 +128,11 @@ _nearbyPlacesList(
                               ),
                             ),
                             RatingStars(
-                              value: allFavoritePlaces[index]['rating']
+                              value: placesWithinRadius[index]['rating']
                                           .runtimeType ==
                                       int
-                                  ? allFavoritePlaces[index]['rating'] * 1.0
-                                  : allFavoritePlaces[index]['rating'] ?? 0.0,
+                                  ? placesWithinRadius[index]['rating'] * 1.0
+                                  : placesWithinRadius[index]['rating'] ?? 0.0,
                               starCount: 5,
                               starSize: 10,
                               valueLabelColor: const Color(0xff9b9b9b),
@@ -158,10 +158,10 @@ _nearbyPlacesList(
                             SizedBox(
                               width: 170.0,
                               child: Text(
-                                allFavoritePlaces[index]['business_status'] ??
+                                placesWithinRadius[index]['business_status'] ??
                                     'none',
                                 style: TextStyle(
-                                    color: allFavoritePlaces[index]
+                                    color: placesWithinRadius[index]
                                                 ['business_status'] ==
                                             'OPERATIONAL'
                                         ? Colors.green

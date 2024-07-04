@@ -12,6 +12,9 @@ sealed class MapRemoteDataSource {
   Future<Map<String, dynamic>> selectFromSearchList(
       SelectFromSearchListParams params);
   Future<Map<String, dynamic>> getDirections(GetDirectionsParams params);
+  Future<Map<String, dynamic>> searchInRadius(SearchInRadiusParams params);
+  Future<Map<String, dynamic>> tapOnCarouselCard(
+      TapOnCarouselCardParams params);
 }
 
 class MapRemoteDataSourceImpl implements MapRemoteDataSource {
@@ -83,6 +86,49 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
         'polyline_decoded': PolylinePoints().decodePolyline(
             response['routes'][0]['overview_polyline']['points'])
       };
+
+      return result;
+    } catch (exception) {
+      logger.e(exception);
+      if (exception.toString() == noElement) {
+        throw AuthException();
+      }
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> searchInRadius(
+      SearchInRadiusParams params) async {
+    try {
+      final result = await apiHelper.execute(
+        method: Method.get,
+        baseUrl: dotenv.env['googleMapBaseUrl'],
+        endpoint:
+            '/place/nearbysearch/json?&location=${params.tappedPoint.latitude},${params.tappedPoint.longitude}&radius=${params.radius}&key=${dotenv.env['googleMapKey']}',
+      );
+
+      return result;
+    } catch (exception) {
+      logger.e(exception);
+      if (exception.toString() == noElement) {
+        throw AuthException();
+      }
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> tapOnCarouselCard(
+      TapOnCarouselCardParams params) async {
+    try {
+      final response = await apiHelper.execute(
+        method: Method.get,
+        baseUrl: dotenv.env['googleMapBaseUrl'],
+        endpoint:
+            '/place/details/json?place_id=${params.placeId}&key=${dotenv.env['googleMapKey']}',
+      );
+      var result = response['result'] as Map<String, dynamic>;
 
       return result;
     } catch (exception) {

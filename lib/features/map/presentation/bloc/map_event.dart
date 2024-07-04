@@ -4,12 +4,6 @@ abstract class MapEvent {
   const MapEvent();
 }
 
-class MapEventTapOnCarouselCard extends MapEvent {
-  final String placeId;
-
-  const MapEventTapOnCarouselCard({required this.placeId});
-}
-
 class MapEventGetPlaceDetails extends MapEvent {
   final tappedPoint;
   final int radius;
@@ -77,4 +71,19 @@ class MapEventNearbyPlacesWidgetControl extends MapEvent {
     this.radiusValue = 3000.0,
     this.tappedPoint,
   });
+}
+
+// search within radius
+class MapEventSearchInRadius extends MapEvent {
+  final LatLng tappedPoint;
+  final int radius;
+
+  MapEventSearchInRadius({required this.tappedPoint, required this.radius});
+}
+
+// tap on carousel card
+class MapEventTapOnCarouselCard extends MapEvent {
+  final String placeId;
+
+  const MapEventTapOnCarouselCard({required this.placeId});
 }
