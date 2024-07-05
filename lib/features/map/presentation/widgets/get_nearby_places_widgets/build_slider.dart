@@ -5,12 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
-import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 
-Widget buildSlider(BuildContext context, MapState state, Set<Circle> circles,
-    Timer? debounce, showSlider) {
-  if (!(state is MapStateNearbyPlacesWidgetControlSuccessful &&
-      state.showSlider)) {
+Widget buildSlider(
+  BuildContext context,
+  Set<Circle> circles,
+  _setCircle,
+  tappedPoint,
+  Timer? debounce,
+  showSlider,
+  radiusValue,
+  resetLocalVariables,
+) {
+  if (!showSlider) {
     return Container();
   }
 
@@ -25,12 +31,9 @@ Widget buildSlider(BuildContext context, MapState state, Set<Circle> circles,
               child: Slider(
             max: 7000.0,
             min: 1000.0,
-            value: state.radiusValue,
+            value: radiusValue,
             onChanged: (newVal) {
-              context.read<MapBloc>().add(MapEventNearbyPlacesWidgetControl(
-                  showSlider: true,
-                  radiusValue: newVal,
-                  tappedPoint: state.tappedPoint));
+              _setCircle(tappedPoint, newVal);
             },
           )),
           IconButton(
@@ -40,16 +43,14 @@ Widget buildSlider(BuildContext context, MapState state, Set<Circle> circles,
                 }
                 debounce = Timer(const Duration(seconds: 2), () async {
                   context.read<MapBloc>().add(MapEventSearchInRadius(
-                      tappedPoint: state.tappedPoint,
-                      radius: state.radiusValue.toInt()));
-                  // _markers = {};
+                      tappedPoint: tappedPoint, radius: radiusValue.toInt()));
                 });
               },
               icon: const Icon(Icons.near_me)),
           IconButton(
               onPressed: () {
-                context.read<MapBloc>().add(const MapEventReset());
-                circles.clear();
+                resetLocalVariables();
+                // circles.clear();
                 // setState(() {
                 // radiusSlider = false;
                 // pressedNear = false;

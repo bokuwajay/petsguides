@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
-import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 
 Widget buildCarouselContainer(
   BuildContext context,
-  MapState state,
-  placesWithinRadius,
+  List placesWithinRadius,
   pageController,
   placeImg,
   moveCameraSlightly,
 ) {
-  if (!(state is MapStateSearchInRadiusSuccessful &&
-      state.placesInRadius.isNotEmpty)) {
+  if (placesWithinRadius.isEmpty) {
     return Container();
   }
 
@@ -38,7 +36,6 @@ Widget buildCarouselContainer(
 
 _nearbyPlacesList(
     index, pageController, placesWithinRadius, placeImg, moveCameraSlightly) {
-  const key = 'AIzaSyDvM7vtrGRyn3Ie3Fcpf0EJJ_8dN4WA4e8';
   return AnimatedBuilder(
       animation: pageController,
       builder: (BuildContext context, Widget? widget) {
@@ -57,7 +54,7 @@ _nearbyPlacesList(
       },
       child: Builder(
         builder: (context) => InkWell(
-          onTap: () async {
+          onTap: () {
             context.read<MapBloc>().add(MapEventTapOnCarouselCard(
                 placeId: placesWithinRadius[index]['place_id']));
 
@@ -95,7 +92,7 @@ _nearbyPlacesList(
                                             topLeft: Radius.circular(10.0)),
                                         image: DecorationImage(
                                             image: NetworkImage(placeImg != ''
-                                                ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$placeImg&key=$key'
+                                                ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'
                                                 : 'https://pic.onlinewebfonts.com/svg/img_546302.png'),
                                             fit: BoxFit.cover)),
                                   )

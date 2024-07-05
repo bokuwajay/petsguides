@@ -48,19 +48,6 @@ class MapEventGetDirections extends MapEvent {
       {required this.origin, required this.destination});
 }
 
-// near by places
-class MapEventNearbyPlacesWidgetControl extends MapEvent {
-  bool showSlider;
-  double radiusValue;
-  dynamic tappedPoint;
-
-  MapEventNearbyPlacesWidgetControl({
-    this.showSlider = false,
-    this.radiusValue = 3000.0,
-    this.tappedPoint,
-  });
-}
-
 // search within radius
 class MapEventSearchInRadius extends MapEvent {
   final LatLng tappedPoint;
