@@ -12,6 +12,7 @@ Widget buildSearchPlacesTextFormField(
   bool showSearchPlacesTextFormField,
   TextEditingController searchController,
   Timer? _debounce,
+  resetLocalVariables,
 ) {
   if (!showSearchPlacesTextFormField) {
     return Container();
@@ -33,7 +34,8 @@ Widget buildSearchPlacesTextFormField(
                 const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
             suffixIcon: IconButton(
               onPressed: () {
-                context.read<MapBloc>().add(const MapEventReset());
+                // context.read<MapBloc>().add(const MapEventReset());
+                resetLocalVariables();
               },
               icon: const Icon(Icons.close),
             ),

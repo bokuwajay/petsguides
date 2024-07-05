@@ -8,7 +8,7 @@ import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 
 Widget buildSlider(BuildContext context, MapState state, Set<Circle> circles,
-    Timer? debounce) {
+    Timer? debounce, showSlider) {
   if (!(state is MapStateNearbyPlacesWidgetControlSuccessful &&
       state.showSlider)) {
     return Container();
