@@ -4,22 +4,6 @@ abstract class MapEvent {
   const MapEvent();
 }
 
-class MapEventGetPlaceDetails extends MapEvent {
-  final tappedPoint;
-  final int radius;
-
-  const MapEventGetPlaceDetails(
-      {required this.tappedPoint, required this.radius});
-}
-
-class MapEventGetMorePlaceDetails extends MapEvent {
-  final String tokenKey;
-
-  const MapEventGetMorePlaceDetails({required this.tokenKey});
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-
 // Reset event
 class MapEventReset extends MapEvent {
   const MapEventReset();
@@ -44,8 +28,7 @@ class MapEventGetDirections extends MapEvent {
   final String origin;
   final String destination;
 
-  const MapEventGetDirections(
-      {required this.origin, required this.destination});
+  const MapEventGetDirections({required this.origin, required this.destination});
 }
 
 // search within radius

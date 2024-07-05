@@ -107,27 +107,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   //
   //
   //
-  //
-  // bool searchTextFormField = false;
-  // bool radiusSlider = false;
-  // bool cardTapped = false;
-  // bool pressedNear = false;
-  // bool getDirections = false;
-
-  // Set<Marker> _markersDupe = Set<Marker>();
-
-  // Set<Polyline> _polylines = Set<Polyline>();
-  // int markerIdCounter = 1;
-  // int polylineIdCounter = 1;
-
-  String tokenKey = '';
 
   late PageController _pageController;
   int prevPage = 0;
 
   var photoGalleryIndex = 0;
-
-  var selectedPlaceDetails;
 
   static final CameraPosition _kGooglePlex = CameraPosition(target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746);
 
@@ -243,10 +227,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           _setPolyline(state.getDirections['polyline_decoded']);
         } else if (state is MapStateSearchInRadiusSuccessful && state.placesInRadius.isNotEmpty) {
           placesWithinRadius = state.placesInRadius['results'];
-          placesWithinRadius.forEach((element) {
+          for (var element in placesWithinRadius) {
             _setNearMarker(LatLng(element['geometry']['location']['lat'], element['geometry']['location']['lng']), element['name'], element['types'],
                 element['business_status'] ?? 'not available');
-          });
+          }
         } else if (state is MapStateTapOnCarouselCardSuccessful && state.flipCardData.isNotEmpty) {
           tappedPlaceDetail = state.flipCardData;
         }
@@ -315,6 +299,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                 onPressed: () {
                   setState(() {
                     _markers.clear();
+                    _polylines.clear();
                     _originController.clear();
                     _destinationController.clear();
                     _circles.clear();
@@ -409,7 +394,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(9.0), color: photoGalleryIndex != 0 ? Colors.green.shade500 : Colors.grey.shade500),
                   child: const Center(
-                    child: Text('Prev', style: TextStyle(fontFamily: 'WorkSans', color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.w500)),
+                    child: Text(
+                      'Prev',
+                      style: TextStyle(fontFamily: 'WorkSans', color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
               ),
