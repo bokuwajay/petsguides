@@ -30,12 +30,9 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => ApiInterceptor());
 
   sl.registerLazySingleton(() => HiveLocalStorage());
-  sl.registerLazySingleton(
-      () => SecureLocalStorage(sl<FlutterSecureStorage>()));
+  sl.registerLazySingleton(() => SecureLocalStorage(sl<FlutterSecureStorage>()));
 
-  final String? languageCode =
-      await sl<HiveLocalStorage>().load(key: 'language', boxName: 'cache');
+  final String? languageCode = await sl<HiveLocalStorage>().load(key: 'language', boxName: 'cache');
 
-  sl.registerLazySingleton<Locale>(
-      () => Locale(languageCode ?? Platform.localeName.substring(0, 2)));
+  sl.registerLazySingleton<Locale>(() => Locale(languageCode ?? Platform.localeName.substring(0, 2)));
 }

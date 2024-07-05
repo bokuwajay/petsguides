@@ -26,7 +26,7 @@
       ]
     }
   },
-
+  "dart.lineLength": 160,
   "[dart]": {
     // Automatically format code on save and during typing of certain characters
     // (like `;` and `}`).

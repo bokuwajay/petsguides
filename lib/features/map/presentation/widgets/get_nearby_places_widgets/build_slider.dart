@@ -6,16 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 
-Widget buildSlider(
-  BuildContext context,
-  Set<Circle> circles,
-  _setCircle,
-  tappedPoint,
-  Timer? debounce,
-  showSlider,
-  radiusValue,
-  resetLocalVariables,
-) {
+Widget buildSlider(BuildContext context, Set<Circle> circles, _setCircle, tappedPoint, Timer? debounce, showSlider, radiusValue, resetLocalVariables) {
   if (!showSlider) {
     return Container();
   }
@@ -42,8 +33,7 @@ Widget buildSlider(
                   debounce?.cancel();
                 }
                 debounce = Timer(const Duration(seconds: 2), () async {
-                  context.read<MapBloc>().add(MapEventSearchInRadius(
-                      tappedPoint: tappedPoint, radius: radiusValue.toInt()));
+                  context.read<MapBloc>().add(MapEventSearchInRadius(tappedPoint: tappedPoint, radius: radiusValue.toInt()));
                 });
               },
               icon: const Icon(Icons.near_me)),

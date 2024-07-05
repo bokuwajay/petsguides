@@ -21,23 +21,17 @@ class MapDependency {
           sl<MapTapOnCarouselCardUseCase>(),
         ));
 
-    sl.registerLazySingleton(
-        () => MapTapOnCarouselCardUseCase(sl<MapRepositoryImpl>()));
+    sl.registerLazySingleton(() => MapTapOnCarouselCardUseCase(sl<MapRepositoryImpl>()));
 
-    sl.registerLazySingleton(
-        () => MapSearchInRadiusUseCase(sl<MapRepositoryImpl>()));
+    sl.registerLazySingleton(() => MapSearchInRadiusUseCase(sl<MapRepositoryImpl>()));
 
-    sl.registerLazySingleton(
-        () => MapGetDirectionsUseCase(sl<MapRepositoryImpl>()));
+    sl.registerLazySingleton(() => MapGetDirectionsUseCase(sl<MapRepositoryImpl>()));
 
-    sl.registerLazySingleton(
-        () => MapSearchPlacesUseCase(sl<MapRepositoryImpl>()));
+    sl.registerLazySingleton(() => MapSearchPlacesUseCase(sl<MapRepositoryImpl>()));
 
-    sl.registerLazySingleton(
-        () => MapSelectFromSearchListUseCase(sl<MapRepositoryImpl>()));
+    sl.registerLazySingleton(() => MapSelectFromSearchListUseCase(sl<MapRepositoryImpl>()));
 
-    sl.registerLazySingleton(
-        () => MapRepositoryImpl(sl<MapRemoteDataSourceImpl>()));
+    sl.registerLazySingleton(() => MapRepositoryImpl(sl<MapRemoteDataSourceImpl>()));
 
     sl.registerLazySingleton(() => MapRemoteDataSourceImpl(sl<ApiHelper>()));
   }

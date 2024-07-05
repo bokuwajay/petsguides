@@ -26,7 +26,6 @@ class GoogleMapView extends StatefulWidget {
 }
 
 class _GoogleMapViewState extends State<GoogleMapView> {
-  bool showFlipDetailCard = false;
   final Completer<GoogleMapController> _controller = Completer();
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
@@ -76,18 +75,14 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   void _setPolyline(List<PointLatLng> points) {
     final String polylineIdVal = 'polylin_$polylineIdCounter';
     polylineIdCounter++;
-    _polylines.add(Polyline(
-        polylineId: PolylineId(polylineIdVal),
-        width: 2,
-        color: Colors.blue,
-        points: points.map((e) => LatLng(e.latitude, e.longitude)).toList()));
+    _polylines.add(
+        Polyline(polylineId: PolylineId(polylineIdVal), width: 2, color: Colors.blue, points: points.map((e) => LatLng(e.latitude, e.longitude)).toList()));
   }
 
   void _setCircle(LatLng point, newVal) async {
     final GoogleMapController controller = await _controller.future;
 
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: point, zoom: 12)));
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: point, zoom: 12)));
     setState(() {
       radiusValue = newVal;
       _circles.add(Circle(
@@ -134,16 +129,14 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   var selectedPlaceDetails;
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-      target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746);
+  static final CameraPosition _kGooglePlex = CameraPosition(target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746);
 
   _setNearMarker(LatLng point, String label, List types, String status) async {
     var counter = markerIdCounter++;
     final Uint8List markerIcon;
 
     if (types.contains('restaurants')) {
-      markerIcon =
-          await getBytesFromAsset('assets/mapicons/restaurants.png', 75);
+      markerIcon = await getBytesFromAsset('assets/mapicons/restaurants.png', 75);
     } else if (types.contains('food')) {
       markerIcon = await getBytesFromAsset('assets/mapicons/food.png', 75);
     } else if (types.contains('school')) {
@@ -153,20 +146,14 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     } else if (types.contains('lodging')) {
       markerIcon = await getBytesFromAsset('assets/mapicons/hotels.png', 75);
     } else if (types.contains('store')) {
-      markerIcon =
-          await getBytesFromAsset('assets/mapicons/retail-stores.png', 75);
+      markerIcon = await getBytesFromAsset('assets/mapicons/retail-stores.png', 75);
     } else if (types.contains('locality')) {
-      markerIcon =
-          await getBytesFromAsset('assets/mapicons/local-services.png', 75);
+      markerIcon = await getBytesFromAsset('assets/mapicons/local-services.png', 75);
     } else {
       markerIcon = await getBytesFromAsset('assets/mapicons/places.png', 75);
     }
 
-    final Marker marker = Marker(
-        markerId: MarkerId('marker_$counter'),
-        position: point,
-        onTap: () {},
-        icon: BitmapDescriptor.fromBytes(markerIcon));
+    final Marker marker = Marker(markerId: MarkerId('marker_$counter'), position: point, onTap: () {}, icon: BitmapDescriptor.fromBytes(markerIcon));
 
     setState(() {
       _markers.add(marker);
@@ -175,8 +162,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   @override
   void initState() {
-    _pageController = PageController(initialPage: 1, viewportFraction: 0.85)
-      ..addListener(_onScroll);
+    _pageController = PageController(initialPage: 1, viewportFraction: 0.85)..addListener(_onScroll);
     super.initState();
   }
 
@@ -193,8 +179,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     if (_pageController.page != null) {
       if (placesWithinRadius[_pageController.page!.toInt()]['photos'] != null) {
         setState(() {
-          placeImg = placesWithinRadius[_pageController.page!.toInt()]['photos']
-              [0]['photo_reference'];
+          placeImg = placesWithinRadius[_pageController.page!.toInt()]['photos'][0]['photo_reference'];
         });
       } else {
         placeImg = '';
@@ -240,43 +225,29 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         if (state is MapStateResetSuccessful) {
           // showSearchPlacesTextFormField = state.showSearchPlacesTextFormField;
           // showGetDirections = state.showGetDirections;
-        } else if (state is MapStateSelectFromSearchListSuccessful &&
-            state.selectedPlace.isNotEmpty) {
+        } else if (state is MapStateSelectFromSearchListSuccessful && state.selectedPlace.isNotEmpty) {
           resetLocalVariables();
           gotoSearchedPlace(
-            state.selectedPlace['geometry']['location']['lat'],
-            state.selectedPlace['geometry']['location']['lng'],
-            _controller.future,
-            _setMarker,
-          );
-        } else if (state is MapStateGetDirectionsSuccessful &&
-            state.getDirections.isNotEmpty) {
+              state.selectedPlace['geometry']['location']['lat'], state.selectedPlace['geometry']['location']['lng'], _controller.future, _setMarker);
+        } else if (state is MapStateGetDirectionsSuccessful && state.getDirections.isNotEmpty) {
           resetLocalVariables();
           gotoOriginDestination(
-            state.getDirections['start_location']['lat'],
-            state.getDirections['start_location']['lng'],
-            state.getDirections['end_location']['lat'],
-            state.getDirections['end_location']['lng'],
-            state.getDirections['bounds_ne'],
-            state.getDirections['bounds_sw'],
-            _controller.future,
-            _setMarker,
-          );
+              state.getDirections['start_location']['lat'],
+              state.getDirections['start_location']['lng'],
+              state.getDirections['end_location']['lat'],
+              state.getDirections['end_location']['lng'],
+              state.getDirections['bounds_ne'],
+              state.getDirections['bounds_sw'],
+              _controller.future,
+              _setMarker);
           _setPolyline(state.getDirections['polyline_decoded']);
-        } else if (state is MapStateSearchInRadiusSuccessful &&
-            state.placesInRadius.isNotEmpty) {
+        } else if (state is MapStateSearchInRadiusSuccessful && state.placesInRadius.isNotEmpty) {
           placesWithinRadius = state.placesInRadius['results'];
           placesWithinRadius.forEach((element) {
-            _setNearMarker(
-              LatLng(element['geometry']['location']['lat'],
-                  element['geometry']['location']['lng']),
-              element['name'],
-              element['types'],
-              element['business_status'] ?? 'not available',
-            );
+            _setNearMarker(LatLng(element['geometry']['location']['lat'], element['geometry']['location']['lng']), element['name'], element['types'],
+                element['business_status'] ?? 'not available');
           });
-        } else if (state is MapStateTapOnCarouselCardSuccessful &&
-            state.flipCardData.isNotEmpty) {
+        } else if (state is MapStateTapOnCarouselCardSuccessful && state.flipCardData.isNotEmpty) {
           tappedPlaceDetail = state.flipCardData;
         }
       },
@@ -305,37 +276,12 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       },
                     ),
                   ),
-                  buildSearchPlacesTextFormField(
-                    context,
-                    state,
-                    showSearchPlacesTextFormField,
-                    _searchController,
-                    _debounce,
-                    resetLocalVariables,
-                  ),
+                  buildSearchPlacesTextFormField(context, state, showSearchPlacesTextFormField, _searchController, _debounce, resetLocalVariables),
                   buildSearchResultBoard(context, state),
-                  buildGetDirectionTextFormField(
-                    context,
-                    state,
-                    showGetDirections,
-                    _originController,
-                    _destinationController,
-                    resetLocalVariables,
-                  ),
-                  buildSlider(
-                    context,
-                    _circles,
-                    _setCircle,
-                    tappedPoint,
-                    _debounce,
-                    showSlider,
-                    radiusValue,
-                    resetLocalVariables,
-                  ),
-                  buildCarouselContainer(context, placesWithinRadius,
-                      _pageController, placeImg, moveCameraSlightly),
-                  buildFlipCard(context, placeImg, tappedPlaceDetail,
-                      toggleFlipCard, isReviews, isPhotos, buildFlipCardGallery)
+                  buildGetDirectionTextFormField(context, state, showGetDirections, _originController, _destinationController, resetLocalVariables),
+                  buildSlider(context, _circles, _setCircle, tappedPoint, _debounce, showSlider, radiusValue, resetLocalVariables),
+                  buildFlipCard(context, placeImg, tappedPlaceDetail, toggleFlipCard, isReviews, isPhotos, buildFlipCardGallery),
+                  buildCarouselContainer(context, placesWithinRadius, _pageController, placeImg, moveCameraSlightly),
                 ])
               ],
             ),
@@ -392,13 +338,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
-          target: LatLng(
-              placesWithinRadius[_pageController.page!.toInt()]['geometry']
-                      ['location']['lat'] +
-                  0.0125,
-              placesWithinRadius[_pageController.page!.toInt()]['geometry']
-                      ['location']['lng'] +
-                  0.005),
+          target: LatLng(placesWithinRadius[_pageController.page!.toInt()]['geometry']['location']['lat'] + 0.0125,
+              placesWithinRadius[_pageController.page!.toInt()]['geometry']['location']['lng'] + 0.005),
           zoom: 14.0,
           bearing: 45.0,
           tilt: 45.0),
@@ -412,19 +353,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
     var selectedPlace = placesWithinRadius[_pageController.page!.toInt()];
 
-    _setNearMarker(
-        LatLng(selectedPlace['geometry']['location']['lat'],
-            selectedPlace['geometry']['location']['lng']),
-        selectedPlace['name'] ?? 'no name',
-        selectedPlace['types'],
-        selectedPlace['business_status'] ?? 'none');
+    _setNearMarker(LatLng(selectedPlace['geometry']['location']['lat'], selectedPlace['geometry']['location']['lng']), selectedPlace['name'] ?? 'no name',
+        selectedPlace['types'], selectedPlace['business_status'] ?? 'none');
 
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(selectedPlace['geometry']['location']['lat'],
-            selectedPlace['geometry']['location']['lng']),
-        zoom: 14.0,
-        bearing: 45.0,
-        tilt: 45.0)));
+        target: LatLng(selectedPlace['geometry']['location']['lat'], selectedPlace['geometry']['location']['lng']), zoom: 14.0, bearing: 45.0, tilt: 45.0)));
   }
 
   buildFlipCardGallery(photoElement) {
@@ -434,10 +367,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         child: const Center(
           child: Text(
             'No Photos',
-            style: TextStyle(
-                fontFamily: 'WorkSans',
-                fontSize: 12.0,
-                fontWeight: FontWeight.w500),
+            style: TextStyle(fontFamily: 'WorkSans', fontSize: 12.0, fontWeight: FontWeight.w500),
           ),
         ),
       );
@@ -449,9 +379,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
       return Column(
         children: [
-          const SizedBox(
-            height: 10.0,
-          ),
+          const SizedBox(height: 10.0),
           Container(
               height: 200.0,
               width: 200.0,
@@ -461,9 +389,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       image: NetworkImage(
                           'https://maps.googleapis.com/maps/api/place/photo?maxwidth=$maxWidth&maxheight=$maxHeight&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'),
                       fit: BoxFit.cover))),
-          const SizedBox(
-            height: 10.0,
-          ),
+          const SizedBox(height: 10.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -480,30 +406,16 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                 child: Container(
                   width: 40.0,
                   height: 20.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(9.0),
-                    color: photoGalleryIndex != 0
-                        ? Colors.green.shade500
-                        : Colors.grey.shade500,
-                  ),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(9.0), color: photoGalleryIndex != 0 ? Colors.green.shade500 : Colors.grey.shade500),
                   child: const Center(
-                    child: Text(
-                      'Prev',
-                      style: TextStyle(
-                          fontFamily: 'WorkSans',
-                          color: Colors.white,
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w500),
-                    ),
+                    child: Text('Prev', style: TextStyle(fontFamily: 'WorkSans', color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.w500)),
                   ),
                 ),
               ),
               Text(
                 '$tempDisplayIndex/' + photoElement.length.toString(),
-                style: const TextStyle(
-                    fontFamily: 'WorkSans',
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w500),
+                style: const TextStyle(fontFamily: 'WorkSans', fontSize: 12.0, fontWeight: FontWeight.w500),
               ),
               GestureDetector(
                 onTap: () {
@@ -520,18 +432,12 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   height: 20.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(9.0),
-                    color: photoGalleryIndex != photoElement.length - 1
-                        ? Colors.green.shade500
-                        : Colors.grey.shade500,
+                    color: photoGalleryIndex != photoElement.length - 1 ? Colors.green.shade500 : Colors.grey.shade500,
                   ),
                   child: const Center(
                     child: Text(
                       'Next',
-                      style: TextStyle(
-                          fontFamily: 'WorkSans',
-                          color: Colors.white,
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w500),
+                      style: TextStyle(fontFamily: 'WorkSans', color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
