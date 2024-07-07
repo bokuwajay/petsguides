@@ -12,14 +12,6 @@ class MapStateInitial extends MapState {}
 
 class MapStateLoading extends MapState {}
 
-// Reset
-class MapStateResetSuccessful extends MapState {
-  const MapStateResetSuccessful();
-
-  @override
-  List<Object?> get props => [];
-}
-
 // search place
 class MapStateSearchPlacesSuccessful extends MapState {
   final List<AutoCompleteEntity>? data;
@@ -79,7 +71,6 @@ class MapStateGetDirectionsFailed extends MapState {
 }
 
 // search within radius
-
 class MapStateSearchInRadiusSuccessful extends MapState {
   final Map<String, dynamic> placesInRadius;
 
@@ -93,6 +84,25 @@ class MapStateSearchInRadiusFailed extends MapState {
   final String message;
 
   const MapStateSearchInRadiusFailed(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+// get more place in radius
+class MapStateGetMorePlacesInRadiusSuccessful extends MapState {
+  final Map<String, dynamic> morePlacesInRadius;
+
+  const MapStateGetMorePlacesInRadiusSuccessful(this.morePlacesInRadius);
+
+  @override
+  List<Object?> get props => [morePlacesInRadius];
+}
+
+class MapStateGetMorePlacesInRadiusFailed extends MapState {
+  final String message;
+
+  const MapStateGetMorePlacesInRadiusFailed(this.message);
 
   @override
   List<Object?> get props => [message];

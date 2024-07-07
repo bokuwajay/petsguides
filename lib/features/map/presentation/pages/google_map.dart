@@ -59,6 +59,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   bool isPhotos = false;
   //
   //
+  String nextPageToken = '';
+  bool getMorePlaces = false;
   //
 
   void _setMarker(point) {
@@ -205,6 +207,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
       radiusValue = 3000.0;
       placesWithinRadius = [];
 
+      // get more places in radius
+      nextPageToken = '';
+      getMorePlaces = false;
+
       // tap on carousel card and show flip card
       tappedPlaceDetail = null;
       placeImg = '';
@@ -255,7 +261,16 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           );
           _setPolyline(state.getDirections['polyline_decoded']);
         } else if (state is MapStateSearchInRadiusSuccessful && state.placesInRadius.isNotEmpty) {
+          getMorePlaces = true;
           placesWithinRadius = state.placesInRadius['results'];
+          nextPageToken = state.placesInRadius['next_page_token'] ?? 'none';
+          for (var element in placesWithinRadius) {
+            _setNearMarker(LatLng(element['geometry']['location']['lat'], element['geometry']['location']['lng']), element['name'], element['types'],
+                element['business_status'] ?? 'not available');
+          }
+        } else if (state is MapStateGetMorePlacesInRadiusSuccessful && state.morePlacesInRadius.isNotEmpty) {
+          placesWithinRadius.addAll(state.morePlacesInRadius['results']);
+          nextPageToken = state.morePlacesInRadius['next_page_token'] ?? 'none';
           for (var element in placesWithinRadius) {
             _setNearMarker(LatLng(element['geometry']['location']['lat'], element['geometry']['location']['lng']), element['name'], element['types'],
                 element['business_status'] ?? 'not available');
@@ -293,7 +308,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   buildSearchPlacesTextFormField(context, state, showSearchPlacesTextFormField, _searchController, _debounce, reset),
                   buildSearchResultBoard(context, showSearchResultBoard, searchedPlaces, reset),
                   buildGetDirectionTextFormField(context, state, showGetDirections, _originController, _destinationController, reset),
-                  buildSlider(context, _setCircle, tappedPoint, _debounce, showSlider, radiusValue, reset),
+                  buildSlider(context, _setCircle, tappedPoint, _debounce, showSlider, nextPageToken, getMorePlaces, radiusValue, reset),
                   buildFlipCard(context, placeImg, tappedPlaceDetail, toggleReviewPhoto, isReviews, isPhotos, buildFlipCardGallery, showFlipCard),
                   buildCarouselContainer(context, placesWithinRadius, _pageController, placeImg, moveCameraSlightly),
                 ])
@@ -336,14 +351,16 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   Future<void> moveCameraSlightly() async {
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-          target: LatLng(placesWithinRadius[_pageController.page!.toInt()]['geometry']['location']['lat'] + 0.0125,
-              placesWithinRadius[_pageController.page!.toInt()]['geometry']['location']['lng'] + 0.005),
-          zoom: 14.0,
-          bearing: 45.0,
-          tilt: 45.0),
-    ));
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target: LatLng(placesWithinRadius[_pageController.page!.toInt()]['geometry']['location']['lat'] + 0.0125,
+                placesWithinRadius[_pageController.page!.toInt()]['geometry']['location']['lng'] + 0.005),
+            zoom: 14.0,
+            bearing: 45.0,
+            tilt: 45.0),
+      ),
+    );
   }
 
   Future<void> gotoTappedPlace() async {

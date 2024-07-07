@@ -26,7 +26,6 @@ Widget buildCarouselContainer(BuildContext context, List placesWithinRadius, pag
 }
 
 _nearbyPlacesList(index, pageController, placesWithinRadius, placeImg, moveCameraSlightly) {
-  print('index--------$index');
   return AnimatedBuilder(
     animation: pageController,
     builder: (BuildContext context, Widget? widget) {
@@ -67,12 +66,13 @@ _nearbyPlacesList(index, pageController, placesWithinRadius, placeImg, moveCamer
                                 height: 90.0,
                                 width: 90.0,
                                 decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10.0), topLeft: Radius.circular(10.0)),
-                                    image: DecorationImage(
-                                        image: NetworkImage(placeImg != ''
-                                            ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'
-                                            : 'https://pic.onlinewebfonts.com/svg/img_546302.png'),
-                                        fit: BoxFit.cover)),
+                                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10.0), topLeft: Radius.circular(10.0)),
+                                  image: DecorationImage(
+                                      image: NetworkImage(placeImg != ''
+                                          ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'
+                                          : 'https://pic.onlinewebfonts.com/svg/img_546302.png'),
+                                      fit: BoxFit.cover),
+                                ),
                               )
                             : Container(
                                 height: 90.0,

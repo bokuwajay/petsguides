@@ -20,6 +20,10 @@ abstract class MapRepository {
     SearchInRadiusParams params,
   );
 
+  Future<Either<Failure, Map<String, dynamic>>> getMorePlacesInRadius(
+    GetMorePlacesInRadiusParams params,
+  );
+
   Future<Either<Failure, Map<String, dynamic>>> tapOnCarouselCard(
     TapOnCarouselCardParams params,
   );

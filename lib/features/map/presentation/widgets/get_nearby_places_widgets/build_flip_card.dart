@@ -134,7 +134,7 @@ Widget buildFlipCard(
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               height: 250.0,
               child: isReviews
                   ? ListView(
