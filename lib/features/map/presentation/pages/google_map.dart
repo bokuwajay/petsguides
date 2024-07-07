@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 import 'package:petsguides/features/map/presentation/widgets/get_direction_widgets/build_get_direction_text_form_field.dart';
@@ -101,6 +102,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   //
   //
   //
+  bool showSearchResultBoard = false;
+  List<AutoCompleteEntity> searchedPlaces = [];
+
   ///
   List placesWithinRadius = [];
   //
@@ -151,12 +155,18 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   }
 
   void _onScroll() {
+    print('page controller----${_pageController.page!.toInt()}');
+    print('previusous page-------$prevPage');
+    print('phtoto gallaexy------------$photoGalleryIndex');
     if (_pageController.page!.toInt() != prevPage) {
       prevPage = _pageController.page!.toInt();
       photoGalleryIndex = 1;
       gotoTappedPlace();
       fetchImage();
     }
+    print('affter ----- page controller----${_pageController.page!.toInt()}');
+    print('affter ----- previusous page-------$prevPage');
+    print('affter ----- phtoto gallaexy------------$photoGalleryIndex');
   }
 
   void fetchImage() async {
@@ -171,24 +181,37 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     }
   }
 
-  void resetLocalVariables() {
+  void reset() {
     setState(() {
       // clear searh places
       showSearchPlacesTextFormField = false;
+      showSearchResultBoard = false;
+      _searchController.clear();
       _markers.clear();
+      markerIdCounter = 1;
+      searchedPlaces = [];
 
       // clear get directions
       showGetDirections = false;
       _originController.clear();
       _destinationController.clear();
       _polylines.clear();
+      polylineIdCounter = 1;
 
       // clear near by
       _circles.clear();
       showSlider = false;
+      tappedPoint = null;
       radiusValue = 3000.0;
       placesWithinRadius = [];
+
+      // tap on carousel card and show flip card
       tappedPlaceDetail = null;
+      placeImg = '';
+      isReviews = true;
+      isPhotos = false;
+      prevPage = 0;
+      photoGalleryIndex = 0;
     });
   }
 
@@ -206,24 +229,29 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
     return BlocConsumer<MapBloc, MapState>(
       listener: (context, state) {
-        if (state is MapStateResetSuccessful) {
-          // showSearchPlacesTextFormField = state.showSearchPlacesTextFormField;
-          // showGetDirections = state.showGetDirections;
+        if (state is MapStateSearchPlacesSuccessful) {
+          showSearchResultBoard = true;
+          if (state.data != null) {
+            searchedPlaces = state.data!;
+          } else {
+            searchedPlaces = [];
+          }
         } else if (state is MapStateSelectFromSearchListSuccessful && state.selectedPlace.isNotEmpty) {
-          resetLocalVariables();
+          reset();
           gotoSearchedPlace(
               state.selectedPlace['geometry']['location']['lat'], state.selectedPlace['geometry']['location']['lng'], _controller.future, _setMarker);
         } else if (state is MapStateGetDirectionsSuccessful && state.getDirections.isNotEmpty) {
-          resetLocalVariables();
+          reset();
           gotoOriginDestination(
-              state.getDirections['start_location']['lat'],
-              state.getDirections['start_location']['lng'],
-              state.getDirections['end_location']['lat'],
-              state.getDirections['end_location']['lng'],
-              state.getDirections['bounds_ne'],
-              state.getDirections['bounds_sw'],
-              _controller.future,
-              _setMarker);
+            state.getDirections['start_location']['lat'],
+            state.getDirections['start_location']['lng'],
+            state.getDirections['end_location']['lat'],
+            state.getDirections['end_location']['lng'],
+            state.getDirections['bounds_ne'],
+            state.getDirections['bounds_sw'],
+            _controller.future,
+            _setMarker,
+          );
           _setPolyline(state.getDirections['polyline_decoded']);
         } else if (state is MapStateSearchInRadiusSuccessful && state.placesInRadius.isNotEmpty) {
           placesWithinRadius = state.placesInRadius['results'];
@@ -254,16 +282,16 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                         _controller.complete(controller);
                       },
                       onTap: (point) {
-                        resetLocalVariables();
+                        reset();
                         tappedPoint = point;
                         _setCircle(point, radiusValue);
                       },
                     ),
                   ),
-                  buildSearchPlacesTextFormField(context, state, showSearchPlacesTextFormField, _searchController, _debounce, resetLocalVariables),
-                  buildSearchResultBoard(context, state),
-                  buildGetDirectionTextFormField(context, state, showGetDirections, _originController, _destinationController, resetLocalVariables),
-                  buildSlider(context, _circles, _setCircle, tappedPoint, _debounce, showSlider, radiusValue, resetLocalVariables),
+                  buildSearchPlacesTextFormField(context, state, showSearchPlacesTextFormField, _searchController, _debounce, reset),
+                  buildSearchResultBoard(context, showSearchResultBoard, searchedPlaces, reset),
+                  buildGetDirectionTextFormField(context, state, showGetDirections, _originController, _destinationController, reset),
+                  buildSlider(context, _setCircle, tappedPoint, _debounce, showSlider, radiusValue, reset),
                   buildFlipCard(context, placeImg, tappedPlaceDetail, toggleFlipCard, isReviews, isPhotos, buildFlipCardGallery),
                   buildCarouselContainer(context, placesWithinRadius, _pageController, placeImg, moveCameraSlightly),
                 ])
@@ -281,15 +309,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
             children: <Widget>[
               IconButton(
                 onPressed: () {
+                  reset();
                   setState(() {
-                    _markers.clear();
-                    _polylines.clear();
-                    _searchController.clear();
-                    _circles.clear();
-                    showGetDirections = false;
-                    showSlider = false;
-                    radiusValue = 3000.0;
-                    placesWithinRadius = [];
                     showSearchPlacesTextFormField = true;
                   });
                 },
@@ -297,16 +318,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
               ),
               IconButton(
                 onPressed: () {
+                  reset();
                   setState(() {
-                    _markers.clear();
-                    _polylines.clear();
-                    _originController.clear();
-                    _destinationController.clear();
-                    _circles.clear();
-                    showSearchPlacesTextFormField = false;
-                    showSlider = false;
-                    radiusValue = 3000.0;
-                    placesWithinRadius = [];
                     showGetDirections = true;
                   });
                 },
