@@ -29,39 +29,44 @@ class GoogleMapView extends StatefulWidget {
 
 class _GoogleMapViewState extends State<GoogleMapView> {
   final Completer<GoogleMapController> _controller = Completer();
-  final TextEditingController _searchController = TextEditingController();
+  static final CameraPosition _kGooglePlex = CameraPosition(target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746);
   Timer? _debounce;
+  late PageController _pageController;
+
+// search places
+  bool showSearchPlacesTextFormField = false;
+  bool showSearchResultBoard = false;
+  final TextEditingController _searchController = TextEditingController();
+  final Set<Marker> _markers = <Marker>{};
+  int markerIdCounter = 1;
+  List<AutoCompleteEntity> searchedPlaces = [];
+
+// get directions
+  bool showGetDirections = false;
   final TextEditingController _originController = TextEditingController();
   final TextEditingController _destinationController = TextEditingController();
-  Set<Marker> _markers = <Marker>{};
-  int markerIdCounter = 1;
-
-  Set<Polyline> _polylines = <Polyline>{};
+  final Set<Polyline> _polylines = <Polyline>{};
   int polylineIdCounter = 1;
 
+  // get near by within radius
   final Set<Circle> _circles = <Circle>{};
-
-  //
-  //
-  //
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  bool showSearchPlacesTextFormField = false;
-  bool showGetDirections = false;
   bool showSlider = false;
-  var radiusValue = 3000.0;
   var tappedPoint;
-///////////
-  ///
-  String placeImg = '';
-  var tappedPlaceDetail;
-  bool isReviews = true;
-  bool isPhotos = false;
-  //
-  //
+  var radiusValue = 3000.0;
+  List placesWithinRadius = [];
+
+  // get more places within radius
   String nextPageToken = '';
   bool getMorePlaces = false;
-  //
+
+// tap on carousel card
+  var tappedPlaceDetail;
+  String placeImg = '';
+  bool isReviews = true;
+  bool isPhotos = false;
+  int prevPage = 0;
+  var photoGalleryIndex = 0;
+  bool showFlipCard = false;
 
   void _setMarker(point) {
     var counter = markerIdCounter++;
@@ -85,7 +90,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   void _setCircle(LatLng point, newVal) async {
     final GoogleMapController controller = await _controller.future;
-
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: point, zoom: 12)));
     setState(() {
       radiusValue = newVal;
@@ -99,29 +103,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
       showSlider = true;
     });
   }
-
-  //
-  //
-  //
-  //
-  //
-  bool showSearchResultBoard = false;
-  List<AutoCompleteEntity> searchedPlaces = [];
-
-  ///
-  List placesWithinRadius = [];
-  //
-  //
-  //
-  bool showFlipCard = false;
-  //
-
-  late PageController _pageController;
-  int prevPage = 0;
-
-  var photoGalleryIndex = 0;
-
-  static final CameraPosition _kGooglePlex = CameraPosition(target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.4746);
 
   _setNearMarker(LatLng point, String label, List types, String status) async {
     var counter = markerIdCounter++;
@@ -171,6 +152,19 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     }
   }
 
+  Future<void> gotoTappedPlace() async {
+    final GoogleMapController controller = await _controller.future;
+
+    _markers.clear();
+    var selectedPlace = placesWithinRadius[_pageController.page!.toInt()];
+
+    _setNearMarker(LatLng(selectedPlace['geometry']['location']['lat'], selectedPlace['geometry']['location']['lng']), selectedPlace['name'] ?? 'no name',
+        selectedPlace['types'], selectedPlace['business_status'] ?? 'none');
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(selectedPlace['geometry']['location']['lat'], selectedPlace['geometry']['location']['lng']), zoom: 14.0, bearing: 45.0, tilt: 45.0)));
+  }
+
   void fetchImage() async {
     if (_pageController.page != null) {
       if (placesWithinRadius[_pageController.page!.toInt()]['photos'] != null) {
@@ -181,6 +175,20 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         placeImg = '';
       }
     }
+  }
+
+  Future<void> moveCameraSlightly() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target: LatLng(placesWithinRadius[_pageController.page!.toInt()]['geometry']['location']['lat'] + 0.0125,
+                placesWithinRadius[_pageController.page!.toInt()]['geometry']['location']['lng'] + 0.005),
+            zoom: 14.0,
+            bearing: 45.0,
+            tilt: 45.0),
+      ),
+    );
   }
 
   void reset() {
@@ -200,7 +208,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
       _polylines.clear();
       polylineIdCounter = 1;
 
-      // clear near by
+      // clear get near by
       _circles.clear();
       showSlider = false;
       tappedPoint = null;
@@ -349,34 +357,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     );
   }
 
-  Future<void> moveCameraSlightly() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-            target: LatLng(placesWithinRadius[_pageController.page!.toInt()]['geometry']['location']['lat'] + 0.0125,
-                placesWithinRadius[_pageController.page!.toInt()]['geometry']['location']['lng'] + 0.005),
-            zoom: 14.0,
-            bearing: 45.0,
-            tilt: 45.0),
-      ),
-    );
-  }
-
-  Future<void> gotoTappedPlace() async {
-    final GoogleMapController controller = await _controller.future;
-
-    _markers.clear();
-
-    var selectedPlace = placesWithinRadius[_pageController.page!.toInt()];
-
-    _setNearMarker(LatLng(selectedPlace['geometry']['location']['lat'], selectedPlace['geometry']['location']['lng']), selectedPlace['name'] ?? 'no name',
-        selectedPlace['types'], selectedPlace['business_status'] ?? 'none');
-
-    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(selectedPlace['geometry']['location']['lat'], selectedPlace['geometry']['location']['lng']), zoom: 14.0, bearing: 45.0, tilt: 45.0)));
-  }
-
   buildFlipCardGallery(photoElement) {
     if (photoElement == null || photoElement.length == 0) {
       return Container(
@@ -433,7 +413,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                 ),
               ),
               Text(
-                '$tempDisplayIndex/' + photoElement.length.toString(),
+                '$tempDisplayIndex/${photoElement.length}',
                 style: const TextStyle(fontFamily: 'WorkSans', fontSize: 12.0, fontWeight: FontWeight.w500),
               ),
               GestureDetector(
