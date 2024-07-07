@@ -14,6 +14,16 @@ class MapDependency {
   MapDependency._();
 
   static void init() {
+    sl.registerLazySingleton(() => MapRemoteDataSourceImpl(sl<ApiHelper>()));
+    sl.registerLazySingleton(() => MapRepositoryImpl(sl<MapRemoteDataSourceImpl>()));
+
+    sl.registerLazySingleton(() => MapSearchPlacesUseCase(sl<MapRepositoryImpl>()));
+    sl.registerLazySingleton(() => MapSelectFromSearchListUseCase(sl<MapRepositoryImpl>()));
+    sl.registerLazySingleton(() => MapGetDirectionsUseCase(sl<MapRepositoryImpl>()));
+    sl.registerLazySingleton(() => MapSearchInRadiusUseCase(sl<MapRepositoryImpl>()));
+    sl.registerLazySingleton(() => MapGetMorePlacesInRadiusUseCase(sl<MapRepositoryImpl>()));
+    sl.registerLazySingleton(() => MapTapOnCarouselCardUseCase(sl<MapRepositoryImpl>()));
+
     sl.registerFactory(() => MapBloc(
           sl<MapSearchPlacesUseCase>(),
           sl<MapSelectFromSearchListUseCase>(),
@@ -22,21 +32,5 @@ class MapDependency {
           sl<MapGetMorePlacesInRadiusUseCase>(),
           sl<MapTapOnCarouselCardUseCase>(),
         ));
-
-    sl.registerLazySingleton(() => MapTapOnCarouselCardUseCase(sl<MapRepositoryImpl>()));
-
-    sl.registerLazySingleton(() => MapGetMorePlacesInRadiusUseCase(sl<MapRepositoryImpl>()));
-
-    sl.registerLazySingleton(() => MapSearchInRadiusUseCase(sl<MapRepositoryImpl>()));
-
-    sl.registerLazySingleton(() => MapGetDirectionsUseCase(sl<MapRepositoryImpl>()));
-
-    sl.registerLazySingleton(() => MapSearchPlacesUseCase(sl<MapRepositoryImpl>()));
-
-    sl.registerLazySingleton(() => MapSelectFromSearchListUseCase(sl<MapRepositoryImpl>()));
-
-    sl.registerLazySingleton(() => MapRepositoryImpl(sl<MapRemoteDataSourceImpl>()));
-
-    sl.registerLazySingleton(() => MapRemoteDataSourceImpl(sl<ApiHelper>()));
   }
 }

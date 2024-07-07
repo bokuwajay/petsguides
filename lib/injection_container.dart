@@ -17,17 +17,14 @@ import 'package:petsguides/features/map/di/map_dependency.dart';
 final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
-  AuthDependency.init();
-  MapDependency.init();
-
-  sl.registerLazySingleton(() => NetworkInfo(sl<InternetConnectionChecker>()));
   sl.registerLazySingleton(() => InternetConnectionChecker());
+  sl.registerLazySingleton(() => NetworkInfo(sl<InternetConnectionChecker>()));
 
   sl.registerLazySingleton<AppRouteConfig>(() => AppRouteConfig());
 
-  sl.registerLazySingleton(() => ApiHelper(sl<Dio>()));
-  sl.registerLazySingleton(() => Dio()..interceptors.add(sl<ApiInterceptor>()));
   sl.registerLazySingleton(() => ApiInterceptor());
+  sl.registerLazySingleton(() => Dio()..interceptors.add(sl<ApiInterceptor>()));
+  sl.registerLazySingleton(() => ApiHelper(sl<Dio>()));
 
   sl.registerLazySingleton(() => HiveLocalStorage());
   sl.registerLazySingleton(() => SecureLocalStorage(sl<FlutterSecureStorage>()));
@@ -35,4 +32,7 @@ Future<void> initializeDependencies() async {
   final String? languageCode = await sl<HiveLocalStorage>().load(key: 'language', boxName: 'cache');
 
   sl.registerLazySingleton<Locale>(() => Locale(languageCode ?? Platform.localeName.substring(0, 2)));
+
+  AuthDependency.init();
+  MapDependency.init();
 }

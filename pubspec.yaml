@@ -40,7 +40,6 @@ dependencies:
   fab_circular_menu_plus: ^0.0.2
   flutter_polyline_points:
   flutter_rating_stars:
-  flutter_riverpod:
   flip_card:
   go_router: ^13.1.0
   dio: ^5.4.0
@@ -66,17 +65,6 @@ dependencies:
   # dateFormat
   intl:
 
-  # database use sqlite to store data locally
-  floor: ^1.4.2
-
-  # source code generator package which uses Dio as Http Client to generate proper methods that we need to deal with restful API based on abstraction
-  retrofit: ^4.1.0
-
-  # manage the life cycle of the widget (main purpose: increase the code sharing between widgets by removing duplicates)
-  flutter_hooks: ^0.20.5
-
-  # show image from the internet and keep them in the cached directory
-  cached_network_image: ^3.3.1
 
   flutter_secure_storage: ^9.0.0
   jwt_decoder: ^2.0.1
@@ -84,17 +72,11 @@ dependencies:
   snappable_thanos: ^0.0.4
   animate_do: ^3.3.3
 
-  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
-
-  # these also needed at dev_dependencies
-  retrofit_generator: ^8.1.0
-  floor_generator: ^1.4.2
-  build_runner: ^2.4.8
   analyzer: ^5.13.0
 
 # For information on the generic Dart part of this file, see the

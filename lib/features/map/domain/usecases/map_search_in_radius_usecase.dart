@@ -5,8 +5,17 @@ import 'package:petsguides/core/error/failures.dart';
 import 'package:petsguides/core/usecases/usecase.dart';
 import 'package:petsguides/features/map/domain/repository/map_repository.dart';
 
-class MapSearchInRadiusUseCase
-    implements UseCase<Map<String, dynamic>, Params> {
+class Params extends Equatable {
+  final LatLng tappedPoint;
+  final int radius;
+
+  const Params({required this.tappedPoint, required this.radius});
+
+  @override
+  List<Object?> get props => [tappedPoint, tappedPoint];
+}
+
+class MapSearchInRadiusUseCase implements UseCase<Map<String, dynamic>, Params> {
   final MapRepository _mapRepository;
   MapSearchInRadiusUseCase(this._mapRepository);
 
@@ -18,14 +27,4 @@ class MapSearchInRadiusUseCase
     final result = await _mapRepository.searchInRadius(params);
     return result;
   }
-}
-
-class Params extends Equatable {
-  final LatLng tappedPoint;
-  final int radius;
-
-  const Params({required this.tappedPoint, required this.radius});
-
-  @override
-  List<Object?> get props => [tappedPoint, tappedPoint];
 }

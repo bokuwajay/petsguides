@@ -5,8 +5,16 @@ import 'package:petsguides/core/usecases/usecase.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/domain/repository/map_repository.dart';
 
-class MapSearchPlacesUseCase
-    implements UseCase<List<AutoCompleteEntity>, Params> {
+class Params extends Equatable {
+  final String searchInput;
+
+  const Params({required this.searchInput});
+
+  @override
+  List<Object?> get props => [searchInput];
+}
+
+class MapSearchPlacesUseCase implements UseCase<List<AutoCompleteEntity>, Params> {
   final MapRepository _mapRepository;
   MapSearchPlacesUseCase(this._mapRepository);
 
@@ -18,13 +26,4 @@ class MapSearchPlacesUseCase
     final result = await _mapRepository.searchPlaces(params);
     return result;
   }
-}
-
-class Params extends Equatable {
-  final String searchInput;
-
-  const Params({required this.searchInput});
-
-  @override
-  List<Object?> get props => [searchInput];
 }

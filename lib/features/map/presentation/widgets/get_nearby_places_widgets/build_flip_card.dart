@@ -18,7 +18,7 @@ Widget buildFlipCard(
   }
 
   return Positioned(
-    top: 100.0,
+    top: 120.0,
     left: 15.0,
     child: FlipCard(
       front: Container(

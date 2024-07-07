@@ -21,15 +21,7 @@ class AutoCompleteEntity extends Equatable {
 
   @override
   List<Object?> get props {
-    return [
-      description,
-      matchedSubstrings,
-      placeId,
-      reference,
-      structuredFormatting,
-      terms,
-      types
-    ];
+    return [description, matchedSubstrings, placeId, reference, structuredFormatting, terms, types];
   }
 }
 
@@ -50,8 +42,7 @@ class StructuredFormatting {
   List<MainTextMatchedSubstrings>? mainTextMatchedSubstrings;
   String? secondaryText;
 
-  StructuredFormatting(
-      {this.mainText, this.mainTextMatchedSubstrings, this.secondaryText});
+  StructuredFormatting({this.mainText, this.mainTextMatchedSubstrings, this.secondaryText});
 
   StructuredFormatting.fromJson(Map<String, dynamic> json) {
     mainText = json['main_text'];
@@ -63,17 +54,6 @@ class StructuredFormatting {
     }
     secondaryText = json['secondary_text'];
   }
-
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   data['main_text'] = this.mainText;
-  //   if (this.mainTextMatchedSubstrings != null) {
-  //     data['main_text_matched_substrings'] =
-  //         this.mainTextMatchedSubstrings!.map((v) => v.toJson()).toList();
-  //   }
-  //   data['secondary_text'] = this.secondaryText;
-  //   return data;
-  // }
 }
 
 class Terms {
@@ -95,25 +75,6 @@ class Terms {
   }
 }
 
-// class SecondaryTextMatchedSubstrings {
-//   int? length;
-//   int? offset;
-
-//   SecondaryTextMatchedSubstrings({this.length, this.offset});
-
-//   SecondaryTextMatchedSubstrings.fromJson(Map<String, dynamic> json) {
-//     length = json['length'];
-//     offset = json['offset'];
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['length'] = this.length;
-//     data['offset'] = this.offset;
-//     return data;
-//   }
-// }
-
 class MainTextMatchedSubstrings {
   int? length;
   int? offset;
@@ -124,11 +85,4 @@ class MainTextMatchedSubstrings {
     length = json['length'];
     offset = json['offset'];
   }
-
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   data['length'] = this.length;
-  //   data['offset'] = this.offset;
-  //   return data;
-  // }
 }
