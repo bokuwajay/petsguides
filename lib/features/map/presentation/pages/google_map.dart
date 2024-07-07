@@ -8,6 +8,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
+import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';
 import 'package:petsguides/features/map/presentation/widgets/get_direction_widgets/build_get_direction_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/widgets/get_nearby_places_widgets/build_carousel_container.dart';
@@ -110,6 +111,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   //
   //
   //
+  bool showFlipCard = false;
   //
 
   late PageController _pageController;
@@ -155,18 +157,16 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   }
 
   void _onScroll() {
-    print('page controller----${_pageController.page!.toInt()}');
-    print('previusous page-------$prevPage');
-    print('phtoto gallaexy------------$photoGalleryIndex');
     if (_pageController.page!.toInt() != prevPage) {
       prevPage = _pageController.page!.toInt();
       photoGalleryIndex = 1;
       gotoTappedPlace();
       fetchImage();
     }
-    print('affter ----- page controller----${_pageController.page!.toInt()}');
-    print('affter ----- previusous page-------$prevPage');
-    print('affter ----- phtoto gallaexy------------$photoGalleryIndex');
+    if (showFlipCard) {
+      context.read<MapBloc>().add(MapEventTapOnCarouselCard(placeId: placesWithinRadius[_pageController.page!.toInt()]['place_id']));
+      moveCameraSlightly();
+    }
   }
 
   void fetchImage() async {
@@ -212,10 +212,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
       isPhotos = false;
       prevPage = 0;
       photoGalleryIndex = 0;
+      showFlipCard = false;
     });
   }
 
-  void toggleFlipCard() {
+  void toggleReviewPhoto() {
     setState(() {
       isReviews = !isReviews;
       isPhotos = !isPhotos;
@@ -260,6 +261,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                 element['business_status'] ?? 'not available');
           }
         } else if (state is MapStateTapOnCarouselCardSuccessful && state.flipCardData.isNotEmpty) {
+          showFlipCard = true;
           tappedPlaceDetail = state.flipCardData;
         }
       },
@@ -292,7 +294,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                   buildSearchResultBoard(context, showSearchResultBoard, searchedPlaces, reset),
                   buildGetDirectionTextFormField(context, state, showGetDirections, _originController, _destinationController, reset),
                   buildSlider(context, _setCircle, tappedPoint, _debounce, showSlider, radiusValue, reset),
-                  buildFlipCard(context, placeImg, tappedPlaceDetail, toggleFlipCard, isReviews, isPhotos, buildFlipCardGallery),
+                  buildFlipCard(context, placeImg, tappedPlaceDetail, toggleReviewPhoto, isReviews, isPhotos, buildFlipCardGallery, showFlipCard),
                   buildCarouselContainer(context, placesWithinRadius, _pageController, placeImg, moveCameraSlightly),
                 ])
               ],
@@ -347,7 +349,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   Future<void> gotoTappedPlace() async {
     final GoogleMapController controller = await _controller.future;
 
-    _markers = {};
+    _markers.clear();
 
     var selectedPlace = placesWithinRadius[_pageController.page!.toInt()];
 
@@ -360,7 +362,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   buildFlipCardGallery(photoElement) {
     if (photoElement == null || photoElement.length == 0) {
-      // showBlankCard = true;
       return Container(
         child: const Center(
           child: Text(

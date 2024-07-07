@@ -26,6 +26,7 @@ Widget buildCarouselContainer(BuildContext context, List placesWithinRadius, pag
 }
 
 _nearbyPlacesList(index, pageController, placesWithinRadius, placeImg, moveCameraSlightly) {
+  print('index--------$index');
   return AnimatedBuilder(
     animation: pageController,
     builder: (BuildContext context, Widget? widget) {
@@ -46,7 +47,6 @@ _nearbyPlacesList(index, pageController, placesWithinRadius, placeImg, moveCamer
       builder: (context) => InkWell(
         onTap: () {
           context.read<MapBloc>().add(MapEventTapOnCarouselCard(placeId: placesWithinRadius[index]['place_id']));
-
           moveCameraSlightly();
         },
         child: Stack(
