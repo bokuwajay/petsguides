@@ -66,13 +66,11 @@ class ApiHelper {
       case 409:
         throw DuplicatedDataException(response.data["message"].toString());
       case 422:
-        throw UnprocessableContentException(
-            response.data["message"].toString());
+        throw UnprocessableContentException(response.data["message"].toString());
       case 500:
         throw InternalServerException(response.data["message"].toString());
       default:
-        throw FetchDataException(
-            'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
+        throw FetchDataException('Error occurred while Communication with Server with StatusCode : ${response.statusCode}');
     }
   }
 }

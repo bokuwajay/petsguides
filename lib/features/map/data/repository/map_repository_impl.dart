@@ -18,9 +18,9 @@ class MapRepositoryImpl implements MapRepository {
       final result = await _mapRemoteDataSource.searchPlaces(params);
       return Right(result);
     } on ApiException {
-      return Left(MissingParamsFailure());
+      return const Left(MissingParamsFailure("in searchPlaces of MapRepositoryImpl"));
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(ServerFailure("in searchPlaces of MapRepositoryImpl"));
     }
   }
 
@@ -30,9 +30,9 @@ class MapRepositoryImpl implements MapRepository {
       final result = await _mapRemoteDataSource.selectFromSearchList(params);
       return Right(result);
     } on ApiException {
-      return Left(MissingParamsFailure());
+      return const Left(MissingParamsFailure("in selectFromSearchList of MapRepositoryImpl"));
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(ServerFailure("in selectFromSearchList of MapRepositoryImpl"));
     }
   }
 
@@ -42,9 +42,9 @@ class MapRepositoryImpl implements MapRepository {
       final result = await _mapRemoteDataSource.getDirections(params);
       return Right(result);
     } on ApiException {
-      return Left(MissingParamsFailure());
+      return const Left(MissingParamsFailure("in getDirections of MapRepositoryImpl"));
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(ServerFailure("in getDirections of MapRepositoryImpl"));
     }
   }
 
@@ -54,9 +54,9 @@ class MapRepositoryImpl implements MapRepository {
       final result = await _mapRemoteDataSource.searchInRadius(params);
       return Right(result);
     } on ApiException {
-      return Left(MissingParamsFailure());
+      return const Left(MissingParamsFailure("in searchInRadius of MapRepositoryImpl"));
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(ServerFailure("in searchInRadius of MapRepositoryImpl"));
     }
   }
 
@@ -66,9 +66,9 @@ class MapRepositoryImpl implements MapRepository {
       final result = await _mapRemoteDataSource.getMorePlacesInRadius(params);
       return Right(result);
     } on ApiException {
-      return Left(MissingParamsFailure());
+      return const Left(MissingParamsFailure("in getMorePlacesInRadius of MapRepositoryImpl"));
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(ServerFailure("in getMorePlacesInRadius of MapRepositoryImpl"));
     }
   }
 
@@ -78,9 +78,9 @@ class MapRepositoryImpl implements MapRepository {
       final result = await _mapRemoteDataSource.tapOnCarouselCard(params);
       return Right(result);
     } on ApiException {
-      return Left(MissingParamsFailure());
+      return const Left(MissingParamsFailure("in tapOnCarouselCard of MapRepositoryImpl"));
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(ServerFailure("in tapOnCarouselCard of MapRepositoryImpl"));
     }
   }
 }

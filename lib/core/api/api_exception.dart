@@ -1,54 +1,54 @@
 class ApiException implements Exception {
-  final String message;
   final String prefix;
+  final String message;
 
-  ApiException([this.message = "", this.prefix = ""]);
+  ApiException([
+    this.prefix = "",
+    this.message = "",
+  ]);
 
   @override
   String toString() {
-    return "$prefix$message";
+    return "$prefix $message";
   }
 }
 
 class FetchDataException extends ApiException {
-  FetchDataException(String message)
-      : super(message, "Error During Communication: ");
+  FetchDataException(String message) : super("Error During Communication: ", message);
 }
 
 class BadRequestException extends ApiException {
-  BadRequestException(String message) : super(message, "Invalid Request: ");
+  BadRequestException(String message) : super("Invalid Request: ", message);
 }
 
 class UnauthorizedException extends ApiException {
-  UnauthorizedException(String message) : super(message, "Unauthorized: ");
+  UnauthorizedException(String message) : super("Unauthorized: ", message);
 }
 
 class ForbiddenException extends ApiException {
-  ForbiddenException(String message) : super(message, "Forbidden: ");
+  ForbiddenException(String message) : super("Forbidden: ", message);
 }
 
 class NotFoundException extends ApiException {
-  NotFoundException(String message) : super(message, "Not Found: ");
+  NotFoundException(String message) : super("Not Found: ", message);
 }
 
 class MethodNotAllowedException extends ApiException {
-  MethodNotAllowedException(String message)
-      : super(message, "Method Not Allowed: ");
+  MethodNotAllowedException(String message) : super("Method Not Allowed: ", message);
 }
 
 class DuplicatedDataException extends ApiException {
-  DuplicatedDataException(String message) : super(message, "Duplicated Data: ");
+  DuplicatedDataException(String message) : super("Duplicated Data: ", message);
 }
 
 class InternalServerException extends ApiException {
-  InternalServerException(String message) : super(message, "Internal Server: ");
+  InternalServerException(String message) : super("Internal Server: ", message);
 }
 
 class UnprocessableContentException extends ApiException {
-  UnprocessableContentException(String message)
-      : super(message, "Unprocessable Content: ");
+  UnprocessableContentException(String message) : super("Unprocessable Content: ", message);
 }
 
 class InvalidInputException extends ApiException {
-  InvalidInputException(String message) : super(message, "Invalid Input: ");
+  InvalidInputException(String message) : super("Invalid Input: ", message);
 }

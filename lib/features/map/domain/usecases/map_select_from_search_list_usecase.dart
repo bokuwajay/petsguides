@@ -20,7 +20,7 @@ class MapSelectFromSearchListUseCase implements UseCase<Map<String, dynamic>, Pa
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) async {
     if (params.placeId.isEmpty) {
-      return Left(MissingParamsFailure());
+      return const Left(MissingParamsFailure('in call of MapSelectFromSearchListUseCase'));
     }
 
     final result = await _mapRepository.selectFromSearchList(params);

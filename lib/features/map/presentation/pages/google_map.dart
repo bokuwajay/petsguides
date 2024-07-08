@@ -254,7 +254,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         } else if (state is MapStateSelectFromSearchListSuccessful && state.selectedPlace.isNotEmpty) {
           reset();
           gotoSearchedPlace(
-              state.selectedPlace['geometry']['location']['lat'], state.selectedPlace['geometry']['location']['lng'], _controller.future, _setMarker);
+            state.selectedPlace['geometry']['location']['lat'],
+            state.selectedPlace['geometry']['location']['lng'],
+            _controller.future,
+            _setMarker,
+          );
         } else if (state is MapStateGetDirectionsSuccessful && state.getDirections.isNotEmpty) {
           reset();
           gotoOriginDestination(
@@ -273,15 +277,23 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           placesWithinRadius = state.placesInRadius['results'];
           nextPageToken = state.placesInRadius['next_page_token'] ?? 'none';
           for (var element in placesWithinRadius) {
-            _setNearMarker(LatLng(element['geometry']['location']['lat'], element['geometry']['location']['lng']), element['name'], element['types'],
-                element['business_status'] ?? 'not available');
+            _setNearMarker(
+              LatLng(element['geometry']['location']['lat'], element['geometry']['location']['lng']),
+              element['name'],
+              element['types'],
+              element['business_status'] ?? 'not available',
+            );
           }
         } else if (state is MapStateGetMorePlacesInRadiusSuccessful && state.morePlacesInRadius.isNotEmpty) {
           placesWithinRadius.addAll(state.morePlacesInRadius['results']);
           nextPageToken = state.morePlacesInRadius['next_page_token'] ?? 'none';
           for (var element in placesWithinRadius) {
-            _setNearMarker(LatLng(element['geometry']['location']['lat'], element['geometry']['location']['lng']), element['name'], element['types'],
-                element['business_status'] ?? 'not available');
+            _setNearMarker(
+              LatLng(element['geometry']['location']['lat'], element['geometry']['location']['lng']),
+              element['name'],
+              element['types'],
+              element['business_status'] ?? 'not available',
+            );
           }
         } else if (state is MapStateTapOnCarouselCardSuccessful && state.flipCardData.isNotEmpty) {
           showFlipCard = true;
@@ -377,14 +389,17 @@ class _GoogleMapViewState extends State<GoogleMapView> {
         children: [
           const SizedBox(height: 10.0),
           Container(
-              height: 200.0,
-              width: 200.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          'https://maps.googleapis.com/maps/api/place/photo?maxwidth=$maxWidth&maxheight=$maxHeight&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'),
-                      fit: BoxFit.cover))),
+            height: 200.0,
+            width: 200.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              image: DecorationImage(
+                image: NetworkImage(
+                    'https://maps.googleapis.com/maps/api/place/photo?maxwidth=$maxWidth&maxheight=$maxHeight&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
           const SizedBox(height: 10.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

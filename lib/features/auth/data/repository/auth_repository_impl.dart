@@ -35,11 +35,11 @@ class AuthRepositoryImpl implements AuthRepository {
         );
         return Right(result);
       }
-      return Left(CredentialFailure());
+      return const Left(CredentialFailure('in authenticate of AuthRepositoryImpl'));
     } on ApiException {
-      return Left(CredentialFailure());
+      return const Left(CredentialFailure('in authenticate of AuthRepositoryImpl'));
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(ServerFailure('in authenticate of AuthRepositoryImpl'));
     }
   }
 
@@ -49,7 +49,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final result = await _authLocalDataSource.checkSignInStatus();
       return Right(result);
     } on CacheException {
-      return Left(CacheFailure());
+      return const Left(CacheFailure('in checkSignInStatus of AuthRepositoryImpl'));
     }
   }
 
@@ -63,7 +63,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       return const Right(true);
     } on CacheException {
-      return Left(CacheFailure());
+      return const Left(CacheFailure('in firstLaunch of AuthRepositoryImpl'));
     }
   }
 
@@ -73,7 +73,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final result = await _authLocalDataSource.checkFirstLaunch();
       return Right(result);
     } on CacheException {
-      return Left(CacheFailure());
+      return const Left(CacheFailure('in checkFirstLaunch of AuthRepositoryImpl'));
     }
   }
 }

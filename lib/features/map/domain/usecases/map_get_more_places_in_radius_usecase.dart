@@ -21,7 +21,7 @@ class MapGetMorePlacesInRadiusUseCase implements UseCase<Map<String, dynamic>, P
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) async {
     if (params.nextPageToken.isEmpty) {
-      return Left(MissingParamsFailure());
+      return const Left(MissingParamsFailure('in call of MapGetMorePlacesInRadiusUseCase'));
     }
 
     final result = await _mapRepository.getMorePlacesInRadius(params);

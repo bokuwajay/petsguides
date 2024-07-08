@@ -22,7 +22,7 @@ class MapSearchInRadiusUseCase implements UseCase<Map<String, dynamic>, Params> 
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) async {
     if (params.props.isEmpty) {
-      return Left(MissingParamsFailure());
+      return const Left(MissingParamsFailure('in call of MapSearchInRadiusUseCase'));
     }
     final result = await _mapRepository.searchInRadius(params);
     return result;
