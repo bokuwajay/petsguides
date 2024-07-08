@@ -193,7 +193,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   void reset() {
     setState(() {
-      // clear searh places
+      // clear search places
       showSearchPlacesTextFormField = false;
       showSearchResultBoard = false;
       _searchController.clear();

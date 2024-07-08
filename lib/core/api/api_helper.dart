@@ -23,6 +23,7 @@ class ApiHelper {
       Response? response;
       switch (method) {
         case Method.get:
+          // Each request will first go into ApiInterceptor onRequest and onError, then go below
           response = await _dio.get(endpoint);
           break;
         case Method.post:

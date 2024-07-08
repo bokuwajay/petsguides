@@ -27,19 +27,16 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
     try {
       final response = await apiHelper.execute(
         method: Method.get,
-        baseUrl: dotenv.env['googleMapBaseUrl'],
-        endpoint: '/place/autocomplete/json?input=${params.searchInput}&types=$types&key=${dotenv.env['googleMapKey']}',
+        baseUrl: dotenv.env['googleMapBaseUri'],
+        endpoint: '/place/autocomplete/json?input=${params.searchInput}&type=$types&key=${dotenv.env['googleMapKey']}',
       );
 
       var result = response['predictions'] as List;
 
       return result.map((e) => AutoCompleteModel.fromJson(e)).toList();
     } catch (exception) {
-      logger.e(exception);
-      if (exception.toString() == noElement) {
-        throw AuthException();
-      }
-      throw ServerException();
+      logger.e('Catch server exception in searchPlaces of MapRemoteDataSourceImpl: $exception');
+      throw exception;
     }
   }
 
