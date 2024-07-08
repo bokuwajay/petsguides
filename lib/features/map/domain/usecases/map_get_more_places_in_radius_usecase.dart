@@ -1,30 +1,30 @@
 import 'package:equatable/equatable.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/core/error/failures.dart';
 import 'package:petsguides/core/usecases/usecase.dart';
 import 'package:petsguides/features/map/domain/repository/map_repository.dart';
 
 class Params extends Equatable {
-  final LatLng tappedPoint;
-  final int radius;
+  final String nextPageToken;
 
-  const Params({required this.tappedPoint, required this.radius});
+  const Params({required this.nextPageToken});
 
   @override
-  List<Object?> get props => [tappedPoint, tappedPoint];
+  List<Object?> get props => [nextPageToken];
 }
 
-class MapSearchInRadiusUseCase implements UseCase<Map<String, dynamic>, Params> {
+class MapGetMorePlacesInRadiusUseCase implements UseCase<Map<String, dynamic>, Params> {
   final MapRepository _mapRepository;
-  MapSearchInRadiusUseCase(this._mapRepository);
+
+  MapGetMorePlacesInRadiusUseCase(this._mapRepository);
 
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) async {
-    if (params.props.isEmpty) {
+    if (params.nextPageToken.isEmpty) {
       return Left(MissingParamsFailure());
     }
-    final result = await _mapRepository.searchInRadius(params);
+
+    final result = await _mapRepository.getMorePlacesInRadius(params);
     return result;
   }
 }

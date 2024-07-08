@@ -22,21 +22,14 @@ class AuthDependency {
         ));
 
     sl.registerLazySingleton(() => AuthUseCase(sl<AuthRepositoryImpl>()));
-    sl.registerLazySingleton(
-        () => AuthCheckSignInStatusUseCase(sl<AuthRepositoryImpl>()));
+    sl.registerLazySingleton(() => AuthCheckSignInStatusUseCase(sl<AuthRepositoryImpl>()));
 
-    sl.registerLazySingleton(
-        () => AuthFirstLaunchUseCase(sl<AuthRepositoryImpl>()));
-    sl.registerLazySingleton(
-        () => AuthCheckFirstLaunchUseCase(sl<AuthRepositoryImpl>()));
+    sl.registerLazySingleton(() => AuthFirstLaunchUseCase(sl<AuthRepositoryImpl>()));
+    sl.registerLazySingleton(() => AuthCheckFirstLaunchUseCase(sl<AuthRepositoryImpl>()));
 
-    sl.registerLazySingleton(() => AuthRepositoryImpl(
-        sl<AuthRemoteDataSourceImpl>(),
-        sl<AuthLocalDataSourceImpl>(),
-        sl<HiveLocalStorage>()));
+    sl.registerLazySingleton(() => AuthRepositoryImpl(sl<AuthRemoteDataSourceImpl>(), sl<AuthLocalDataSourceImpl>(), sl<HiveLocalStorage>()));
 
     sl.registerLazySingleton(() => AuthRemoteDataSourceImpl(sl<ApiHelper>()));
-    sl.registerLazySingleton(
-        () => AuthLocalDataSourceImpl(sl<HiveLocalStorage>()));
+    sl.registerLazySingleton(() => AuthLocalDataSourceImpl(sl<HiveLocalStorage>()));
   }
 }

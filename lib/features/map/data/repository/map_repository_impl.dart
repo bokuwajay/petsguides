@@ -13,8 +13,7 @@ class MapRepositoryImpl implements MapRepository {
   MapRepositoryImpl(this._mapRemoteDataSource);
 
   @override
-  Future<Either<Failure, List<AutoCompleteEntity>>> searchPlaces(
-      SearchPlacesParams params) async {
+  Future<Either<Failure, List<AutoCompleteEntity>>> searchPlaces(SearchPlacesParams params) async {
     try {
       final result = await _mapRemoteDataSource.searchPlaces(params);
       return Right(result);
@@ -26,8 +25,7 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> selectFromSearchList(
-      SelectFromSearchListParams params) async {
+  Future<Either<Failure, Map<String, dynamic>>> selectFromSearchList(SelectFromSearchListParams params) async {
     try {
       final result = await _mapRemoteDataSource.selectFromSearchList(params);
       return Right(result);
@@ -39,8 +37,7 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> getDirections(
-      GetDirectionsParams params) async {
+  Future<Either<Failure, Map<String, dynamic>>> getDirections(GetDirectionsParams params) async {
     try {
       final result = await _mapRemoteDataSource.getDirections(params);
       return Right(result);
@@ -52,8 +49,7 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> searchInRadius(
-      SearchInRadiusParams params) async {
+  Future<Either<Failure, Map<String, dynamic>>> searchInRadius(SearchInRadiusParams params) async {
     try {
       final result = await _mapRemoteDataSource.searchInRadius(params);
       return Right(result);
@@ -65,8 +61,19 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> tapOnCarouselCard(
-      TapOnCarouselCardParams params) async {
+  Future<Either<Failure, Map<String, dynamic>>> getMorePlacesInRadius(GetMorePlacesInRadiusParams params) async {
+    try {
+      final result = await _mapRemoteDataSource.getMorePlacesInRadius(params);
+      return Right(result);
+    } on ApiException {
+      return Left(MissingParamsFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> tapOnCarouselCard(TapOnCarouselCardParams params) async {
     try {
       final result = await _mapRemoteDataSource.tapOnCarouselCard(params);
       return Right(result);
@@ -76,47 +83,4 @@ class MapRepositoryImpl implements MapRepository {
       return Left(ServerFailure());
     }
   }
-
-  // @override
-  // Future<Map<String, dynamic>> getPlace({required String placeId}) async {
-  //   try {
-  //     final httpResponse = await _mapService.getPlace(placeId);
-  //     return httpResponse;
-  //   } on Exception {
-  //     throw Exception().toString();
-  //   }
-  // }
-
-  // @override
-  // Future<Map<String, dynamic>> getDirections(
-  //     {required String origin, required String destination}) async {
-  //   try {
-  //     final httpResponse = await _mapService.getDirections(origin, destination);
-  //     return httpResponse;
-  //   } on Exception {
-  //     throw Exception().toString();
-  //   }
-  // }
-
-  // @override
-  // Future<Map<String, dynamic>> getPlaceDetails(
-  //     {required double lat, required double lng, required int radius}) async {
-  //   try {
-  //     final httpResponse = await _mapService.getPlaceDetails(lat, lng, radius);
-  //     return httpResponse;
-  //   } on Exception {
-  //     throw Exception().toString();
-  //   }
-  // }
-
-  // @override
-  // Future<Map<String, dynamic>> getMorePlaceDetails(
-  //     {required String tokenKey}) async {
-  //   try {
-  //     final httpResponse = await _mapService.getMorePlaceDetails(tokenKey);
-  //     return httpResponse;
-  //   } on Exception {
-  //     throw Exception().toString();
-  //   }
-  // }
 }

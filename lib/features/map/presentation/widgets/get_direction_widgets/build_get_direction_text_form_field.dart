@@ -11,7 +11,7 @@ Widget buildGetDirectionTextFormField(
   bool showGetDirection,
   TextEditingController _originController,
   TextEditingController _destinationController,
-  resetLocalVariables,
+  reset,
 ) {
   if (!showGetDirection) {
     return Container();
@@ -23,24 +23,18 @@ Widget buildGetDirectionTextFormField(
       children: [
         Container(
           height: 50.0,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0), color: Colors.white),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.white),
           child: buildTextFormField(
-              controller: _originController,
-              hintText: 'Origin',
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0)),
+              controller: _originController, hintText: 'Origin', contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0)),
         ),
         const SizedBox(height: 3.0),
         Container(
             height: 50.0,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0), color: Colors.white),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.white),
             child: buildTextFormField(
               controller: _destinationController,
               hintText: 'Destination',
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
               suffixIcon: SizedBox(
                 width: 96.0,
                 child: Row(
@@ -48,26 +42,14 @@ Widget buildGetDirectionTextFormField(
                     IconButton(
                       onPressed: () async {
                         context.read<MapBloc>().add(
-                              MapEventGetDirections(
-                                  origin: _originController.text,
-                                  destination: _destinationController.text),
+                              MapEventGetDirections(origin: _originController.text, destination: _destinationController.text),
                             );
-
-                        // _markers = {};
-                        // _polylines = {};
                       },
                       icon: const Icon(Icons.search),
                     ),
                     IconButton(
                       onPressed: () {
-                        resetLocalVariables();
-                        // setState(() {
-                        // getDirections = false;
-                        // _originController.text = '';
-                        // _destinationController.text = '';
-                        //   _markers = {};
-                        //   _polylines = {};
-                        // });
+                        reset();
                       },
                       icon: const Icon(Icons.close),
                     )

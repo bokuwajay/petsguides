@@ -9,12 +9,11 @@ import 'package:petsguides/features/map/domain/usecases/usecase_params.dart';
 
 sealed class MapRemoteDataSource {
   Future<List<AutoCompleteModel>> searchPlaces(SearchPlacesParams params);
-  Future<Map<String, dynamic>> selectFromSearchList(
-      SelectFromSearchListParams params);
+  Future<Map<String, dynamic>> selectFromSearchList(SelectFromSearchListParams params);
   Future<Map<String, dynamic>> getDirections(GetDirectionsParams params);
   Future<Map<String, dynamic>> searchInRadius(SearchInRadiusParams params);
-  Future<Map<String, dynamic>> tapOnCarouselCard(
-      TapOnCarouselCardParams params);
+  Future<Map<String, dynamic>> getMorePlacesInRadius(GetMorePlacesInRadiusParams params);
+  Future<Map<String, dynamic>> tapOnCarouselCard(TapOnCarouselCardParams params);
 }
 
 class MapRemoteDataSourceImpl implements MapRemoteDataSource {
@@ -24,14 +23,12 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
   final String types = 'geocode';
 
   @override
-  Future<List<AutoCompleteModel>> searchPlaces(
-      SearchPlacesParams params) async {
+  Future<List<AutoCompleteModel>> searchPlaces(SearchPlacesParams params) async {
     try {
       final response = await apiHelper.execute(
         method: Method.get,
         baseUrl: dotenv.env['googleMapBaseUrl'],
-        endpoint:
-            '/place/autocomplete/json?input=${params.searchInput}&types=$types&key=${dotenv.env['googleMapKey']}',
+        endpoint: '/place/autocomplete/json?input=${params.searchInput}&types=$types&key=${dotenv.env['googleMapKey']}',
       );
 
       var result = response['predictions'] as List;
@@ -47,14 +44,12 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>> selectFromSearchList(
-      SelectFromSearchListParams params) async {
+  Future<Map<String, dynamic>> selectFromSearchList(SelectFromSearchListParams params) async {
     try {
       final response = await apiHelper.execute(
         method: Method.get,
         baseUrl: dotenv.env['googleMapBaseUrl'],
-        endpoint:
-            '/place/details/json?place_id=${params.placeId}&key=${dotenv.env['googleMapKey']}',
+        endpoint: '/place/details/json?place_id=${params.placeId}&key=${dotenv.env['googleMapKey']}',
       );
       var result = response['result'] as Map<String, dynamic>;
 
@@ -74,8 +69,7 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       final response = await apiHelper.execute(
         method: Method.get,
         baseUrl: dotenv.env['googleMapBaseUrl'],
-        endpoint:
-            '/directions/json?origin=${params.origin}&destination=${params.destination}&key=${dotenv.env['googleMapKey']}',
+        endpoint: '/directions/json?origin=${params.origin}&destination=${params.destination}&key=${dotenv.env['googleMapKey']}',
       );
       var result = {
         'bounds_ne': response['routes'][0]['bounds']['northeast'],
@@ -83,8 +77,7 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
         'start_location': response['routes'][0]['legs'][0]['start_location'],
         'end_location': response['routes'][0]['legs'][0]['end_location'],
         'polyline': response['routes'][0]['overview_polyline']['points'],
-        'polyline_decoded': PolylinePoints().decodePolyline(
-            response['routes'][0]['overview_polyline']['points'])
+        'polyline_decoded': PolylinePoints().decodePolyline(response['routes'][0]['overview_polyline']['points'])
       };
 
       return result;
@@ -98,14 +91,31 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>> searchInRadius(
-      SearchInRadiusParams params) async {
+  Future<Map<String, dynamic>> searchInRadius(SearchInRadiusParams params) async {
     try {
       final result = await apiHelper.execute(
         method: Method.get,
         baseUrl: dotenv.env['googleMapBaseUrl'],
         endpoint:
             '/place/nearbysearch/json?&location=${params.tappedPoint.latitude},${params.tappedPoint.longitude}&radius=${params.radius}&key=${dotenv.env['googleMapKey']}',
+      );
+      return result;
+    } catch (exception) {
+      logger.e(exception);
+      if (exception.toString() == noElement) {
+        throw AuthException();
+      }
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getMorePlacesInRadius(GetMorePlacesInRadiusParams params) async {
+    try {
+      final result = await apiHelper.execute(
+        method: Method.get,
+        baseUrl: dotenv.env['googleMapBaseUrl'],
+        endpoint: '/place/nearbysearch/json?&pagetoken=${params.nextPageToken}&key=${dotenv.env['googleMapKey']}',
       );
 
       return result;
@@ -119,14 +129,12 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>> tapOnCarouselCard(
-      TapOnCarouselCardParams params) async {
+  Future<Map<String, dynamic>> tapOnCarouselCard(TapOnCarouselCardParams params) async {
     try {
       final response = await apiHelper.execute(
         method: Method.get,
         baseUrl: dotenv.env['googleMapBaseUrl'],
-        endpoint:
-            '/place/details/json?place_id=${params.placeId}&key=${dotenv.env['googleMapKey']}',
+        endpoint: '/place/details/json?place_id=${params.placeId}&key=${dotenv.env['googleMapKey']}',
       );
       var result = response['result'] as Map<String, dynamic>;
 

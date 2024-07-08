@@ -30,9 +30,7 @@ class AppRouteConfig {
                 if (state.signIn) {
                   router.goNamed(AppRoute.map.name);
                 } else {
-                  context
-                      .read<AuthBloc>()
-                      .add(const AuthEventCheckFirstLaunch());
+                  context.read<AuthBloc>().add(const AuthEventCheckFirstLaunch());
                 }
               } else if (state is AuthStateCheckFirstLaunchSuccessful) {
                 if (state.isFirstLaunch) {

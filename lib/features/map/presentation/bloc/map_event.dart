@@ -4,11 +4,6 @@ abstract class MapEvent {
   const MapEvent();
 }
 
-// Reset event
-class MapEventReset extends MapEvent {
-  const MapEventReset();
-}
-
 // search place
 class MapEventSearchPlaces extends MapEvent {
   final String searchInput;
@@ -37,6 +32,13 @@ class MapEventSearchInRadius extends MapEvent {
   final int radius;
 
   MapEventSearchInRadius({required this.tappedPoint, required this.radius});
+}
+
+// get more places in radius
+class MapEventGetMorePlacesInRadius extends MapEvent {
+  final String nextPageToken;
+
+  const MapEventGetMorePlacesInRadius({required this.nextPageToken});
 }
 
 // tap on carousel card

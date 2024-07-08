@@ -2,11 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 
-Widget buildSlider(BuildContext context, Set<Circle> circles, _setCircle, tappedPoint, Timer? debounce, showSlider, radiusValue, resetLocalVariables) {
+Widget buildSlider(
+  BuildContext context,
+  setCircle,
+  tappedPoint,
+  Timer? debounce,
+  bool showSlider,
+  String nextPageToken,
+  bool getMorePlaces,
+  radiusValue,
+  reset,
+) {
   if (!showSlider) {
     return Container();
   }
@@ -24,37 +33,35 @@ Widget buildSlider(BuildContext context, Set<Circle> circles, _setCircle, tapped
             min: 1000.0,
             value: radiusValue,
             onChanged: (newVal) {
-              _setCircle(tappedPoint, newVal);
+              setCircle(tappedPoint, newVal);
             },
           )),
+          getMorePlaces
+              ? IconButton(
+                  onPressed: () {
+                    if (debounce?.isActive ?? false) {
+                      debounce?.cancel();
+                    }
+                    debounce = Timer(const Duration(seconds: 2), () async {
+                      context.read<MapBloc>().add(MapEventGetMorePlacesInRadius(nextPageToken: nextPageToken));
+                    });
+                  },
+                  icon: const Icon(Icons.more_time))
+              : IconButton(
+                  onPressed: () {
+                    if (debounce?.isActive ?? false) {
+                      debounce?.cancel();
+                    }
+                    debounce = Timer(const Duration(seconds: 2), () async {
+                      context.read<MapBloc>().add(MapEventSearchInRadius(tappedPoint: tappedPoint, radius: radiusValue.toInt()));
+                    });
+                  },
+                  icon: const Icon(Icons.near_me)),
           IconButton(
               onPressed: () {
-                if (debounce?.isActive ?? false) {
-                  debounce?.cancel();
-                }
-                debounce = Timer(const Duration(seconds: 2), () async {
-                  context.read<MapBloc>().add(MapEventSearchInRadius(tappedPoint: tappedPoint, radius: radiusValue.toInt()));
-                });
+                reset();
               },
-              icon: const Icon(Icons.near_me)),
-          IconButton(
-              onPressed: () {
-                resetLocalVariables();
-                // circles.clear();
-                // setState(() {
-                // radiusSlider = false;
-                // pressedNear = false;
-                // cardTapped = false;
-                // radiusValue = 3000.0;
-                // _circles = {};
-                // _markers = {};
-                // allFavoritePlaces = [];
-                // });
-              },
-              icon: const Icon(
-                Icons.close,
-                color: Colors.red,
-              ))
+              icon: const Icon(Icons.close, color: Colors.red))
         ],
       ),
     ),
