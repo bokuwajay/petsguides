@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:petsguides/core/api/api_exception.dart';
 import 'package:petsguides/core/api/api_helper.dart';
 import 'package:petsguides/core/constants/error_message.dart';
 import 'package:petsguides/core/error/exceptions.dart';
@@ -34,9 +35,9 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       var result = response['predictions'] as List;
 
       return result.map((e) => AutoCompleteModel.fromJson(e)).toList();
-    } catch (exception) {
-      logger.e('Catch server exception in searchPlaces of MapRemoteDataSourceImpl: $exception');
-      throw exception;
+    } on Exception catch (exception) {
+      logger.e('Logger in searchPlaces of MapRemoteDataSourceImpl\nrethrow: $exception');
+      rethrow;
     }
   }
 
