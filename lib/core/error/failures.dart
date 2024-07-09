@@ -69,21 +69,12 @@ class InternalServeFailure extends Failure {
   const InternalServeFailure({String suffix = ''}) : super("Internal Server Failure: $suffix");
 }
 
+class CacheFailure extends Failure {
+  const CacheFailure({String suffix = ''}) : super("Cache Failure: $suffix");
+}
+
 class UnknownFailure extends Failure {
   const UnknownFailure({String suffix = ''}) : super("Unknown Failure: $suffix");
-}
-
-////
-class ServerFailure extends Failure {
-  const ServerFailure(super.suffix);
-}
-
-class CacheFailure extends Failure {
-  const CacheFailure(super.suffix);
-}
-
-class CredentialFailure extends Failure {
-  const CredentialFailure(super.suffix);
 }
 
 class MissingParamsFailure extends Failure {

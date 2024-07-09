@@ -41,11 +41,8 @@ class UnprocessableContentException implements Exception {}
 // StatusCode 500 (500 or higher imply a Bad response from the server), throw this
 class InternalServerException implements Exception {}
 
-/////
-class ServerException implements Exception {}
-
+// Other feature related customized exception
+// hive_local_storage and secure_local_storage
 class CacheException implements Exception {}
-
-class AuthException implements Exception {}
 
 class EmptyException implements Exception {}

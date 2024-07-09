@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:fpdart/fpdart.dart';
 import 'package:petsguides/core/cache/hive_local_storage.dart';
 import 'package:petsguides/core/error/exceptions.dart';
 import 'package:petsguides/core/error/failures.dart';
+import 'package:petsguides/core/util/exception_converter.dart';
 import 'package:petsguides/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:petsguides/features/auth/data/datasources/auth_remote_datasource.dart';
 
@@ -26,24 +25,12 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, AuthEntity>> authenticate(LoginParams params) async {
     try {
       final result = await _authRemoteDataSource.authenticate(params);
-      if (result.statusCode == HttpStatus.ok) {
-        await _hiveLocalStorage.save(
-          key: 'pgToken',
-          value: result.data,
-          boxName: 'cache',
-        );
-        return Right(result);
-      }
-      return const Left(CredentialFailure('in authenticate of AuthRepositoryImpl'));
-    } on Exception catch (exception) {
-      throw exception;
+      await _hiveLocalStorage.save(key: 'pgToken', value: result.data, boxName: 'cache');
+      return Right(result);
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in authenticate of AuthRepositoryImpl');
+      return Left(failure);
     }
-
-    // on ApiException {
-    //   return const Left(CredentialFailure('in authenticate of AuthRepositoryImpl'));
-    // } on ServerException {
-    //   return const Left(ServerFailure('in authenticate of AuthRepositoryImpl'));
-    // }
   }
 
   @override
@@ -51,8 +38,9 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final result = await _authLocalDataSource.checkSignInStatus();
       return Right(result);
-    } on CacheException {
-      return const Left(CacheFailure('in checkSignInStatus of AuthRepositoryImpl'));
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in checkSignInStatus of AuthRepositoryImpl');
+      return Left(failure);
     }
   }
 

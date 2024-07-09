@@ -35,6 +35,8 @@ Failure exceptionConverter(Object exception, String suffix) {
       return UnprocessableContentFailure(suffix: suffix);
     case InternalServerException:
       return InternalServeFailure(suffix: suffix);
+    case CacheException:
+      return CacheFailure(suffix: suffix);
     default:
       return UnknownFailure(suffix: suffix);
   }

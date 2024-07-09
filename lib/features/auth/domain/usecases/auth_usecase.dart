@@ -5,20 +5,6 @@ import 'package:petsguides/core/usecases/usecase.dart';
 import 'package:petsguides/features/auth/domain/entities/auth_entity.dart';
 import 'package:petsguides/features/auth/domain/repository/auth_repository.dart';
 
-class AuthUseCase implements UseCase<AuthEntity, Params> {
-  final AuthRepository _authRepository;
-  AuthUseCase(this._authRepository);
-
-  @override
-  Future<Either<Failure, AuthEntity>> call(Params params) async {
-    if (params.email.isEmpty || params.password.isEmpty) {
-      return const Left(MissingParamsFailure('in call of AuthUseCase'));
-    }
-    final result = await _authRepository.authenticate(params);
-    return result;
-  }
-}
-
 class Params extends Equatable {
   final String email;
   final String password;
@@ -32,4 +18,18 @@ class Params extends Equatable {
         email,
         password,
       ];
+}
+
+class AuthUseCase implements UseCase<AuthEntity, Params> {
+  final AuthRepository _authRepository;
+  AuthUseCase(this._authRepository);
+
+  @override
+  Future<Either<Failure, AuthEntity>> call(Params params) async {
+    if (params.email.isEmpty || params.password.isEmpty) {
+      return const Left(MissingParamsFailure('in call of AuthUseCase'));
+    }
+    final result = await _authRepository.authenticate(params);
+    return result;
+  }
 }

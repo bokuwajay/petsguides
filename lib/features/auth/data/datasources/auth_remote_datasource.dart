@@ -1,6 +1,4 @@
 import 'package:petsguides/core/api/api_helper.dart';
-import 'package:petsguides/core/constants/error_message.dart';
-import 'package:petsguides/core/error/exceptions.dart';
 import 'package:petsguides/core/util/logger.dart';
 import 'package:petsguides/features/auth/data/models/auth_model.dart';
 import 'package:petsguides/features/auth/domain/usecases/usecase_params.dart';
@@ -26,12 +24,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
       return AuthModel.fromJson(result);
-    } catch (exception) {
-      logger.e(exception);
-      if (exception.toString() == noElement) {
-        throw AuthException();
-      }
-      throw ServerException();
+    } on Exception catch (exception) {
+      logger.e('Logger in authenticate of AuthRemoteDataSourceImpl\nrethrow: $exception');
+      rethrow;
     }
   }
 }

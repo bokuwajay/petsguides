@@ -34,12 +34,8 @@ String failureConverter(Failure failure) {
       return failure.message;
     case InternalServeFailure:
       return failure.message;
-    case ServerFailure:
-      return 'Server Failure ';
     case CacheFailure:
-      return 'Cache Failure ';
-    case CredentialFailure:
-      return 'Wrong Email or Password ';
+      return failure.message;
     case MissingParamsFailure:
       return 'Missing params ';
     default:

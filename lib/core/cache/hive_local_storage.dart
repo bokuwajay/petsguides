@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:petsguides/core/cache/local_storage.dart';
+import 'package:petsguides/core/error/exceptions.dart';
+import 'package:petsguides/core/util/logger.dart';
 
 class HiveLocalStorage implements LocalStorage {
   @override
@@ -9,8 +11,9 @@ class HiveLocalStorage implements LocalStorage {
     try {
       final result = await box.get(key);
       return result;
-    } catch (_) {
-      rethrow;
+    } catch (exception) {
+      logger.e('Logger in load of Hive Local Storage:\nException: $exception\nBox Name: $boxName\nKey: $key');
+      throw CacheException;
     } finally {
       box.close();
     }
@@ -26,10 +29,10 @@ class HiveLocalStorage implements LocalStorage {
     final box = Hive.box(boxName);
     try {
       await box.put(key, value);
-
       return;
-    } catch (_) {
-      rethrow;
+    } catch (exception) {
+      logger.e('Logger in save of Hive Local Storage:\nException: $exception\nBox Name: $boxName\nKey: $key\nValue: $value');
+      throw CacheException;
     } finally {
       box.close();
     }
@@ -42,8 +45,9 @@ class HiveLocalStorage implements LocalStorage {
     try {
       await box.delete(key);
       return;
-    } catch (_) {
-      rethrow;
+    } catch (exception) {
+      logger.e('Logger in delete of Hive Local Storage:\nException: $exception\nBox Name: $boxName\nKey: $key');
+      throw CacheException;
     } finally {
       box.close();
     }

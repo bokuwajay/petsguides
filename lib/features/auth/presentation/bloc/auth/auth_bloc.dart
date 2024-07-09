@@ -16,14 +16,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthFirstLaunchUseCase _authFirstLaunchUseCase;
   final AuthCheckFirstLaunchUseCase _authCheckFirstLaunchUseCase;
 
-  AuthBloc(this._authUseCase, this._authCheckSignInStatusUseCase,
-      this._authFirstLaunchUseCase, this._authCheckFirstLaunchUseCase)
-      : super(AuthStateInitial()) {
+  AuthBloc(
+    this._authUseCase,
+    this._authCheckSignInStatusUseCase,
+    this._authFirstLaunchUseCase,
+    this._authCheckFirstLaunchUseCase,
+  ) : super(AuthStateInitial()) {
     // login
     on<AuthEventLogIn>((event, emit) async {
       emit(AuthStateLoading());
-      final result = await _authUseCase
-          .call(LoginParams(email: event.email, password: event.password));
+      final result = await _authUseCase.call(LoginParams(email: event.email, password: event.password));
       result.fold(
         (l) => emit(AuthStateLoginFailed(failureConverter(l))),
         (r) => emit(AuthStateLoginSuccessful(r)),
@@ -35,8 +37,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthStateLoading());
         final result = await _authCheckSignInStatusUseCase.call(NoParams());
         result.fold(
-            (l) => emit(AuthStateCheckSignInStatusFailed(failureConverter(l))),
-            (r) => emit(AuthStateCheckSignInStatusSuccessful(r)));
+          (l) => emit(AuthStateCheckSignInStatusFailed(failureConverter(l))),
+          (r) => emit(AuthStateCheckSignInStatusSuccessful(r)),
+        );
       },
     );
     // first time launch
@@ -44,9 +47,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (event, emit) async {
         emit(AuthStateLoading());
         final result = await _authFirstLaunchUseCase.call(NoParams());
-        result.fold(
-            (l) => emit(AuthStateFirstLaunchFailed(failureConverter(l))),
-            (r) => emit(AuthStateFirstLaunchSuccessful()));
+        result.fold((l) => emit(AuthStateFirstLaunchFailed(failureConverter(l))), (r) => emit(AuthStateFirstLaunchSuccessful()));
       },
     );
 
@@ -55,9 +56,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (event, emit) async {
         emit(AuthStateLoading());
         final result = await _authCheckFirstLaunchUseCase.call(NoParams());
-        result.fold(
-            (l) => emit(AuthStateCheckFirstLaunchFailed(failureConverter(l))),
-            (r) => emit(AuthStateCheckFirstLaunchSuccessful(r)));
+        result.fold((l) => emit(AuthStateCheckFirstLaunchFailed(failureConverter(l))), (r) => emit(AuthStateCheckFirstLaunchSuccessful(r)));
       },
     );
   }
