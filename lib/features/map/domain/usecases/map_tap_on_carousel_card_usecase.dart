@@ -20,7 +20,8 @@ class MapTapOnCarouselCardUseCase implements UseCase<Map<String, dynamic>, Param
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) async {
     if (params.placeId.isEmpty) {
-      return const Left(MissingParamsFailure('in call of MapTapOnCarouselCardUseCase'));
+      Failure failure = const MissingParamsFailure(suffix: 'in call of MapTapOnCarouselCardUseCase');
+      return Left(failure);
     }
     final result = await _mapRepository.tapOnCarouselCard(params);
     return result;

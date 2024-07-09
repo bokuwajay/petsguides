@@ -1,6 +1,5 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:petsguides/core/cache/hive_local_storage.dart';
-import 'package:petsguides/core/error/exceptions.dart';
 import 'package:petsguides/core/error/failures.dart';
 import 'package:petsguides/core/util/exception_converter.dart';
 import 'package:petsguides/features/auth/data/datasources/auth_local_datasource.dart';
@@ -45,26 +44,24 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> firstLaunch() async {
-    try {
-      await _hiveLocalStorage.save(
-        key: 'FIRST_LAUNCH',
-        value: 'pets_guides',
-        boxName: 'cache',
-      );
-      return const Right(true);
-    } on CacheException {
-      return const Left(CacheFailure('in firstLaunch of AuthRepositoryImpl'));
-    }
-  }
-
-  @override
   Future<Either<Failure, bool>> checkFirstLaunch() async {
     try {
       final result = await _authLocalDataSource.checkFirstLaunch();
       return Right(result);
-    } on CacheException {
-      return const Left(CacheFailure('in checkFirstLaunch of AuthRepositoryImpl'));
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in checkFirstLaunch of AuthRepositoryImpl');
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> firstLaunch() async {
+    try {
+      final result = await _authLocalDataSource.firstLaunch();
+      return Right(result);
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in firstLaunch of AuthRepositoryImpl');
+      return Left(failure);
     }
   }
 }

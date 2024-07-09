@@ -27,7 +27,8 @@ class AuthUseCase implements UseCase<AuthEntity, Params> {
   @override
   Future<Either<Failure, AuthEntity>> call(Params params) async {
     if (params.email.isEmpty || params.password.isEmpty) {
-      return const Left(MissingParamsFailure('in call of AuthUseCase'));
+      Failure failure = const MissingParamsFailure(suffix: 'in call of AuthUseCase');
+      return Left(failure);
     }
     final result = await _authRepository.authenticate(params);
     return result;

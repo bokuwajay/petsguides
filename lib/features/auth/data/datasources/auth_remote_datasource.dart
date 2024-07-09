@@ -24,7 +24,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
       return AuthModel.fromJson(result);
-    } on Exception catch (exception) {
+    } catch (exception) {
       logger.e('Logger in authenticate of AuthRemoteDataSourceImpl\nrethrow: $exception');
       rethrow;
     }

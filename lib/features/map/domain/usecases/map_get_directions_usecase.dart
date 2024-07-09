@@ -21,9 +21,9 @@ class MapGetDirectionsUseCase implements UseCase<Map<String, dynamic>, Params> {
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) async {
     if (params.origin.isEmpty || params.destination.isEmpty) {
-      return const Left(MissingParamsFailure('in call of MapGetDirectionsUseCase'));
+      Failure failure = const MissingParamsFailure(suffix: 'in call of MapGetDirectionsUseCase');
+      return Left(failure);
     }
-
     final result = await _mapRepository.getDirections(params);
     return result;
   }

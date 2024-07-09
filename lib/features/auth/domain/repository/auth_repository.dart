@@ -6,6 +6,6 @@ import 'package:petsguides/features/auth/domain/usecases/usecase_params.dart';
 abstract class AuthRepository {
   Future<Either<Failure, AuthEntity>> authenticate(LoginParams params);
   Future<Either<Failure, bool>> checkSignInStatus();
-  Future<Either<Failure, bool>> firstLaunch();
   Future<Either<Failure, bool>> checkFirstLaunch();
+  Future<Either<Failure, bool>> firstLaunch();
 }

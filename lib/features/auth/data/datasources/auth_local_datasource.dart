@@ -1,11 +1,11 @@
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:petsguides/core/cache/hive_local_storage.dart';
-import 'package:petsguides/core/error/exceptions.dart';
 import 'package:petsguides/core/util/logger.dart';
 
 sealed class AuthLocalDataSource {
-  Future<bool> checkFirstLaunch();
   Future<bool> checkSignInStatus();
+  Future<bool> checkFirstLaunch();
+  Future<bool> firstLaunch();
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
@@ -29,7 +29,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
         // token expired
         return false;
       }
-    } on Exception catch (exception) {
+    } catch (exception) {
       logger.e('Logger in checkSignInStatus of AuthLocalDataSourceImpl\nthrow: $exception');
       rethrow;
     }
@@ -38,17 +38,25 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<bool> checkFirstLaunch() async {
     try {
-      final firstLaunch = await _hiveLocalStorage.load(
-        key: 'FIRST_LAUNCH',
-        boxName: 'cache',
-      );
+      final firstLaunch = await _hiveLocalStorage.load(key: 'FIRST_LAUNCH', boxName: 'cache');
       if (firstLaunch != 'pets_guides') {
         return true;
       }
       return false;
-    } catch (e) {
-      logger.e(e);
-      throw CacheException();
+    } catch (exception) {
+      logger.e('Logger in checkFirstLaunch of AuthLocalDataSourceImpl\nthrow: $exception');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> firstLaunch() async {
+    try {
+      await _hiveLocalStorage.save(key: 'FIRST_LAUNCH', value: 'pets_guides', boxName: 'cache');
+      return true;
+    } catch (exception) {
+      logger.e('Logger in firstLaunch of AuthLocalDataSourceImpl\nthrow: $exception');
+      rethrow;
     }
   }
 }

@@ -21,8 +21,7 @@ void main() async {
   await Future.wait([
     Hive.initFlutter(),
     getTemporaryDirectory().then((path) async {
-      HydratedBloc.storage =
-          await HydratedStorage.build(storageDirectory: path);
+      HydratedBloc.storage = await HydratedStorage.build(storageDirectory: path);
     })
   ]);
 

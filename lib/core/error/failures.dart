@@ -78,5 +78,5 @@ class UnknownFailure extends Failure {
 }
 
 class MissingParamsFailure extends Failure {
-  const MissingParamsFailure(super.suffix);
+  const MissingParamsFailure({String suffix = ''}) : super("Missing Params Failure: $suffix");
 }

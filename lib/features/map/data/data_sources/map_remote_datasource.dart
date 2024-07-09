@@ -25,14 +25,14 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
     try {
       final response = await apiHelper.execute(
         method: Method.get,
-        baseUrl: dotenv.env['googleMapBaseUri'],
+        baseUrl: dotenv.env['googleMapBaseUrl'],
         endpoint: '/place/autocomplete/json?input=${params.searchInput}&type=$types&key=${dotenv.env['googleMapKey']}',
       );
 
       var result = response['predictions'] as List;
 
       return result.map((e) => AutoCompleteModel.fromJson(e)).toList();
-    } on Exception catch (exception) {
+    } catch (exception) {
       logger.e('Logger in searchPlaces of MapRemoteDataSourceImpl\nrethrow: $exception');
       rethrow;
     }
@@ -49,7 +49,7 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       var result = response['result'] as Map<String, dynamic>;
 
       return result;
-    } on Exception catch (exception) {
+    } catch (exception) {
       logger.e('Logger in selectFromSearchList of MapRemoteDataSourceImpl\nrethrow: $exception');
       rethrow;
     }
@@ -73,7 +73,7 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       };
 
       return result;
-    } on Exception catch (exception) {
+    } catch (exception) {
       logger.e('Logger in getDirections of MapRemoteDataSourceImpl\nrethrow: $exception');
       rethrow;
     }
@@ -89,7 +89,7 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
             '/place/nearbysearch/json?&location=${params.tappedPoint.latitude},${params.tappedPoint.longitude}&radius=${params.radius}&key=${dotenv.env['googleMapKey']}',
       );
       return result;
-    } on Exception catch (exception) {
+    } catch (exception) {
       logger.e('Logger in searchInRadius of MapRemoteDataSourceImpl\nrethrow: $exception');
       rethrow;
     }
@@ -105,7 +105,7 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       );
 
       return result;
-    } on Exception catch (exception) {
+    } catch (exception) {
       logger.e('Logger in getMorePlacesInRadius of MapRemoteDataSourceImpl\nrethrow: $exception');
       rethrow;
     }
@@ -122,7 +122,7 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       var result = response['result'] as Map<String, dynamic>;
 
       return result;
-    } on Exception catch (exception) {
+    } catch (exception) {
       logger.e('Logger in tapOnCarouselCard of MapRemoteDataSourceImpl\nrethrow: $exception');
       rethrow;
     }
