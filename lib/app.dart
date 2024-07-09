@@ -33,11 +33,7 @@ class _MyAppState extends State<MyApp> {
       _locale = lang;
     });
 
-    await sl<HiveLocalStorage>().save(
-      key: 'language',
-      value: lang.languageCode,
-      boxName: 'cache',
-    );
+    await sl<HiveLocalStorage>().save(key: 'language', value: lang.languageCode, boxName: 'cache');
   }
 
   @override

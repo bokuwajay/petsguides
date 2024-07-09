@@ -45,7 +45,13 @@ class AuthStateCheckSignInStatusFailed extends AuthState {
   List<Object?> get props => [message];
 }
 
-class AuthStateFirstLaunchSuccessful extends AuthState {}
+class AuthStateFirstLaunchSuccessful extends AuthState {
+  final bool launchedSuccessful;
+  const AuthStateFirstLaunchSuccessful(this.launchedSuccessful);
+
+  @override
+  List<Object?> get props => [launchedSuccessful];
+}
 
 class AuthStateFirstLaunchFailed extends AuthState {
   final String message;

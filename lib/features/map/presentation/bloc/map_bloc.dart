@@ -31,7 +31,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       // emit(MapStateLoading());
 
       final result = await _mapSearchPlacesUseCase.call(SearchPlacesParams(searchInput: event.searchInput));
-      result.fold((l) => emit(MapStateSearchPlacesFailed(failureConverter(l))), (r) => emit(MapStateSearchPlacesSuccessful(r)));
+      result.fold(
+        (l) => emit(MapStateSearchPlacesFailed(failureConverter(l))),
+        (r) => emit(MapStateSearchPlacesSuccessful(r)),
+      );
     });
 
     on<MapEventSelectFromSearchList>(
@@ -39,7 +42,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         // emit(MapStateLoading());
         final result = await _mapSelectFromSearchListUseCase.call(SelectFromSearchListParams(placeId: event.placeId));
 
-        result.fold((l) => emit(MapStateSelectFromSearchListFailed(failureConverter(l))), (r) => emit(MapStateSelectFromSearchListSuccessful(r)));
+        result.fold(
+          (l) => emit(MapStateSelectFromSearchListFailed(failureConverter(l))),
+          (r) => emit(MapStateSelectFromSearchListSuccessful(r)),
+        );
       },
     );
 
@@ -48,7 +54,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         // emit(MapStateLoading());
         final result = await _mapGetDirectionsUseCase.call(GetDirectionsParams(origin: event.origin, destination: event.destination));
 
-        result.fold((l) => emit(MapStateGetDirectionsFailed(failureConverter(l))), (r) => emit(MapStateGetDirectionsSuccessful(r)));
+        result.fold(
+          (l) => emit(MapStateGetDirectionsFailed(failureConverter(l))),
+          (r) => emit(MapStateGetDirectionsSuccessful(r)),
+        );
       },
     );
 
@@ -57,7 +66,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         // emit(MapStateLoading());
 
         final result = await _mapSearchInRadiusUseCase.call(SearchInRadiusParams(tappedPoint: event.tappedPoint, radius: event.radius));
-        result.fold((l) => emit(MapStateSearchInRadiusFailed(failureConverter(l))), (r) => emit(MapStateSearchInRadiusSuccessful(r)));
+        result.fold(
+          (l) => emit(MapStateSearchInRadiusFailed(failureConverter(l))),
+          (r) => emit(MapStateSearchInRadiusSuccessful(r)),
+        );
       },
     );
 
@@ -65,7 +77,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       (event, emit) async {
         // emit(MapStateLoading());
         final result = await _mapGetMorePlacesInRadiusUseCase.call(GetMorePlacesInRadiusParams(nextPageToken: event.nextPageToken));
-        result.fold((l) => emit(MapStateGetMorePlacesInRadiusFailed(failureConverter(l))), (r) => emit(MapStateGetMorePlacesInRadiusSuccessful(r)));
+        result.fold(
+          (l) => emit(MapStateGetMorePlacesInRadiusFailed(failureConverter(l))),
+          (r) => emit(MapStateGetMorePlacesInRadiusSuccessful(r)),
+        );
       },
     );
 
@@ -74,7 +89,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         // emit(MapStateLoading());
         final result = await _mapTapOnCarouselCardUseCase.call(TapOnCarouselCardParams(placeId: event.placeId));
 
-        result.fold((l) => emit(MapStateTapOnCarouselCardFailed(failureConverter(l))), (r) => emit(MapStateTapOnCarouselCardSuccessful(r)));
+        result.fold(
+          (l) => emit(MapStateTapOnCarouselCardFailed(failureConverter(l))),
+          (r) => emit(MapStateTapOnCarouselCardSuccessful(r)),
+        );
       },
     );
   }
