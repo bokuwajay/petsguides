@@ -17,7 +17,7 @@ class MapRepositoryImpl implements MapRepository {
     try {
       final result = await _mapRemoteDataSource.searchPlaces(params);
       return Right(result);
-    } on ServerException {
+    } on Exception {
       return const Left(ServerFailure("in searchPlaces of MapRepositoryImpl"));
     }
   }

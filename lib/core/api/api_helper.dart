@@ -44,7 +44,24 @@ class ApiHelper {
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     } on DioException catch (dioException) {
-      return _returnResponse(dioException.response!);
+      switch (dioException.type) {
+        case DioExceptionType.connectionError:
+          throw ConnectionErrorException('from Api helper');
+        case DioExceptionType.connectionTimeout:
+          throw ConnectionTimeOutException('from Api helper');
+        case DioExceptionType.sendTimeout:
+          throw SendTimeOutException('from Api helper');
+        case DioExceptionType.receiveTimeout:
+          throw ReceiveTimeOutException('from Api helper');
+        case DioExceptionType.badCertificate:
+          throw BadCertificateException('from Api helper');
+        case DioExceptionType.cancel:
+          throw CancelException('from Api helper');
+        case DioExceptionType.unknown:
+          throw UnknownException('from Api helper');
+        case DioExceptionType.badResponse:
+          return _returnResponse(dioException.response!);
+      }
     }
   }
 
