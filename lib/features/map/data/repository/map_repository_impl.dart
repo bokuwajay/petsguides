@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:petsguides/core/api/api_exception.dart';
-import 'package:petsguides/core/error/exceptions.dart';
 import 'package:petsguides/core/error/failures.dart';
+import 'package:petsguides/core/util/exception_converter.dart';
 import 'package:petsguides/features/map/data/data_sources/map_remote_datasource.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/domain/repository/map_repository.dart';
@@ -17,8 +16,9 @@ class MapRepositoryImpl implements MapRepository {
     try {
       final result = await _mapRemoteDataSource.searchPlaces(params);
       return Right(result);
-    } on Exception {
-      return const Left(ServerFailure("in searchPlaces of MapRepositoryImpl"));
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in searchPlaces of MapRepositoryImpl');
+      return Left(failure);
     }
   }
 
@@ -27,10 +27,9 @@ class MapRepositoryImpl implements MapRepository {
     try {
       final result = await _mapRemoteDataSource.selectFromSearchList(params);
       return Right(result);
-    } on ApiException {
-      return const Left(MissingParamsFailure("in selectFromSearchList of MapRepositoryImpl"));
-    } on ServerException {
-      return const Left(ServerFailure("in selectFromSearchList of MapRepositoryImpl"));
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in selectFromSearchList of MapRepositoryImpl');
+      return Left(failure);
     }
   }
 
@@ -39,10 +38,9 @@ class MapRepositoryImpl implements MapRepository {
     try {
       final result = await _mapRemoteDataSource.getDirections(params);
       return Right(result);
-    } on ApiException {
-      return const Left(MissingParamsFailure("in getDirections of MapRepositoryImpl"));
-    } on ServerException {
-      return const Left(ServerFailure("in getDirections of MapRepositoryImpl"));
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in getDirections of MapRepositoryImpl');
+      return Left(failure);
     }
   }
 
@@ -51,10 +49,9 @@ class MapRepositoryImpl implements MapRepository {
     try {
       final result = await _mapRemoteDataSource.searchInRadius(params);
       return Right(result);
-    } on ApiException {
-      return const Left(MissingParamsFailure("in searchInRadius of MapRepositoryImpl"));
-    } on ServerException {
-      return const Left(ServerFailure("in searchInRadius of MapRepositoryImpl"));
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in searchInRadius of MapRepositoryImpl');
+      return Left(failure);
     }
   }
 
@@ -63,10 +60,9 @@ class MapRepositoryImpl implements MapRepository {
     try {
       final result = await _mapRemoteDataSource.getMorePlacesInRadius(params);
       return Right(result);
-    } on ApiException {
-      return const Left(MissingParamsFailure("in getMorePlacesInRadius of MapRepositoryImpl"));
-    } on ServerException {
-      return const Left(ServerFailure("in getMorePlacesInRadius of MapRepositoryImpl"));
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in getMorePlacesInRadius of MapRepositoryImpl');
+      return Left(failure);
     }
   }
 
@@ -75,10 +71,9 @@ class MapRepositoryImpl implements MapRepository {
     try {
       final result = await _mapRemoteDataSource.tapOnCarouselCard(params);
       return Right(result);
-    } on ApiException {
-      return const Left(MissingParamsFailure("in tapOnCarouselCard of MapRepositoryImpl"));
-    } on ServerException {
-      return const Left(ServerFailure("in tapOnCarouselCard of MapRepositoryImpl"));
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in tapOnCarouselCard of MapRepositoryImpl');
+      return Left(failure);
     }
   }
 }

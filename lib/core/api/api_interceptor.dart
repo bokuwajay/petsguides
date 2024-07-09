@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:petsguides/core/api/api_exception.dart';
 import 'package:petsguides/core/util/logger.dart';
 
 import 'api_url.dart';

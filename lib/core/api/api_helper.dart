@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-
-import 'api_exception.dart';
+import 'package:petsguides/core/error/exceptions.dart';
 
 enum Method { get, post, put, patch, delete }
 
@@ -23,7 +22,7 @@ class ApiHelper {
       Response? response;
       switch (method) {
         case Method.get:
-          // Each request will first go into ApiInterceptor onRequest and onError, then go below
+          // Each request will first go into Api Interceptor onRequest and onError, then go below
           response = await _dio.get(endpoint);
           break;
         case Method.post:
@@ -42,23 +41,23 @@ class ApiHelper {
 
       return _returnResponse(response);
     } on SocketException {
-      throw FetchDataException('No Internet Connection');
+      throw FetchDataException;
     } on DioException catch (dioException) {
       switch (dioException.type) {
         case DioExceptionType.connectionError:
-          throw ConnectionErrorException('from Api helper');
+          throw ConnectionErrorException;
         case DioExceptionType.connectionTimeout:
-          throw ConnectionTimeOutException('from Api helper');
+          throw ConnectionTimeOutException;
         case DioExceptionType.sendTimeout:
-          throw SendTimeOutException('from Api helper');
+          throw SendTimeOutException;
         case DioExceptionType.receiveTimeout:
-          throw ReceiveTimeOutException('from Api helper');
+          throw ReceiveTimeOutException;
         case DioExceptionType.badCertificate:
-          throw BadCertificateException('from Api helper');
+          throw BadCertificateException;
         case DioExceptionType.cancel:
-          throw CancelException('from Api helper');
+          throw CancelException;
         case DioExceptionType.unknown:
-          throw UnknownException('from Api helper');
+          throw UnknownException;
         case DioExceptionType.badResponse:
           return _returnResponse(dioException.response!);
       }
@@ -72,23 +71,23 @@ class ApiHelper {
       case 201:
         return response.data;
       case 400:
-        throw BadRequestException(response.data["message"].toString());
+        throw BadRequestException;
       case 401:
-        throw UnauthorizedException(response.data["message"].toString());
+        throw UnauthorizedException;
       case 403:
-        throw ForbiddenException(response.data["message"].toString());
+        throw ForbiddenException;
       case 404:
-        throw NotFoundException(response.data["message"].toString());
+        throw NotFoundException;
       case 405:
-        throw MethodNotAllowedException(response.data["message"].toString());
+        throw MethodNotAllowedException;
       case 409:
-        throw DuplicatedDataException(response.data["message"].toString());
+        throw DuplicatedDataException;
       case 422:
-        throw UnprocessableContentException(response.data["message"].toString());
+        throw UnprocessableContentException;
       case 500:
-        throw InternalServerException(response.data["message"].toString());
+        throw InternalServerException;
       default:
-        throw FetchDataException('Error occurred while Communication with Server with StatusCode : ${response.statusCode}');
+        throw UnknownException;
     }
   }
 }

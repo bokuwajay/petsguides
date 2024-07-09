@@ -1,9 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:petsguides/core/api/api_exception.dart';
 import 'package:petsguides/core/api/api_helper.dart';
-import 'package:petsguides/core/constants/error_message.dart';
-import 'package:petsguides/core/error/exceptions.dart';
 import 'package:petsguides/core/util/logger.dart';
 import 'package:petsguides/features/map/data/models/auto_complete_model.dart';
 import 'package:petsguides/features/map/domain/usecases/usecase_params.dart';
@@ -52,12 +49,9 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       var result = response['result'] as Map<String, dynamic>;
 
       return result;
-    } catch (exception) {
-      logger.e(exception);
-      if (exception.toString() == noElement) {
-        throw AuthException();
-      }
-      throw ServerException();
+    } on Exception catch (exception) {
+      logger.e('Logger in selectFromSearchList of MapRemoteDataSourceImpl\nrethrow: $exception');
+      rethrow;
     }
   }
 
@@ -79,12 +73,9 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       };
 
       return result;
-    } catch (exception) {
-      logger.e(exception);
-      if (exception.toString() == noElement) {
-        throw AuthException();
-      }
-      throw ServerException();
+    } on Exception catch (exception) {
+      logger.e('Logger in getDirections of MapRemoteDataSourceImpl\nrethrow: $exception');
+      rethrow;
     }
   }
 
@@ -98,12 +89,9 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
             '/place/nearbysearch/json?&location=${params.tappedPoint.latitude},${params.tappedPoint.longitude}&radius=${params.radius}&key=${dotenv.env['googleMapKey']}',
       );
       return result;
-    } catch (exception) {
-      logger.e(exception);
-      if (exception.toString() == noElement) {
-        throw AuthException();
-      }
-      throw ServerException();
+    } on Exception catch (exception) {
+      logger.e('Logger in searchInRadius of MapRemoteDataSourceImpl\nrethrow: $exception');
+      rethrow;
     }
   }
 
@@ -117,12 +105,9 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       );
 
       return result;
-    } catch (exception) {
-      logger.e(exception);
-      if (exception.toString() == noElement) {
-        throw AuthException();
-      }
-      throw ServerException();
+    } on Exception catch (exception) {
+      logger.e('Logger in getMorePlacesInRadius of MapRemoteDataSourceImpl\nrethrow: $exception');
+      rethrow;
     }
   }
 
@@ -137,12 +122,9 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       var result = response['result'] as Map<String, dynamic>;
 
       return result;
-    } catch (exception) {
-      logger.e(exception);
-      if (exception.toString() == noElement) {
-        throw AuthException();
-      }
-      throw ServerException();
+    } on Exception catch (exception) {
+      logger.e('Logger in tapOnCarouselCard of MapRemoteDataSourceImpl\nrethrow: $exception');
+      rethrow;
     }
   }
 }

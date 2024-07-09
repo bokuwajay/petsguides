@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
-import 'package:petsguides/core/api/api_exception.dart';
 import 'package:petsguides/core/cache/hive_local_storage.dart';
 import 'package:petsguides/core/error/exceptions.dart';
 import 'package:petsguides/core/error/failures.dart';
@@ -36,11 +35,15 @@ class AuthRepositoryImpl implements AuthRepository {
         return Right(result);
       }
       return const Left(CredentialFailure('in authenticate of AuthRepositoryImpl'));
-    } on ApiException {
-      return const Left(CredentialFailure('in authenticate of AuthRepositoryImpl'));
-    } on ServerException {
-      return const Left(ServerFailure('in authenticate of AuthRepositoryImpl'));
+    } on Exception catch (exception) {
+      throw exception;
     }
+
+    // on ApiException {
+    //   return const Left(CredentialFailure('in authenticate of AuthRepositoryImpl'));
+    // } on ServerException {
+    //   return const Left(ServerFailure('in authenticate of AuthRepositoryImpl'));
+    // }
   }
 
   @override
