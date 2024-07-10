@@ -21,7 +21,8 @@ class MapSearchPlacesUseCase implements UseCase<List<AutoCompleteEntity>, Params
   @override
   Future<Either<Failure, List<AutoCompleteEntity>>> call(Params params) async {
     if (params.searchInput.isEmpty) {
-      return const Left(MissingParamsFailure('in call of MapSearchPlacesUseCase'));
+      Failure failure = const MissingParamsFailure(suffix: 'in call of MapSearchPlacesUseCase');
+      return Left(failure);
     }
     final result = await _mapRepository.searchPlaces(params);
     return result;

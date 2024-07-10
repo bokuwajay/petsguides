@@ -37,7 +37,7 @@ String failureConverter(Failure failure) {
     case CacheFailure:
       return failure.message;
     case MissingParamsFailure:
-      return 'Missing params ';
+      return failure.message;
     default:
       return failure.message;
   }

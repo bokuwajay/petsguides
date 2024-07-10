@@ -21,8 +21,9 @@ class MapSearchInRadiusUseCase implements UseCase<Map<String, dynamic>, Params> 
 
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) async {
-    if (params.props.isEmpty) {
-      return const Left(MissingParamsFailure('in call of MapSearchInRadiusUseCase'));
+    if (params.radius.isNaN || params.tappedPoint.latitude.isNaN || params.tappedPoint.longitude.isNaN) {
+      Failure failure = const MissingParamsFailure(suffix: 'in call of MapSearchInRadiusUseCase');
+      return Left(failure);
     }
     final result = await _mapRepository.searchInRadius(params);
     return result;
