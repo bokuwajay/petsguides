@@ -12,6 +12,15 @@ class MapStateInitial extends MapState {}
 
 class MapStateLoading extends MapState {}
 
+class MapStateFailed extends MapState {
+  final String message;
+
+  const MapStateFailed(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
 // search place
 class MapStateSearchPlacesSuccessful extends MapState {
   final List<AutoCompleteEntity>? data;
@@ -24,14 +33,14 @@ class MapStateSearchPlacesSuccessful extends MapState {
   List<Object?> get props => [data];
 }
 
-class MapStateSearchPlacesFailed extends MapState {
-  final String message;
+// class MapStateSearchPlacesFailed extends MapState {
+//   final String message;
 
-  const MapStateSearchPlacesFailed(this.message);
+//   const MapStateSearchPlacesFailed(this.message);
 
-  @override
-  List<Object?> get props => [message];
-}
+//   @override
+//   List<Object?> get props => [message];
+// }
 
 // select place from search result board
 class MapStateSelectFromSearchListSuccessful extends MapState {
@@ -43,14 +52,14 @@ class MapStateSelectFromSearchListSuccessful extends MapState {
   List<Object?> get props => [selectedPlace];
 }
 
-class MapStateSelectFromSearchListFailed extends MapState {
-  final String message;
+// class MapStateSelectFromSearchListFailed extends MapState {
+//   final String message;
 
-  const MapStateSelectFromSearchListFailed(this.message);
+//   const MapStateSelectFromSearchListFailed(this.message);
 
-  @override
-  List<Object?> get props => [message];
-}
+//   @override
+//   List<Object?> get props => [message];
+// }
 
 // get directions
 class MapStateGetDirectionsSuccessful extends MapState {
@@ -61,14 +70,14 @@ class MapStateGetDirectionsSuccessful extends MapState {
   List<Object?> get props => [getDirections];
 }
 
-class MapStateGetDirectionsFailed extends MapState {
-  final String message;
+// class MapStateGetDirectionsFailed extends MapState {
+//   final String message;
 
-  const MapStateGetDirectionsFailed(this.message);
+//   const MapStateGetDirectionsFailed(this.message);
 
-  @override
-  List<Object?> get props => [message];
-}
+//   @override
+//   List<Object?> get props => [message];
+// }
 
 // search within radius
 class MapStateSearchInRadiusSuccessful extends MapState {
@@ -80,14 +89,14 @@ class MapStateSearchInRadiusSuccessful extends MapState {
   List<Object?> get props => [placesInRadius];
 }
 
-class MapStateSearchInRadiusFailed extends MapState {
-  final String message;
+// class MapStateSearchInRadiusFailed extends MapState {
+//   final String message;
 
-  const MapStateSearchInRadiusFailed(this.message);
+//   const MapStateSearchInRadiusFailed(this.message);
 
-  @override
-  List<Object?> get props => [message];
-}
+//   @override
+//   List<Object?> get props => [message];
+// }
 
 // get more place in radius
 class MapStateGetMorePlacesInRadiusSuccessful extends MapState {
@@ -99,14 +108,14 @@ class MapStateGetMorePlacesInRadiusSuccessful extends MapState {
   List<Object?> get props => [morePlacesInRadius];
 }
 
-class MapStateGetMorePlacesInRadiusFailed extends MapState {
-  final String message;
+// class MapStateGetMorePlacesInRadiusFailed extends MapState {
+//   final String message;
 
-  const MapStateGetMorePlacesInRadiusFailed(this.message);
+//   const MapStateGetMorePlacesInRadiusFailed(this.message);
 
-  @override
-  List<Object?> get props => [message];
-}
+//   @override
+//   List<Object?> get props => [message];
+// }
 
 // tap on carousel card
 class MapStateTapOnCarouselCardSuccessful extends MapState {
@@ -118,11 +127,11 @@ class MapStateTapOnCarouselCardSuccessful extends MapState {
   List<Object?> get props => [flipCardData];
 }
 
-class MapStateTapOnCarouselCardFailed extends MapState {
-  final String message;
+// class MapStateTapOnCarouselCardFailed extends MapState {
+//   final String message;
 
-  const MapStateTapOnCarouselCardFailed(this.message);
+//   const MapStateTapOnCarouselCardFailed(this.message);
 
-  @override
-  List<Object?> get props => [message];
-}
+//   @override
+//   List<Object?> get props => [message];
+// }

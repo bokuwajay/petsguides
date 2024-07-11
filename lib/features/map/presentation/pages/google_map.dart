@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:petsguides/core/util/dialogs/error_dialog.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
@@ -244,7 +245,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
     return BlocConsumer<MapBloc, MapState>(
       listener: (context, state) {
-        if (state is MapStateSearchPlacesSuccessful) {
+        if (state is MapStateFailed) {
+          showErrorDialog(context, "Map Error", "missing error", 'OK');
+        } else if (state is MapStateSearchPlacesSuccessful) {
           showSearchResultBoard = true;
           if (state.data != null) {
             searchedPlaces = state.data!;
