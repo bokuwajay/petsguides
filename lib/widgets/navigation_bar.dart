@@ -17,20 +17,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
       key: _bottomNavigationKey,
       index: 0,
       height: 75.0,
-      color: MediaQuery.of(context).platformBrightness == Brightness.light
-          ? Colors.white
-          : Colors.black,
+      color: MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.white : Colors.black,
       items: const <Widget>[
-        Icon(Icons.perm_identity, size: 40),
-        Icon(Icons.groups_2_outlined, size: 40),
-        Icon(Icons.shopping_cart_outlined, size: 40),
-        Icon(Icons.map_outlined, size: 40),
-        Icon(Icons.message_outlined, size: 40),
+        Icon(Icons.photo_album_rounded, size: 40),
+        Icon(Icons.search_outlined, size: 40),
+        Icon(Icons.add_business_outlined, size: 40),
+        Icon(Icons.message_rounded, size: 40),
+        Icon(Icons.perm_identity_rounded, size: 40),
       ],
-      buttonBackgroundColor:
-          MediaQuery.of(context).platformBrightness == Brightness.light
-              ? Colors.white
-              : Colors.black,
+      buttonBackgroundColor: MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.white : Colors.black,
       backgroundColor: Colors.transparent,
       animationCurve: Curves.easeInOut,
       animationDuration: const Duration(milliseconds: 600),

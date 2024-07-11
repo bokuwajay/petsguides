@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/core/util/validator.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
-import 'package:petsguides/components/build_text_form_field.dart';
+import 'package:petsguides/widgets/build_text_form_field.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 
 class SignInSection extends StatefulWidget {
@@ -49,8 +49,7 @@ class _SignInSectionState extends State<SignInSection> with Validator {
                 keyboardType: TextInputType.emailAddress,
                 hintText: AppLocalizations.of(context)!.email,
                 prefixIcon: const Icon(Icons.email),
-                validator: (value) =>
-                    validateEmail(value, AppLocalizations.of(context)!.email),
+                validator: (value) => validateEmail(value, AppLocalizations.of(context)!.email),
               ),
             ),
             Padding(
@@ -60,8 +59,7 @@ class _SignInSectionState extends State<SignInSection> with Validator {
                 hintText: AppLocalizations.of(context)!.password,
                 prefixIcon: const Icon(Icons.lock),
                 obscureText: true,
-                validator: (value) => validateRequiredField(
-                    value, AppLocalizations.of(context)!.password),
+                validator: (value) => validateRequiredField(value, AppLocalizations.of(context)!.password),
               ),
             ),
             Row(
@@ -81,9 +79,7 @@ class _SignInSectionState extends State<SignInSection> with Validator {
             SizedBox(
               width: 160,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50))),
+                style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     final email = _email.text;

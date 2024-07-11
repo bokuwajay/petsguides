@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petsguides/core/util/validator.dart';
-import 'package:petsguides/components/build_text_form_field.dart';
+import 'package:petsguides/widgets/build_text_form_field.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 
 class SignUpSection extends StatefulWidget {
@@ -55,8 +55,7 @@ class _SignUpSectionState extends State<SignUpSection> with Validator {
                 child: buildTextFormField(
                   controller: _firstName,
                   hintText: AppLocalizations.of(context)!.firstName,
-                  validator: (value) => validateRequiredField(
-                      value, AppLocalizations.of(context)!.firstName),
+                  validator: (value) => validateRequiredField(value, AppLocalizations.of(context)!.firstName),
                 ),
               ),
               Padding(
@@ -64,8 +63,7 @@ class _SignUpSectionState extends State<SignUpSection> with Validator {
                 child: buildTextFormField(
                   controller: _lastName,
                   hintText: AppLocalizations.of(context)!.lastName,
-                  validator: (value) => validateRequiredField(
-                      value, AppLocalizations.of(context)!.lastName),
+                  validator: (value) => validateRequiredField(value, AppLocalizations.of(context)!.lastName),
                 ),
               ),
               Padding(
@@ -73,8 +71,7 @@ class _SignUpSectionState extends State<SignUpSection> with Validator {
                 child: buildTextFormField(
                   controller: _email,
                   hintText: AppLocalizations.of(context)!.email,
-                  validator: (value) =>
-                      validateEmail(value, AppLocalizations.of(context)!.email),
+                  validator: (value) => validateEmail(value, AppLocalizations.of(context)!.email),
                 ),
               ),
               Padding(
@@ -84,8 +81,7 @@ class _SignUpSectionState extends State<SignUpSection> with Validator {
                   hintText: AppLocalizations.of(context)!.password,
                   prefixIcon: const Icon(Icons.lock),
                   obscureText: true,
-                  validator: (value) => validateRequiredField(
-                      value, AppLocalizations.of(context)!.password),
+                  validator: (value) => validateRequiredField(value, AppLocalizations.of(context)!.password),
                 ),
               ),
               Padding(
@@ -95,10 +91,7 @@ class _SignUpSectionState extends State<SignUpSection> with Validator {
                   hintText: AppLocalizations.of(context)!.repeatPassword,
                   prefixIcon: const Icon(Icons.lock),
                   obscureText: true,
-                  validator: (value) => validateConfirmPassword(
-                      value,
-                      _password.text,
-                      AppLocalizations.of(context)!.repeatPassword),
+                  validator: (value) => validateConfirmPassword(value, _password.text, AppLocalizations.of(context)!.repeatPassword),
                 ),
               ),
               Padding(
@@ -106,8 +99,7 @@ class _SignUpSectionState extends State<SignUpSection> with Validator {
                 child: buildTextFormField(
                   controller: _phone,
                   hintText: AppLocalizations.of(context)!.phone,
-                  validator: (value) =>
-                      validatePhone(value, AppLocalizations.of(context)!.phone),
+                  validator: (value) => validatePhone(value, AppLocalizations.of(context)!.phone),
                 ),
               ),
               SizedBox(

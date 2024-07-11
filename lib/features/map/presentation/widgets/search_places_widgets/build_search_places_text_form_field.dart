@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:petsguides/components/build_text_form_field.dart';
+import 'package:petsguides/widgets/build_text_form_field.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_state.dart';

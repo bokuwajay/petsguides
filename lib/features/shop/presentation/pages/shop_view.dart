@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:petsguides/components/bottomNavigationBar/navigation_bar.dart';
+import 'package:petsguides/widgets/navigation_bar.dart';
 import 'package:petsguides/features/shop/presentation/widgets/shop_item_list_view.dart';
 import 'package:petsguides/features/shop/presentation/widgets/sidebar/side_bar.dart';
 
@@ -13,8 +13,7 @@ class ShopView extends StatefulWidget {
   State<ShopView> createState() => _ShopViewState();
 }
 
-class _ShopViewState extends State<ShopView>
-    with SingleTickerProviderStateMixin {
+class _ShopViewState extends State<ShopView> with SingleTickerProviderStateMixin {
   bool isSideBarClosed = true;
 
   late AnimationController _animationController;
@@ -34,8 +33,7 @@ class _ShopViewState extends State<ShopView>
 
   @override
   void initState() {
-    _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200))
+    _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 200))
       ..addListener(() {
         setState(() {});
       });
