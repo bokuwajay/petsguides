@@ -11,6 +11,15 @@ class AuthStateInitial extends AuthState {}
 
 class AuthStateLoading extends AuthState {}
 
+class AuthStateFailed extends AuthState {
+  final String message;
+
+  const AuthStateFailed(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
 class AuthStateLoginSuccessful extends AuthState {
   final AuthEntity data;
 
@@ -18,15 +27,6 @@ class AuthStateLoginSuccessful extends AuthState {
 
   @override
   List<Object?> get props => [data];
-}
-
-class AuthStateLoginFailed extends AuthState {
-  final String message;
-
-  const AuthStateLoginFailed(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }
 
 class AuthStateCheckSignInStatusSuccessful extends AuthState {
@@ -37,14 +37,6 @@ class AuthStateCheckSignInStatusSuccessful extends AuthState {
   List<Object?> get props => [signIn];
 }
 
-class AuthStateCheckSignInStatusFailed extends AuthState {
-  final String message;
-  const AuthStateCheckSignInStatusFailed(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
 class AuthStateFirstLaunchSuccessful extends AuthState {
   final bool launchedSuccessful;
   const AuthStateFirstLaunchSuccessful(this.launchedSuccessful);
@@ -53,26 +45,10 @@ class AuthStateFirstLaunchSuccessful extends AuthState {
   List<Object?> get props => [launchedSuccessful];
 }
 
-class AuthStateFirstLaunchFailed extends AuthState {
-  final String message;
-  const AuthStateFirstLaunchFailed(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
 class AuthStateCheckFirstLaunchSuccessful extends AuthState {
   final bool isFirstLaunch;
   const AuthStateCheckFirstLaunchSuccessful(this.isFirstLaunch);
 
   @override
   List<Object?> get props => [isFirstLaunch];
-}
-
-class AuthStateCheckFirstLaunchFailed extends AuthState {
-  final String message;
-  const AuthStateCheckFirstLaunchFailed(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }

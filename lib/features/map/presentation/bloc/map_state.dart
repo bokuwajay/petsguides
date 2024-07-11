@@ -33,15 +33,6 @@ class MapStateSearchPlacesSuccessful extends MapState {
   List<Object?> get props => [data];
 }
 
-// class MapStateSearchPlacesFailed extends MapState {
-//   final String message;
-
-//   const MapStateSearchPlacesFailed(this.message);
-
-//   @override
-//   List<Object?> get props => [message];
-// }
-
 // select place from search result board
 class MapStateSelectFromSearchListSuccessful extends MapState {
   final Map<String, dynamic> selectedPlace;
@@ -52,15 +43,6 @@ class MapStateSelectFromSearchListSuccessful extends MapState {
   List<Object?> get props => [selectedPlace];
 }
 
-// class MapStateSelectFromSearchListFailed extends MapState {
-//   final String message;
-
-//   const MapStateSelectFromSearchListFailed(this.message);
-
-//   @override
-//   List<Object?> get props => [message];
-// }
-
 // get directions
 class MapStateGetDirectionsSuccessful extends MapState {
   final Map<String, dynamic> getDirections;
@@ -69,15 +51,6 @@ class MapStateGetDirectionsSuccessful extends MapState {
   @override
   List<Object?> get props => [getDirections];
 }
-
-// class MapStateGetDirectionsFailed extends MapState {
-//   final String message;
-
-//   const MapStateGetDirectionsFailed(this.message);
-
-//   @override
-//   List<Object?> get props => [message];
-// }
 
 // search within radius
 class MapStateSearchInRadiusSuccessful extends MapState {
@@ -89,15 +62,6 @@ class MapStateSearchInRadiusSuccessful extends MapState {
   List<Object?> get props => [placesInRadius];
 }
 
-// class MapStateSearchInRadiusFailed extends MapState {
-//   final String message;
-
-//   const MapStateSearchInRadiusFailed(this.message);
-
-//   @override
-//   List<Object?> get props => [message];
-// }
-
 // get more place in radius
 class MapStateGetMorePlacesInRadiusSuccessful extends MapState {
   final Map<String, dynamic> morePlacesInRadius;
@@ -108,15 +72,6 @@ class MapStateGetMorePlacesInRadiusSuccessful extends MapState {
   List<Object?> get props => [morePlacesInRadius];
 }
 
-// class MapStateGetMorePlacesInRadiusFailed extends MapState {
-//   final String message;
-
-//   const MapStateGetMorePlacesInRadiusFailed(this.message);
-
-//   @override
-//   List<Object?> get props => [message];
-// }
-
 // tap on carousel card
 class MapStateTapOnCarouselCardSuccessful extends MapState {
   final Map<String, dynamic> flipCardData;
@@ -126,12 +81,3 @@ class MapStateTapOnCarouselCardSuccessful extends MapState {
   @override
   List<Object?> get props => [flipCardData];
 }
-
-// class MapStateTapOnCarouselCardFailed extends MapState {
-//   final String message;
-
-//   const MapStateTapOnCarouselCardFailed(this.message);
-
-//   @override
-//   List<Object?> get props => [message];
-// }

@@ -27,7 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthStateLoading());
       final result = await _authUseCase.call(LoginParams(email: event.email, password: event.password));
       result.fold(
-        (l) => emit(AuthStateLoginFailed(failureConverter(l))),
+        (l) => emit(AuthStateFailed(failureConverter(l))),
         (r) => emit(AuthStateLoginSuccessful(r)),
       );
     });
@@ -37,7 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthStateLoading());
         final result = await _authCheckSignInStatusUseCase.call(NoParams());
         result.fold(
-          (l) => emit(AuthStateCheckSignInStatusFailed(failureConverter(l))),
+          (l) => emit(AuthStateFailed(failureConverter(l))),
           (r) => emit(AuthStateCheckSignInStatusSuccessful(r)),
         );
       },
@@ -48,7 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthStateLoading());
         final result = await _authFirstLaunchUseCase.call(NoParams());
         result.fold(
-          (l) => emit(AuthStateFirstLaunchFailed(failureConverter(l))),
+          (l) => emit(AuthStateFailed(failureConverter(l))),
           (r) => emit(AuthStateFirstLaunchSuccessful(r)),
         );
       },
@@ -60,7 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthStateLoading());
         final result = await _authCheckFirstLaunchUseCase.call(NoParams());
         result.fold(
-          (l) => emit(AuthStateCheckFirstLaunchFailed(failureConverter(l))),
+          (l) => emit(AuthStateFailed(failureConverter(l))),
           (r) => emit(AuthStateCheckFirstLaunchSuccessful(r)),
         );
       },
