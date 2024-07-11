@@ -1,12 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:petsguides/config/routes/app_route.dart';
-import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
-import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
-import 'package:petsguides/features/auth/presentation/bloc/auth/auth_state.dart';
 import 'package:petsguides/features/auth/presentation/pages/get_started_view.dart';
+import 'package:petsguides/features/auth/presentation/pages/initial_view.dart';
 import 'package:petsguides/features/auth/presentation/pages/login_view.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/pages/google_map.dart';
@@ -22,29 +18,7 @@ class AppRouteConfig {
       GoRoute(
         path: AppRoute.initialScreen.path,
         name: AppRoute.initialScreen.name,
-        builder: (context, state) {
-          context.read<AuthBloc>().add(const AuthEventCheckSignInStatus());
-          return BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) async {
-              if (state is AuthStateCheckSignInStatusSuccessful) {
-                if (state.signIn) {
-                  router.goNamed(AppRoute.map.name);
-                } else {
-                  context.read<AuthBloc>().add(const AuthEventCheckFirstLaunch());
-                }
-              } else if (state is AuthStateCheckFirstLaunchSuccessful) {
-                if (state.isFirstLaunch) {
-                  router.goNamed(AppRoute.map.name);
-                } else {
-                  router.goNamed(AppRoute.map.name);
-                }
-              }
-            },
-            child: Center(
-              child: LottieBuilder.asset('assets/splashShiba.json'),
-            ),
-          );
-        },
+        builder: (context, state) => const InitialView(),
       ),
       GoRoute(
         path: AppRoute.getStarted.path,
