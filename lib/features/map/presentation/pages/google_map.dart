@@ -246,7 +246,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     return BlocConsumer<MapBloc, MapState>(
       listener: (context, state) {
         if (state is MapStateFailed) {
-          showErrorDialog(context, "Map Error", "missing error", 'OK');
+          showErrorDialog(context, state.message);
         } else if (state is MapStateSearchPlacesSuccessful) {
           showSearchResultBoard = true;
           if (state.data != null) {

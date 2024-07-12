@@ -44,5 +44,3 @@ class InternalServerException implements Exception {}
 // Other feature related customized exception
 // hive_local_storage and secure_local_storage
 class CacheException implements Exception {}
-
-class EmptyException implements Exception {}

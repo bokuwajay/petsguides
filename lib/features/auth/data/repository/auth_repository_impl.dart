@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:petsguides/core/cache/hive_local_storage.dart';
 import 'package:petsguides/core/error/failures.dart';
-import 'package:petsguides/core/util/exception_converter.dart';
+import 'package:petsguides/core/error/exception_converter.dart';
 import 'package:petsguides/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:petsguides/features/auth/data/datasources/auth_remote_datasource.dart';
 

@@ -83,5 +83,5 @@ class MissingParamsFailure extends Failure {
 // Unexpected
 
 class UnknownFailure extends Failure {
-  UnknownFailure({String suffix = ''}) : super("Unknown Failure: $suffix Timestamp: ${DateTime.now().toString()}");
+  UnknownFailure({String suffix = ''}) : super("Unexpected Failure: $suffix Timestamp: ${DateTime.now().toString()}");
 }

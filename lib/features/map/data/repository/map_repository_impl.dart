@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:petsguides/core/error/failures.dart';
-import 'package:petsguides/core/util/exception_converter.dart';
+import 'package:petsguides/core/error/exception_converter.dart';
 import 'package:petsguides/features/map/data/data_sources/map_remote_datasource.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/domain/repository/map_repository.dart';

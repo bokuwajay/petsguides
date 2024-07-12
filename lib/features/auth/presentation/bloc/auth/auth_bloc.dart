@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/core/usecases/usecase.dart';
-import 'package:petsguides/core/util/failure_converter.dart';
+import 'package:petsguides/core/error/failure_converter.dart';
 import 'package:petsguides/core/util/logger.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_check_first_launch_usecase.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_check_signin_status_usecase.dart';

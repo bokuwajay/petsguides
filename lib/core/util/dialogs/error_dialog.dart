@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:petsguides/core/error/failure_messages_to_user.dart';
 import 'package:petsguides/core/util/dialogs/generic_dialog.dart';
 
-Future<void> showErrorDialog(
-  BuildContext context,
-  String title,
-  String text,
-  String confirmBtn,
-) {
+Future<void> showErrorDialog(BuildContext context, String message) {
+  final result = failureMessagesToUser(context, message);
+
   return showGenericDialog<void>(
     context: context,
-    title: title,
-    content: text,
+    title: result['title']!,
+    content: result['content']!,
     optionBuilder: () => {
-      confirmBtn: null,
+      result['btn']!: null,
     },
   );
 }
