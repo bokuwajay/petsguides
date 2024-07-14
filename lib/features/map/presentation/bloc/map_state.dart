@@ -10,7 +10,13 @@ abstract class MapState extends Equatable {
 
 class MapStateInitial extends MapState {}
 
-class MapStateLoading extends MapState {}
+class MapStateLoading extends MapState {
+  final int? loadingTimeElapsed;
+  const MapStateLoading(this.loadingTimeElapsed);
+
+  @override
+  List<Object?> get props => [loadingTimeElapsed];
+}
 
 class MapStateFailed extends MapState {
   final String message;
