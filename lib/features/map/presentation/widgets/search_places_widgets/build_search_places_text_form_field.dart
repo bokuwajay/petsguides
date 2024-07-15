@@ -51,6 +51,7 @@ Widget buildSearchPlacesTextFormField(
                 }
               });
             },
+            enable: state is! MapStateLoading,
           ),
         ),
       ],

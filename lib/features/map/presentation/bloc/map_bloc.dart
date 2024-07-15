@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/core/error/failure_converter.dart';
+import 'package:petsguides/core/util/loading_timer.dart';
+
 import 'package:petsguides/core/util/logger.dart';
 import 'package:petsguides/features/map/domain/usecases/map_get_directions_usecase.dart';
 import 'package:petsguides/features/map/domain/usecases/map_get_more_places_in_radius_usecase.dart';
@@ -33,22 +35,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     this._mapTapOnCarouselCardUseCase,
   ) : super(MapStateInitial()) {
     on<MapEventSearchPlaces>((event, emit) async {
-      loadingTimeElapsed = 0;
-      _timer?.cancel();
-      emit(const MapStateLoading(null));
-
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        loadingTimeElapsed++;
-        if (loadingTimeElapsed > 3) {
-          emit(MapStateLoading(loadingTimeElapsed));
-          _timer?.cancel();
-        }
-      });
-
-      await Future.delayed(const Duration(seconds: 10));
+      loadingTimer<MapState>(emit.call, _timer, loadingTimeElapsed, (elapsed) => elapsed == 0 ? const MapStateLoading(null) : MapStateLoading(elapsed));
 
       final result = await _mapSearchPlacesUseCase.call(SearchPlacesParams(searchInput: event.searchInput));
+
       _timer?.cancel();
+
       result.fold(
         (l) => emit(MapStateFailed(failureConverter(l))),
         (r) => emit(MapStateSearchPlacesSuccessful(r)),

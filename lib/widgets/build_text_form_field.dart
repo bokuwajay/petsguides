@@ -12,6 +12,7 @@ class buildTextFormField extends StatefulWidget {
     this.suffixIcon,
     this.contentPadding,
     this.onChanged,
+    this.enable = true,
   });
 
   final TextEditingController controller;
@@ -23,6 +24,7 @@ class buildTextFormField extends StatefulWidget {
   final Widget? suffixIcon;
   final EdgeInsetsGeometry? contentPadding;
   final void Function(String)? onChanged;
+  final bool enable;
 
   @override
   State<buildTextFormField> createState() => _buildTextFormFieldState();
@@ -48,6 +50,7 @@ class _buildTextFormFieldState extends State<buildTextFormField> {
       validator: widget.validator,
       obscureText: widget.obscureText,
       onChanged: widget.onChanged,
+      enabled: widget.enable,
     );
   }
 }
