@@ -245,7 +245,12 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
     return BlocConsumer<MapBloc, MapState>(
       listener: (context, state) {
-        if (state is MapStateFailed) {
+        if (state is MapStateLoading) {
+          print('object---time elapse-----${state.loadingTimeElapsed}');
+          if (state.loadingTimeElapsed != null) {
+            print('ininininiside--time elapse-----${state.loadingTimeElapsed}');
+          }
+        } else if (state is MapStateFailed) {
           showErrorDialog(context, state.message);
         } else if (state is MapStateSearchPlacesSuccessful) {
           showSearchResultBoard = true;

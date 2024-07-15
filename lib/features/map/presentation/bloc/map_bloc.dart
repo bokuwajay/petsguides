@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/core/error/failure_converter.dart';
 import 'package:petsguides/core/util/logger.dart';
@@ -19,6 +21,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   final MapGetMorePlacesInRadiusUseCase _mapGetMorePlacesInRadiusUseCase;
   final MapTapOnCarouselCardUseCase _mapTapOnCarouselCardUseCase;
 
+  Timer? _timer;
+  int loadingTimeElapsed = 0;
+
   MapBloc(
     this._mapSearchPlacesUseCase,
     this._mapSelectFromSearchListUseCase,
@@ -28,9 +33,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     this._mapTapOnCarouselCardUseCase,
   ) : super(MapStateInitial()) {
     on<MapEventSearchPlaces>((event, emit) async {
-      // emit(MapStateLoading());
+      loadingTimeElapsed = 0;
+      _timer?.cancel();
+      emit(const MapStateLoading(null));
+
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        loadingTimeElapsed++;
+        if (loadingTimeElapsed > 2) {
+          emit(MapStateLoading(loadingTimeElapsed));
+          _timer?.cancel();
+        }
+      });
 
       final result = await _mapSearchPlacesUseCase.call(SearchPlacesParams(searchInput: event.searchInput));
+      _timer?.cancel();
       result.fold(
         (l) => emit(MapStateFailed(failureConverter(l))),
         (r) => emit(MapStateSearchPlacesSuccessful(r)),
@@ -100,6 +116,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   @override
   Future<void> close() {
     logger.i("===== CLOSE MapBloc =====");
+    _timer?.cancel();
     return super.close();
   }
 }

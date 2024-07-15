@@ -31,7 +31,9 @@ Widget buildSearchPlacesTextFormField(
             controller: searchController,
             hintText: 'search place',
             contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-            suffixIcon: IconButton(
+            suffixIcon:
+                // const CircularProgressIndicator()
+                IconButton(
               onPressed: () {
                 reset();
               },
