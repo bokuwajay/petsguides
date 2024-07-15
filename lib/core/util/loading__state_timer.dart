@@ -2,7 +2,7 @@ import 'dart:async';
 
 typedef Emitter<T> = void Function(T state);
 
-Timer loadingTimer<T>(
+Timer loadingStateTimer<T>(
   Emitter<T> emit,
   Timer? timer,
   int loadingTimeElapsed,

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/core/error/failure_converter.dart';
-import 'package:petsguides/core/util/loading_timer.dart';
+import 'package:petsguides/core/util/loading__state_timer.dart';
 import 'package:petsguides/core/util/logger.dart';
 import 'package:petsguides/features/map/domain/usecases/map_get_directions_usecase.dart';
 import 'package:petsguides/features/map/domain/usecases/map_get_more_places_in_radius_usecase.dart';
@@ -34,7 +34,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     this._mapTapOnCarouselCardUseCase,
   ) : super(MapStateInitial()) {
     on<MapEventSearchPlaces>((event, emit) async {
-      _timer = loadingTimer<MapState>(
+      _timer = loadingStateTimer<MapState>(
         emit.call,
         _timer,
         loadingTimeElapsed,
@@ -65,7 +65,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     on<MapEventGetDirections>(
       (event, emit) async {
-        _timer = loadingTimer<MapState>(
+        _timer = loadingStateTimer<MapState>(
           emit.call,
           _timer,
           loadingTimeElapsed,
