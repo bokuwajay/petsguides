@@ -7,6 +7,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/core/util/dialogs/error_dialog.dart';
+import 'package:petsguides/core/util/overlay/generic_overlay.dart';
+import 'package:petsguides/core/util/overlay/loading_overlay.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
@@ -245,12 +247,16 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
     return BlocConsumer<MapBloc, MapState>(
       listener: (context, state) {
-        if (state is MapStateLoading) {
-          print('object---time elapse-----${state.loadingTimeElapsed}');
-          if (state.loadingTimeElapsed != null) {
-            print('ininininiside--time elapse-----${state.loadingTimeElapsed}');
-          }
-        } else if (state is MapStateFailed) {
+        if (state is MapStateLoading && state.loadingTimeElapsed != null) {
+          GenericOverlay().show(
+            context: context,
+            builder: (context) => LoadingOverlay(size: MediaQuery.of(context).size),
+          );
+        } else {
+          GenericOverlay().hide();
+        }
+
+        if (state is MapStateFailed) {
           showErrorDialog(context, state.message);
         } else if (state is MapStateSearchPlacesSuccessful) {
           showSearchResultBoard = true;

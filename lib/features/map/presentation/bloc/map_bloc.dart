@@ -39,11 +39,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         loadingTimeElapsed++;
-        if (loadingTimeElapsed > 2) {
+        if (loadingTimeElapsed > 3) {
           emit(MapStateLoading(loadingTimeElapsed));
           _timer?.cancel();
         }
       });
+
+      await Future.delayed(const Duration(seconds: 10));
 
       final result = await _mapSearchPlacesUseCase.call(SearchPlacesParams(searchInput: event.searchInput));
       _timer?.cancel();

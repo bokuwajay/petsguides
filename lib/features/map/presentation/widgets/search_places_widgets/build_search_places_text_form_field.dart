@@ -31,14 +31,14 @@ Widget buildSearchPlacesTextFormField(
             controller: searchController,
             hintText: 'search place',
             contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-            suffixIcon:
-                // const CircularProgressIndicator()
-                IconButton(
-              onPressed: () {
-                reset();
-              },
-              icon: const Icon(Icons.close),
-            ),
+            suffixIcon: state is MapStateLoading && state.loadingTimeElapsed == null
+                ? const CircularProgressIndicator()
+                : IconButton(
+                    onPressed: () {
+                      reset();
+                    },
+                    icon: const Icon(Icons.close),
+                  ),
             onChanged: (value) {
               if (_debounce?.isActive ?? false) {
                 _debounce?.cancel();
