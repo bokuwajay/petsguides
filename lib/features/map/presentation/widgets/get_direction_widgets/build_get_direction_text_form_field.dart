@@ -25,37 +25,41 @@ Widget buildGetDirectionTextFormField(
           height: 50.0,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.white),
           child: buildTextFormField(
-              controller: _originController, hintText: 'Origin', contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0)),
+            controller: _originController,
+            hintText: 'Origin',
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+            enable: state is! MapStateLoading,
+          ),
         ),
         const SizedBox(height: 3.0),
         Container(
             height: 50.0,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.white),
             child: buildTextFormField(
+              enable: state is! MapStateLoading,
               controller: _destinationController,
               hintText: 'Destination',
               contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-              suffixIcon: SizedBox(
-                width: 96.0,
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        context.read<MapBloc>().add(
-                              MapEventGetDirections(origin: _originController.text, destination: _destinationController.text),
-                            );
-                      },
-                      icon: const Icon(Icons.search),
+              suffixIcon: state is MapStateLoading && state.loadingTimeElapsed == null
+                  ? const CircularProgressIndicator()
+                  : SizedBox(
+                      width: 96.0,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            onPressed: () async {
+                              context.read<MapBloc>().add(MapEventGetDirections(origin: _originController.text, destination: _destinationController.text));
+                            },
+                            icon: const Icon(Icons.search),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                reset();
+                              },
+                              icon: const Icon(Icons.close))
+                        ],
+                      ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        reset();
-                      },
-                      icon: const Icon(Icons.close),
-                    )
-                  ],
-                ),
-              ),
             ))
       ],
     ),

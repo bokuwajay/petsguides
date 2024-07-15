@@ -4,8 +4,7 @@ import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dar
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 
-Widget buildSearchResultList(
-    BuildContext context, AutoCompleteEntity placeItem) {
+Widget buildSearchResultList(BuildContext context, AutoCompleteEntity placeItem) {
   return Padding(
     padding: const EdgeInsets.all(5.0),
     child: GestureDetector(
@@ -13,10 +12,7 @@ Widget buildSearchResultList(
         FocusManager.instance.primaryFocus?.unfocus();
       },
       onTap: () async {
-        // context.read<MapBloc>().add(MapEventSearchWidgetControl());
-
-        context.read<MapBloc>().add(
-            MapEventSelectFromSearchList(placeId: placeItem.placeId ?? ''));
+        context.read<MapBloc>().add(MapEventSelectFromSearchList(placeId: placeItem.placeId ?? ''));
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
