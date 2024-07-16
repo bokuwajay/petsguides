@@ -3,33 +3,49 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:petsguides/core/cache/hive_local_storage.dart';
 import 'package:petsguides/core/util/logger.dart';
 import 'package:petsguides/injection_container.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'api_url.dart';
 
 class ApiInterceptor extends Interceptor {
+  final List<String> externalBaseUrls = [dotenv.env['googleMapBaseUrl']!.toString()];
+
+  final List<String> publicEndpoints = ['/auth/authentication'];
+
+  bool isExternalBaseUrl(String baseUrl) {
+    return externalBaseUrls.any((url) => baseUrl.startsWith(url));
+  }
+
+  bool isPublicEndpoint(String path) {
+    return publicEndpoints.any((endpoint) => path.startsWith(endpoint));
+  }
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     if (options.baseUrl.isEmpty) {
       options.baseUrl = ApiUrl.baseUrl;
     }
 
-    final token = await sl<HiveLocalStorage>().load(key: 'pgToken', boxName: 'cache');
-    if (token == null ||
-        JwtDecoder.decode(token)['exp'] == null ||
-        DateTime.fromMillisecondsSinceEpoch(JwtDecoder.decode(token)['exp'] * 1000).isBefore(DateTime.now())) {
-      return handler.reject(
-        DioException(
-          requestOptions: options,
-          type: DioExceptionType.badResponse,
-          response: Response(
+    if (!isExternalBaseUrl(options.baseUrl) && !isPublicEndpoint(options.path)) {
+      final token = await sl<HiveLocalStorage>().load(key: 'pgToken', boxName: 'cache');
+      if (token == null ||
+          JwtDecoder.decode(token)['exp'] == null ||
+          DateTime.fromMillisecondsSinceEpoch(JwtDecoder.decode(token)['exp'] * 1000).isBefore(DateTime.now())) {
+        return handler.reject(
+          DioException(
             requestOptions: options,
-            statusCode: 401,
-            statusMessage: 'Unauthorized',
+            type: DioExceptionType.badResponse,
+            response: Response(
+              requestOptions: options,
+              statusCode: 401,
+              statusMessage: 'Unauthorized',
+            ),
           ),
-        ),
-      );
+        );
+      }
+      options.headers['Authorization'] = 'Bearer $token';
     }
-    options.headers['Authorization'] = 'Bearer $token';
+
     super.onRequest(options, handler);
   }
 
