@@ -8,6 +8,7 @@ import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/core/util/validator.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
+import 'package:petsguides/google_login.dart';
 
 import 'package:snappable_thanos/snappable_thanos.dart';
 
@@ -69,8 +70,7 @@ class _LoginViewState extends State<LoginView> with Validator {
                             child: Container(
                               decoration: const BoxDecoration(
                                 image: DecorationImage(
-                                  image:
-                                      AssetImage('assets/login/background.png'),
+                                  image: AssetImage('assets/login/background.png'),
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -83,10 +83,7 @@ class _LoginViewState extends State<LoginView> with Validator {
                             duration: const Duration(milliseconds: 1000),
                             child: Container(
                               decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/login/background-2.png'),
-                                    fit: BoxFit.fill),
+                                image: DecorationImage(image: AssetImage('assets/login/background-2.png'), fit: BoxFit.fill),
                               ),
                             ),
                           ))
@@ -124,8 +121,7 @@ class _LoginViewState extends State<LoginView> with Validator {
                           state.snap();
                         }
                         Future.delayed(Duration(milliseconds: 1280), () {
-                          MyApp.setLocale(
-                              context, Locale(lang.languageCode, ''));
+                          MyApp.setLocale(context, Locale(lang.languageCode, ''));
                         });
                       }
                     },
@@ -155,39 +151,30 @@ class _LoginViewState extends State<LoginView> with Validator {
                                   Container(
                                     padding: const EdgeInsets.all(10),
                                     child: TextFormField(
-                                        onTapOutside: (event) =>
-                                            FocusScope.of(context).unfocus(),
+                                        onTapOutside: (event) => FocusScope.of(context).unfocus(),
                                         controller: _email,
                                         enableSuggestions: false,
                                         autocorrect: false,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
+                                        keyboardType: TextInputType.emailAddress,
                                         decoration: InputDecoration(
-                                          hintText:
-                                              AppLocalizations.of(context)!
-                                                  .email,
+                                          hintText: AppLocalizations.of(context)!.email,
                                           prefixIcon: const Padding(
                                             padding: EdgeInsets.all(0),
                                             child: Icon(Icons.email),
                                           ),
                                         ),
-                                        validator: (value) => validateEmail(
-                                            value,
-                                            AppLocalizations.of(context)!
-                                                .email)),
+                                        validator: (value) => validateEmail(value, AppLocalizations.of(context)!.email)),
                                   ),
                                   Container(
                                     padding: const EdgeInsets.all(10),
                                     child: TextFormField(
-                                      onTapOutside: (event) =>
-                                          FocusScope.of(context).unfocus(),
+                                      onTapOutside: (event) => FocusScope.of(context).unfocus(),
                                       controller: _password,
                                       enableSuggestions: false,
                                       autocorrect: false,
                                       obscureText: hidePassword,
                                       decoration: InputDecoration(
-                                        hintText: AppLocalizations.of(context)!
-                                            .password,
+                                        hintText: AppLocalizations.of(context)!.password,
                                         prefixIcon: const Padding(
                                           padding: EdgeInsets.all(0),
                                           child: Icon(Icons.lock),
@@ -196,21 +183,14 @@ class _LoginViewState extends State<LoginView> with Validator {
                                             ? IconButton(
                                                 onPressed: () => setState(
                                                   () {
-                                                    hidePassword =
-                                                        !hidePassword;
+                                                    hidePassword = !hidePassword;
                                                   },
                                                 ),
-                                                icon: Icon(hidePassword
-                                                    ? Icons.visibility
-                                                    : Icons.visibility_off),
+                                                icon: Icon(hidePassword ? Icons.visibility : Icons.visibility_off),
                                               )
                                             : null,
                                       ),
-                                      validator: (value) =>
-                                          validateRequiredField(
-                                              value,
-                                              AppLocalizations.of(context)!
-                                                  .password),
+                                      validator: (value) => validateRequiredField(value, AppLocalizations.of(context)!.password),
                                     ),
                                   ),
                                 ],
@@ -232,9 +212,7 @@ class _LoginViewState extends State<LoginView> with Validator {
                         child: Container(
                           width: 280,
                           child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50))),
+                            style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 final email = _email.text;
@@ -267,6 +245,36 @@ class _LoginViewState extends State<LoginView> with Validator {
                         ),
                       ),
                       const SizedBox(height: 30),
+                      FadeInUp(
+                        duration: const Duration(milliseconds: 2000),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
+                          onPressed: () async {
+                            var user = await GoogleLogin.login();
+                            if (user != null) {
+                              print('Login OK!!!!');
+                              print('inform----------$user');
+                            }
+                          },
+                          child: const Text(
+                            "Google Sign In",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      FadeInUp(
+                        duration: const Duration(milliseconds: 2000),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
+                          onPressed: () async {
+                            await GoogleLogin.signOut;
+                          },
+                          child: const Text(
+                            "Google Log Out",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

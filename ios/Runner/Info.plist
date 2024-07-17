@@ -58,6 +58,20 @@
 			</array>
 		</dict>
 	</array>
+<!-- Google Sign-in Section -->
+    <key>CFBundleURLTypes</key>
+    <array>
+	    <dict>
+	        <key>CFBundleTypeRole</key>
+	        <string>Editor</string>
+	        <key>CFBundleURLSchemes</key>
+	        <array>
+		        <string>***IF YOU HAVE FACEBOOK SIGN IN CLIENT ID, TYPE HERE***</string>
+		        <string>com.googleusercontent.apps.201305529069-0bt8vkl844r71ungo9gfm2lksov7br9q</string>
+	        </array> 
+	    </dict>
+	</array>
+<!-- End of the Google Sign-in Section -->
 	<key>FlutterDeepLinkingEnabled</key>
 	<true/>
 </dict>

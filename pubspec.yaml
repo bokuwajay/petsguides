@@ -71,6 +71,8 @@ dependencies:
   snappable_thanos: ^0.0.4
   animate_do: ^3.3.3
 
+  google_sign_in:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
