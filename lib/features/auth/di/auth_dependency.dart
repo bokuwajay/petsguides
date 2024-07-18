@@ -6,6 +6,7 @@ import 'package:petsguides/features/auth/data/repository/auth_repository_impl.da
 import 'package:petsguides/features/auth/domain/usecases/auth_check_first_launch_usecase.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_check_signin_status_usecase.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_first_launch_usecase.dart';
+import 'package:petsguides/features/auth/domain/usecases/auth_google_signin_usecase.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_usecase.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/injection_container.dart';
@@ -27,12 +28,14 @@ class AuthDependency {
     sl.registerLazySingleton(() => AuthCheckSignInStatusUseCase(sl<AuthRepositoryImpl>()));
     sl.registerLazySingleton(() => AuthFirstLaunchUseCase(sl<AuthRepositoryImpl>()));
     sl.registerLazySingleton(() => AuthCheckFirstLaunchUseCase(sl<AuthRepositoryImpl>()));
+    sl.registerLazySingleton(() => AuthGoogleSignInUseCase(sl<AuthRepositoryImpl>()));
 
     sl.registerFactory(() => AuthBloc(
           sl<AuthUseCase>(),
           sl<AuthCheckSignInStatusUseCase>(),
           sl<AuthFirstLaunchUseCase>(),
           sl<AuthCheckFirstLaunchUseCase>(),
+          sl<AuthGoogleSignInUseCase>(),
         ));
   }
 }

@@ -5,6 +5,7 @@ import 'package:petsguides/core/util/logger.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_check_first_launch_usecase.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_check_signin_status_usecase.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_first_launch_usecase.dart';
+import 'package:petsguides/features/auth/domain/usecases/auth_google_signin_usecase.dart';
 import 'package:petsguides/features/auth/domain/usecases/auth_usecase.dart';
 import 'package:petsguides/features/auth/domain/usecases/usecase_params.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
@@ -15,12 +16,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthCheckSignInStatusUseCase _authCheckSignInStatusUseCase;
   final AuthFirstLaunchUseCase _authFirstLaunchUseCase;
   final AuthCheckFirstLaunchUseCase _authCheckFirstLaunchUseCase;
+  final AuthGoogleSignInUseCase _authGoogleSignInUseCase;
 
   AuthBloc(
     this._authUseCase,
     this._authCheckSignInStatusUseCase,
     this._authFirstLaunchUseCase,
     this._authCheckFirstLaunchUseCase,
+    this._authGoogleSignInUseCase,
   ) : super(AuthStateInitial()) {
     // login
     on<AuthEventLogIn>((event, emit) async {
@@ -62,6 +65,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         result.fold(
           (l) => emit(AuthStateFailed(failureConverter(l))),
           (r) => emit(AuthStateCheckFirstLaunchSuccessful(r)),
+        );
+      },
+    );
+
+    on<AuthEventGoogleSignIn>(
+      (event, emit) async {
+        emit(AuthStateLoading());
+        final result = await _authGoogleSignInUseCase.call(NoParams());
+        result.fold(
+          (l) => emit(AuthStateFailed(failureConverter(l))),
+          (r) => emit(AuthStateGoogleSignInSuccessful(r)),
         );
       },
     );

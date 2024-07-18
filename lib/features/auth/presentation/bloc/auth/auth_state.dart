@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:petsguides/features/auth/domain/entities/auth_entity.dart';
 
 abstract class AuthState extends Equatable {
@@ -51,4 +52,13 @@ class AuthStateCheckFirstLaunchSuccessful extends AuthState {
 
   @override
   List<Object?> get props => [isFirstLaunch];
+}
+
+class AuthStateGoogleSignInSuccessful extends AuthState {
+  final GoogleSignInAccount? data;
+
+  const AuthStateGoogleSignInSuccessful(this.data);
+
+  @override
+  List<Object?> get props => [data];
 }

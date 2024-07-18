@@ -1,4 +1,5 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:petsguides/core/cache/hive_local_storage.dart';
 import 'package:petsguides/core/error/failures.dart';
 import 'package:petsguides/core/error/exception_converter.dart';
@@ -61,6 +62,17 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(result);
     } catch (exception) {
       Failure failure = exceptionConverter(exception, 'in firstLaunch of AuthRepositoryImpl');
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, GoogleSignInAccount?>> googleSignIn() async {
+    try {
+      final result = await _authRemoteDataSource.googleSignIn();
+      return Right(result);
+    } catch (exception) {
+      Failure failure = exceptionConverter(exception, 'in googleSignIn of AuthRepositoryImpl');
       return Left(failure);
     }
   }

@@ -26,3 +26,7 @@ class AuthEventFirstLaunch extends AuthEvent {
 class AuthEventCheckFirstLaunch extends AuthEvent {
   const AuthEventCheckFirstLaunch();
 }
+
+class AuthEventGoogleSignIn extends AuthEvent {
+  const AuthEventGoogleSignIn();
+}

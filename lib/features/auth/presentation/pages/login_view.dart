@@ -8,8 +8,7 @@ import 'package:petsguides/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart';
 import 'package:petsguides/core/util/validator.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
-import 'package:petsguides/google_login.dart';
-import 'package:petsguides/twitter_login.dart';
+// import 'package:petsguides/twitter_login.dart';
 
 import 'package:snappable_thanos/snappable_thanos.dart';
 
@@ -251,11 +250,7 @@ class _LoginViewState extends State<LoginView> with Validator {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
                           onPressed: () async {
-                            var user = await GoogleLogin.login();
-                            if (user != null) {
-                              print('Login OK!!!!');
-                              print('inform----------$user');
-                            }
+                            context.read<AuthBloc>().add(const AuthEventGoogleSignIn());
                           },
                           child: const Text(
                             "Google Sign In",
@@ -268,7 +263,7 @@ class _LoginViewState extends State<LoginView> with Validator {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
                           onPressed: () async {
-                            await XLogin.twitterLogin();
+                            // await XLogin.twitterLogin();
                           },
                           child: const Text(
                             "X Login",
