@@ -9,6 +9,7 @@ import 'package:petsguides/features/auth/presentation/bloc/auth/auth_event.dart'
 import 'package:petsguides/core/util/validator.dart';
 import 'package:flutter_gen/gen_l10n/pets_guides_localizations.dart';
 import 'package:petsguides/google_login.dart';
+import 'package:petsguides/twitter_login.dart';
 
 import 'package:snappable_thanos/snappable_thanos.dart';
 
@@ -267,10 +268,10 @@ class _LoginViewState extends State<LoginView> with Validator {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
                           onPressed: () async {
-                            await GoogleLogin.signOut;
+                            await XLogin.twitterLogin();
                           },
                           child: const Text(
-                            "Google Log Out",
+                            "X Login",
                             style: TextStyle(fontSize: 20),
                           ),
                         ),

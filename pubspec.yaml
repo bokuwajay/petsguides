@@ -72,6 +72,7 @@ dependencies:
   animate_do: ^3.3.3
 
   google_sign_in:
+  twitter_login: ^4.4.2
 
 dev_dependencies:
   flutter_test:
