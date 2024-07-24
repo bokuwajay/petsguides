@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:petsguides/core/util/image_helper/image_loader.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_bloc.dart';
 import 'package:petsguides/features/map/presentation/bloc/map_event.dart';
 
@@ -62,17 +63,15 @@ _nearbyPlacesList(index, pageController, placesWithinRadius, placeImg, moveCamer
                   child: Row(children: [
                     pageController.position.haveDimensions
                         ? pageController.page!.toInt() == index
-                            ? Container(
+                            ? SizedBox(
                                 height: 90.0,
                                 width: 90.0,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10.0), topLeft: Radius.circular(10.0)),
-                                  image: DecorationImage(
-                                      image: NetworkImage(placeImg != ''
-                                          ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'
-                                          : 'https://pic.onlinewebfonts.com/svg/img_546302.png'),
-                                      fit: BoxFit.cover),
-                                ),
+                                child: ImageLoader(
+                                    parentWidgetHeight: 90.0,
+                                    parentWidgetWidth: 90.0,
+                                    imageURL: placeImg != ''
+                                        ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'
+                                        : 'https://pic.onlinewebfonts.com/svg/img_546302.png'),
                               )
                             : Container(
                                 height: 90.0,

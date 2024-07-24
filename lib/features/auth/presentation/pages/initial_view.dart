@@ -29,13 +29,13 @@ class _InitialViewState extends State<InitialView> {
       listener: (context, state) async {
         if (state is AuthStateCheckSignInStatusSuccessful) {
           if (state.signIn) {
-            router.goNamed(AppRoute.login.name);
+            router.goNamed(AppRoute.home.name);
           } else {
             context.read<AuthBloc>().add(const AuthEventCheckFirstLaunch());
           }
         } else if (state is AuthStateCheckFirstLaunchSuccessful) {
           if (state.isFirstLaunch) {
-            router.goNamed(AppRoute.login.name);
+            router.goNamed(AppRoute.map.name);
           } else {
             router.goNamed(AppRoute.login.name);
           }

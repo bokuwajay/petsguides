@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsguides/core/error/failure_converter.dart';
-import 'package:petsguides/core/util/loading__state_timer.dart';
+import 'package:petsguides/core/util/loading_state_timer.dart';
 import 'package:petsguides/core/util/logger.dart';
 import 'package:petsguides/features/map/domain/usecases/map_get_directions_usecase.dart';
 import 'package:petsguides/features/map/domain/usecases/map_get_more_places_in_radius_usecase.dart';
