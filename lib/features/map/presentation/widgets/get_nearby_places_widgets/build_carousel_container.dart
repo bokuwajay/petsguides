@@ -53,7 +53,7 @@ _nearbyPlacesList(index, pageController, placesWithinRadius, placeImg, moveCamer
           children: [
             Center(
               child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
                 height: 125.0,
                 width: 275.0,
                 decoration: BoxDecoration(

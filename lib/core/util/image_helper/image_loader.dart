@@ -33,7 +33,7 @@ class _ImageLoaderState extends State<ImageLoader> with TickerProviderStateMixin
     _imageNotifier = ImageNotifier(_imageDetails);
 
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
-    _animation = Tween<double>(begin: widget.parentWidgetHeight * 1.2, end: widget.parentWidgetHeight - 5)
+    _animation = Tween<double>(begin: widget.parentWidgetWidth * 1.2, end: widget.parentWidgetHeight)
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     super.initState();
@@ -73,20 +73,22 @@ class _ImageLoaderState extends State<ImageLoader> with TickerProviderStateMixin
                   animation: _animation,
                   builder: (context, child) {
                     return OverflowBox(
-                      minHeight: widget.parentWidgetHeight - 5,
+                      minHeight: widget.parentWidgetHeight,
                       minWidth: widget.parentWidgetWidth,
                       maxHeight: widget.parentWidgetHeight * 2,
                       maxWidth: widget.parentWidgetWidth * 2,
                       child: SizedBox(
-                        height: _animation.value,
-                        width: _animation.value,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10.0), topLeft: Radius.circular(10.0)),
-                            image: DecorationImage(image: NetworkImage(widget.imageURL), fit: BoxFit.cover),
-                          ),
-                        ),
-                      ),
+                          height: _animation.value,
+                          width: _animation.value,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                image: DecorationImage(image: NetworkImage(widget.imageURL), fit: BoxFit.cover),
+                              ),
+                            ),
+                          )),
                     );
                   },
                   child: RawImage(

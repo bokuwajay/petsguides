@@ -1,6 +1,7 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:petsguides/core/util/image_helper/image_loader.dart';
 import 'package:petsguides/features/map/presentation/widgets/get_nearby_places_widgets/build_flip_card_review.dart';
 
 Widget buildFlipCard(
@@ -24,21 +25,19 @@ Widget buildFlipCard(
       front: Container(
         height: 250.0,
         width: 175.0,
-        decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(8.0))),
+        decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10.0))),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: 150.0,
                 width: 175.0,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
-                  image: DecorationImage(
-                      image: NetworkImage(placeImg != ''
-                          ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'
-                          : 'https://pic.onlinewebfonts.com/svg/img_546302.png'),
-                      fit: BoxFit.cover),
-                ),
+                child: ImageLoader(
+                    parentWidgetHeight: 150.0,
+                    parentWidgetWidth: 175.0,
+                    imageURL: placeImg != ''
+                        ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'
+                        : 'https://pic.onlinewebfonts.com/svg/img_546302.png'),
               ),
               Container(
                 padding: const EdgeInsets.all(7.0),
@@ -102,8 +101,8 @@ Widget buildFlipCard(
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 700),
                       curve: Curves.easeIn,
-                      padding: const EdgeInsets.fromLTRB(7.0, 4.0, 7.0, 4.0),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(11.0), color: isReviews ? Colors.green.shade300 : Colors.white),
+                      padding: const EdgeInsets.all(6.0),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: isReviews ? Colors.green.shade300 : Colors.white),
                       child: Text('Reviews',
                           style: TextStyle(
                             color: isReviews ? Colors.white : Colors.black87,
@@ -120,8 +119,8 @@ Widget buildFlipCard(
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 700),
                       curve: Curves.easeIn,
-                      padding: const EdgeInsets.fromLTRB(7.0, 4.0, 7.0, 4.0),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(11.0), color: isPhotos ? Colors.green.shade300 : Colors.white),
+                      padding: const EdgeInsets.all(6.0),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: isPhotos ? Colors.green.shade300 : Colors.white),
                       child: Text('Photos',
                           style: TextStyle(
                             color: isPhotos ? Colors.white : Colors.black87,

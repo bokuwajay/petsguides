@@ -6,6 +6,7 @@ import 'package:petsguides/config/themes/custom_themes/chip_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/elevated_button_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/icon_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/outlined_button_theme.dart';
+import 'package:petsguides/config/themes/custom_themes/progress_indicator_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/text_button_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/text_form_field_theme.dart';
 import 'package:petsguides/config/themes/custom_themes/text_selection_theme.dart';
@@ -34,6 +35,7 @@ class ThemeClass {
     textButtonTheme: TextButtonThemeClass.lightTextButtonTheme,
     textSelectionTheme: TextSelectionThemeClass.lightTextSelectionTheme,
     iconTheme: IconThemeClass.lightIconTheme,
+    progressIndicatorTheme: ProgressIndicatorThemeClass.lightProgressIndicatorTheme,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -53,5 +55,6 @@ class ThemeClass {
     textButtonTheme: TextButtonThemeClass.darkTextButtonTheme,
     textSelectionTheme: TextSelectionThemeClass.darkTextSelectionTheme,
     iconTheme: IconThemeClass.darkIconTheme,
+    progressIndicatorTheme: ProgressIndicatorThemeClass.darkProgressIndicatorTheme,
   );
 }

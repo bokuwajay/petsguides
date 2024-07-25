@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petsguides/core/util/dialogs/error_dialog.dart';
+import 'package:petsguides/core/util/image_helper/image_loader.dart';
 import 'package:petsguides/core/util/overlay/generic_overlay.dart';
 import 'package:petsguides/core/util/overlay/loading_overlay.dart';
 import 'package:petsguides/features/map/domain/entities/auto_complete_entity.dart';
@@ -402,17 +403,15 @@ class _GoogleMapViewState extends State<GoogleMapView> {
       return Column(
         children: [
           const SizedBox(height: 10.0),
-          Container(
+          SizedBox(
             height: 200.0,
             width: 200.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://maps.googleapis.com/maps/api/place/photo?maxwidth=$maxWidth&maxheight=$maxHeight&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'),
-                fit: BoxFit.cover,
-              ),
-            ),
+            child: ImageLoader(
+                parentWidgetHeight: 200.0,
+                parentWidgetWidth: 200.0,
+                imageURL: placeImg != ''
+                    ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=$maxWidth&maxheight=$maxHeight&photo_reference=$placeImg&key=${dotenv.env['googleMapKey']}'
+                    : 'https://pic.onlinewebfonts.com/svg/img_546302.png'),
           ),
           const SizedBox(height: 10.0),
           Row(
