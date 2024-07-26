@@ -36,33 +36,39 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                 }),
             itemCount: carousels.length,
             itemBuilder: (context, index, realIndex) {
-              return Image(
-                image: AssetImage(carousels[index]),
-                fit: BoxFit.cover,
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image(
+                    image: AssetImage(carousels[index]),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               );
             },
           ),
           Positioned(
-              left: 16,
-              bottom: 16,
-              child: ValueListenableBuilder(
-                  valueListenable: selectedIndex,
-                  builder: (context, selected, child) {
-                    return Row(
-                      children: List.generate(carousels.length, (index) {
-                        return Container(
-                          height: 10,
-                          width: 10,
-                          margin: const EdgeInsets.only(right: 4),
-                          decoration: BoxDecoration(
-                            color:
-                                selected == index ? Colors.blue : Colors.grey,
-                            shape: BoxShape.circle,
-                          ),
-                        );
-                      }),
-                    );
-                  }))
+            left: 26,
+            bottom: 16,
+            child: ValueListenableBuilder(
+                valueListenable: selectedIndex,
+                builder: (context, selected, child) {
+                  return Row(
+                    children: List.generate(carousels.length, (index) {
+                      return Container(
+                        height: 10,
+                        width: 10,
+                        margin: const EdgeInsets.only(right: 4),
+                        decoration: BoxDecoration(
+                          color: selected == index ? Colors.blue : Colors.grey,
+                          shape: BoxShape.circle,
+                        ),
+                      );
+                    }),
+                  );
+                }),
+          ),
         ],
       ),
     );

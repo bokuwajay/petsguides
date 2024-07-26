@@ -18,7 +18,7 @@ class _PetsWidgetState extends State<PetsWidget> {
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Text(
             "Pets",
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         SizedBox(
@@ -32,24 +32,28 @@ class _PetsWidgetState extends State<PetsWidget> {
               return const SizedBox(width: 8);
             },
             itemBuilder: (context, index) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    height: 48,
-                    width: 48,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage(pets[index].image),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 54,
+                      width: 54,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: AssetImage(pets[index].image),
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    pets[index].name,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  )
-                ],
+                    Text(
+                      pets[index].name,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
               );
             },
           ),

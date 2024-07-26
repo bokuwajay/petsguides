@@ -25,7 +25,7 @@ class _PromotionWidgetState extends State<PromotionWidget> {
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Text(
             "Promotion",
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         SizedBox(
@@ -41,9 +41,9 @@ class _PromotionWidgetState extends State<PromotionWidget> {
             itemCount: ads.length,
             itemBuilder: (context, index, realIndex) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(10),
                   child: Image(
                     image: AssetImage(ads[index]),
                     fit: BoxFit.cover,

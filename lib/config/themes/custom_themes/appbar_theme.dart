@@ -8,25 +8,15 @@ class AppBarThemeClass {
       elevation: 0,
       centerTitle: true,
       scrolledUnderElevation: 0,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
-      iconTheme: IconThemeData(color: HexColor('#ED7130'), size: 24),
-      actionsIconTheme: IconThemeData(color: HexColor('#ED7130'), size: 24),
-      titleTextStyle: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w600,
-          color: HexColor('#ED7130')));
+      titleTextStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: HexColor('#ED7130')));
 
   static AppBarTheme darkAppBarTheme = AppBarTheme(
       elevation: 0,
       centerTitle: true,
       scrolledUnderElevation: 0,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.black,
       surfaceTintColor: Colors.transparent,
-      iconTheme: IconThemeData(color: HexColor('#F2A73B'), size: 24),
-      actionsIconTheme: IconThemeData(color: HexColor('#F2A73B'), size: 24),
-      titleTextStyle: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w600,
-          color: HexColor('#F2A73B')));
+      titleTextStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: HexColor('#F2A73B')));
 }

@@ -36,13 +36,7 @@ class PopularProductWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 1,
-                          spreadRadius: 1,
-                          offset: Offset(1, 1))
-                    ]),
+                    boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 1, spreadRadius: 1, offset: Offset(1, 1))]),
                 child: Column(
                   children: [
                     Container(
@@ -52,9 +46,7 @@ class PopularProductWidget extends StatelessWidget {
                         borderRadius: const BorderRadius.vertical(
                           top: Radius.circular(16),
                         ),
-                        image: DecorationImage(
-                            image: AssetImage(products[index].image),
-                            fit: BoxFit.cover),
+                        image: DecorationImage(image: AssetImage(products[index].image), fit: BoxFit.cover),
                       ),
                     ),
                     Expanded(
@@ -67,16 +59,8 @@ class PopularProductWidget extends StatelessWidget {
                             Expanded(
                               child: RichText(
                                 text: TextSpan(children: [
-                                  TextSpan(
-                                      text: products[index].brand,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium),
-                                  TextSpan(
-                                      text: " ${products[index].name}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall)
+                                  TextSpan(text: products[index].brand, style: Theme.of(context).textTheme.titleMedium),
+                                  TextSpan(text: " ${products[index].name}", style: Theme.of(context).textTheme.headlineSmall)
                                 ]),
                               ),
                             ),
@@ -88,23 +72,21 @@ class PopularProductWidget extends StatelessWidget {
                                       const Icon(Icons.star_rounded),
                                       Text(
                                         products[index].rating,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall,
+                                        style: Theme.of(context).textTheme.titleSmall,
                                       ),
                                     ],
                                   ),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.wallet),
-                                      Text(
-                                        products[index].price,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge,
-                                      ),
-                                    ],
-                                  ),
+                                  // Row(
+                                  //   children: [
+                                  //     const Icon(Icons.wallet, size: 10,),
+                                  //     Text(
+                                  //       products[index].price,
+                                  //       style: Theme.of(context)
+                                  //           .textTheme
+                                  //           .titleLarge,
+                                  //     ),
+                                  //   ],
+                                  // ),
                                 ],
                               ),
                             ),
