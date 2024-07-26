@@ -17,13 +17,14 @@ class ShopItemListView extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            pinned: true,
             backgroundColor: Colors.white,
             floating: true,
             centerTitle: true,
             bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(12),
+              preferredSize: const Size.fromHeight(56),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -49,13 +50,14 @@ class ShopItemListView extends StatelessWidget {
                     //     ),
                     //   ),
                     // ),
+
                     IconButton(
                       onPressed: () async {
                         // context
                         //     .read<AuthBloc>()
                         //     .add(const AuthEventCheckToken());
                       },
-                      icon: const Icon(Icons.bookmark_add_outlined, size: 36),
+                      icon: const Icon(Icons.map_outlined, size: 36),
                     ),
 
                     IconButton(

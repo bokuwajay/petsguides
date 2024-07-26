@@ -35,7 +35,7 @@ class _InitialViewState extends State<InitialView> {
           }
         } else if (state is AuthStateCheckFirstLaunchSuccessful) {
           if (state.isFirstLaunch) {
-            router.goNamed(AppRoute.map.name);
+            router.goNamed(AppRoute.home.name);
           } else {
             router.goNamed(AppRoute.login.name);
           }
